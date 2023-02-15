@@ -1,0 +1,147 @@
+# Metview Macro
+
+###############################################################
+# CODE DESCRIPTION
+# Create_Ecuador_Mask_ENS.mv creates Ecuador's mask for the ECMWF ENS 
+# grid, and saves the mask as .grib and .csv files.
+# NOTE: the code needs to be run only once to create the mask. The mask 
+# has been already created and stored permanently in DirOUT. The code was 
+# kept here only for reproducibility purposes. 
+
+# INPUT PARAMETERS DESCRIPTION
+# Git_repo (string): repository's local path
+# DirOUT (string): relative path where to store the mask
+
+# INPUT PARAMETERS
+Git_repo = "/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
+DirOUT = "Data/Raw/Ecuador_Mask_ENS"
+###############################################################
+
+
+# Retrieving the raw data needed to create Ecuador's mask
+print("Retrieving the raw data needed to create Ecuador's mask...")
+
+zeros = retrieve(
+    type    : "cf",
+    stream  : "ef",
+    levtype : "sfc",
+    param   : "tp",
+    step    : 12
+    )
+
+lsm = retrieve(
+    type    : "cf",
+    stream  : "ef",
+    levtype : "sfc",
+    param   : "lsm"
+    )
+
+orog = retrieve(
+    type   : "cf",
+    stream : "ef",
+    levtype : "sfc",
+    param   : "z",
+    grid: "o640"
+    ) / 9.81 
+
+
+# Definition of the areas to remove from Ecuador's mask
+area1 = [1.48,-81.01,-5,-75.11]
+area2 = [-2.757,-77.22,-5.069,-75.11]
+area3 = [-3.429,-78,-5.1,-77.206]
+area4 = [1.48,-77.466,0.5,-75.11]
+area5 = [-3.30,-81.246,-5.2,-80.508]
+area6 = [-4.532,-80.665,-5.2,-79.68]
+area7 = [-4.823,-79.859,-5.136,-79.479]
+area8 = [-3.45,-80.475,-4,-80.34]
+area9 = [-3.525,-78.189,-4,-5.065]
+area10 = [-4,-78.495,-5.087,-77.911]
+area11 = [0.70,-77.352,0.363,-76.413]
+area12 = [-1.542,-75.568,-2.814,-75.11]
+area13 = [-2.151,-76.057,-2.82,-75.534]
+area14 = [-2.999,-77.862,-3.371,-77.215]
+area15 = [-4.772,-78.901,-5.065,-78.188]
+area16 = [-4.639,-78.753,-4779,-78.472]
+area17 = [-4.227,-78.642,-4.644,-78.472]
+area18 = [-3.936,-78.331,-3.939,-78.191]
+area19 = [-3.517,-78.341,-3.93,-78.195]
+area20 = [-2.392,-76.341,-2.812,-2.507]
+area21 = [-2.661,-76.893,-2.811,-76.363]
+area22 = [-2.391,-76.358,-2.677,-76.233]
+area23 = [-1.688,-75.655,-2.115,-75.543]
+area24 = [-1.839,-75.735,-2.106,-75.682]
+area25 = [-1,-75.399,-1.546,-75.112]
+area26 = [-2.535,-76.561,-2.672,-76.375]
+area27 = [-2.532,-76.525,-2.669,-76.384]
+area28 = [-2.386,-76.376,-2.536,-76.234]
+area29 = [-2.275,-76.231,-2.391,-76.092]
+area30 = [-2.814,-77.334,-2.954,-77.214]
+area31 = [-2.677,-76.922,-2.814,-76.794]
+area32 = [-2.535,-76.613,-2.670,-76.515]
+area33 = [-1.357,-75.538,-1.545,-75.394]
+area34 = [-1.974,-75.940,-2.111,-75.813]
+area35 = [-1.830,-75.817,-1.969,-75.673]
+area36 = [-3.235,-78.053,-3.378,-77.913]
+area37 = [-2.817,-80.285,-3.093,-80.0]
+area38 = [-2.644,-80.158,-2.953,-79.863]
+area39 = [0.596,-75.224,-0.836,-75.121]
+area40 = [-0.279,-75.4,-0.423,-75.26]
+area41 = [0.6,-75.536,0,-75.26]
+area42 = [0.565,-75.969,0.28,-75.063]
+area43 = [0.559,-76.233,0.417,-76.096]
+area44 = [0.420,-76.919,0.282,-76.510]
+area45 = [0.277,-75.837,0.139,-75.538]
+area46 = [1.540,-79.028,1.258,-78.885]
+area47 = [1.546,-78.190,1-127,-77-494]
+area48 = [1.544,-78.412,1.221,-78.194]
+area49 = [1.125,-78.190,1,-77.492]
+area50 = [1.539,-78.55,1.271,-77.399]
+area51 = [1.263,-78.357,1.127,-77.333]
+area52 = [1.543,-78.731,1.42,-78.607]
+area53 = [0.983,-77.628,0.703,-77.493]
+area54 = [0.983,-77.893,0.844,-77.634]
+area55 = [0.563,-76.511,0.427,-76.381]
+area56 = [-0.388,-75.238,-0.711,-75.076]
+area57 = [-0.159,-75.396,-0.279,-75.260]
+area58 = [0.563,-76.513,0.423,-76.365]
+
+
+# Selection of the grid-boxes belonging to Ecuador's domain
+ecuador = (mask(zeros,area1) and not mask(zeros,area2) and not mask(zeros,area3) and not mask(zeros,area4) and not mask(zeros,area5) and not mask(zeros,area6) and not mask(zeros,area7) and not mask(zeros,area8) and not mask(zeros,area9) and not mask(zeros,area10) and not mask(zeros,area11) and not mask(zeros,area12) and not mask(zeros,area13) and not mask(zeros,area14) and not mask(zeros,area15) and not mask(zeros,area16) and not mask(zeros,area17) and not mask(zeros,area18) and not mask(zeros,area19) and not mask(zeros,area20) and not mask(zeros,area21) and not mask(zeros,area22) and not mask(zeros,area23) and not mask(zeros,area24) and not mask(zeros,area25) and not mask(zeros,area26) and not mask(zeros,area27) and not mask(zeros,area28) and not mask(zeros,area29) and not mask(zeros,area30) and not mask(zeros,area31) and not mask(zeros,area32) and not mask(zeros,area33) and not mask(zeros,area34) and not mask(zeros,area35) and not mask(zeros,area36) and not mask(zeros,area37) and not mask(zeros,area38) and not mask(zeros,area39) and not mask(zeros,area40) and not mask(zeros,area41) and not mask(zeros,area42) and not mask(zeros,area43) and not mask(zeros,area44) and not mask(zeros,area45) and not mask(zeros,area46) and not mask(zeros,area47) and not mask(zeros,area48) and not mask(zeros,area49) and not mask(zeros,area50) and not mask(zeros,area51) and not mask(zeros,area52) and not mask(zeros,area53) and not mask(zeros,area54) and not mask(zeros,area55) and not mask(zeros,area56) and not mask(zeros,area57) and not mask(zeros,area58)) * (lsm>0.05)
+vals = values(ecuador)
+lats = latitudes(ecuador)
+lons = longitudes(ecuador)
+print(" - N. of grid-boxes in the Ecuador domain: " & sum(vals))
+
+
+# Identification of the three regions in Ecuador's domain (i.e. "La Costa", "La Sierra", "El Oriente"). 
+# Each region gets assigned the numerical code 1,2,3, respectively.
+lons_converted_grib = set_values(ecuador,lons) - 360
+ecuador_regions = (((ecuador*(orog<600)) and (ecuador*(lons_converted_grib<=-78.199))) * 1) + ((ecuador*(orog>=600)) * 2) + (((ecuador*(orog<600)) and (ecuador*(lons_converted_grib>-78.199))) * 3)
+vals_regions= values(ecuador_regions)
+costa = find(vals_regions,1,"all")
+sierra = find(vals_regions,2,"all")
+oriente = find(vals_regions,3,"all")
+print(" - N. of grid-boxes in 'La Costa': " & count(costa))
+print(" - N. of grid-boxes in 'La Sierra': " & count(sierra))
+print(" - N. of grid-boxes in 'El Oriente': " & count(oriente))
+
+
+# Saving Ecuador's mask as .grib file
+print("Saving Ecuador's mask as .grib file...")
+FileOUT_grib = Git_repo & "/" & DirOUT  & "/Mask.grib"
+write(FileOUT_grib, ecuador_regions)
+
+
+# Saving Ecuador's mask as .csv file
+# NOTE: Latitudes and longitudes are saved with max two decimals.
+print("Saving Ecuador's mask as a .csv file...")
+mask_nonzeros = costa & sierra & oriente
+lons_converted_vec = lons - 360
+FileOUT_csv = Git_repo & "/" & DirOUT  & "/Mask.csv"
+Mask_csv = file(FileOUT_csv)
+write(Mask_csv, "lat,lon,region_code", newline)
+for i = 1 to count(mask_nonzeros) do
+    ind_mask = mask_nonzeros[i]
+    append(Mask_csv, round(lats[ind_mask],2), ",", round(lons_converted_vec[ind_mask],2), ",", vals_regions[ind_mask], newline)
+end for
