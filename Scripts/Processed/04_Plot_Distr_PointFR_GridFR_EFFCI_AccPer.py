@@ -6,6 +6,21 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.dates import DateFormatter
 
+##############################################################################
+# CODE DESCRIPTION
+# 04_Plot_Distr_PointFR_GridFR_EFFCI_AccPer.py plots the distribution of point and gridded 
+# flood reports, per grid-box, in the considered domain, for each day in the considered period  
+# of time.
+
+# INPUT PARAMETERS DESCRIPTION
+# DateS (date, in format YYYYMMDD): start date of the considered period of time.
+# DateF (date, in format YYYYMMDD): final date of the considered period of time.
+# Acc (number, in hours): accumulation to consider.
+# AccPerS_list (list of numbers, in UTC hour): start of the accumulation periods to consider.
+# EFFCI_list (list of integers, from 1 to 10): EFFCI indexes to consider.
+# Git_repo (string): repository's local path.
+# DirIN (string): relative path of the directory containing the gridded, accumulated flood reports.
+# DirOUT (string): relative path of the directory containing the distribution's plots.
 
 # INPUT PARAMETERS
 DateS = datetime(2020,1,1)
@@ -16,7 +31,7 @@ EFFCI_list = [1,6,10]
 Git_repo="/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
 DirIN = "Data/Compute/03_GridFR_EFFCI_AccPer"
 DirOUT = "Data/Plot/04_Distr_PointFR_GridFR_EFFCI_AccPer"
-###############################################################################
+##############################################################################
 
 
 # Considering a specific EFFCI index
@@ -83,5 +98,3 @@ for EFFCI in EFFCI_list:
             if not os.path.exists(DirOUT_temp):
                   os.makedirs(DirOUT_temp)
             plt.savefig(FileOUT)
-
-            
