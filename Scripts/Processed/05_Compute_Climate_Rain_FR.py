@@ -28,13 +28,13 @@ EFFCI_list = [1,6,10]
 MagnitudeInPerc_Rain_Event_FR_list = [50, 75, 85, 90, 95, 98, 99]
 RegionName_list = ["La Costa","La Sierra"]
 Git_repo="/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
-FileN_FR = "Data/Compute/01_Clean_PointFR/Ecu_FF_Hist_ECMWF.csv"
+FileIN_FR = "Data/Compute/01_Clean_PointFR/Ecu_FF_Hist_ECMWF.csv"
 DirIN_FC = "Data/Raw/FC/ecPoint"
 DirOUT = "Data/Compute/05_Climate_Rain_FR"
 ########################################################################
 
 # Reading the cleaned point point flood reports for the considered year
-PointFR = pd.read_csv(Git_repo + "/" + FileN_FR)
+PointFR = pd.read_csv(Git_repo + "/" + FileIN_FR)
 
 # Considering a specific EFFCI index for the point point flood reports to use in the computation 
 # of the climatology of rainfall events associated with flash floods 
