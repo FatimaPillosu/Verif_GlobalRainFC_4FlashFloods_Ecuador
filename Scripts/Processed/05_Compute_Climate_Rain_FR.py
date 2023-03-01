@@ -6,7 +6,7 @@ import metview as mv
 
 ########################################################################
 # CODE DESCRIPTION
-# 05_Compute_Rain_Climate_FR.py computes the climatology of rainfall events 
+# 05_Compute_Climate_Rain_FR.py computes the climatology of rainfall events 
 # associated with flash floods.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -30,7 +30,7 @@ RegionName_list = ["La Costa","La Sierra"]
 Git_repo="/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
 FileN_FR = "Data/Compute/01_Clean_PointFR/Ecu_FF_Hist_ECMWF.csv"
 DirIN_FC = "Data/Raw/FC/ecPoint"
-DirOUT = "Data/Compute/05_Rain_Climate_FR"
+DirOUT = "Data/Compute/05_Climate_Rain_FR"
 ########################################################################
 
 # Reading the cleaned point point flood reports for the considered year
