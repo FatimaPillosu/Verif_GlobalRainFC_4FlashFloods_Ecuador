@@ -110,7 +110,7 @@ for EFFCI in EFFCI_list:
             
             # Savin in a .csv file the climatology of rainfall events associated with flash floods
             DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}"
-            FileNameOUT = "Climate_Rain_FR_" + f"{Acc:02d}" + "h _EFFCI" + f"{EFFCI:02d}" + "_" +  RegionName.split()[1] + ".csv"
+            FileNameOUT = "Climate_Rain_FR_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_" +  RegionName.split()[1] + ".csv"
             if not os.path.exists(DirOUT_temp):
                   os.makedirs(DirOUT_temp)
             np.savetxt(DirOUT_temp + "/" + FileNameOUT, climate_rain_FR, delimiter=",", fmt='%0.2f')            
