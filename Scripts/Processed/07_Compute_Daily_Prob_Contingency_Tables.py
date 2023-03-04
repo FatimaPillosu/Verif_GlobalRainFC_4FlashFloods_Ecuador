@@ -22,7 +22,7 @@ FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN_Climate_Rain_FR = "Data/Compute/05_Climate_Rain_FR"
 DirIN_FC = "Data/Raw/FC"
 DirIN_GridFR = "Data/Compute/03_GridFR_EFFCI_AccPer"
-DirOUT = "Data/Compute/07_Daily_Contingency_Tables"
+DirOUT = "Data/Compute/07_Daily_Prob_Contingency_Tables"
 ###############################################################################
 
 # Reading the file containing the mask for the considered domain
