@@ -4,6 +4,33 @@ import numpy as np
 import pandas as pd
 import metview as mv
 
+#################################################################################
+# CODE DESCRIPTION
+# 05_Compute_Climate_Rain_FR.py computes the climatology of rainfall events 
+# associated with flash floods.
+
+# INPUT PARAMETERS DESCRIPTION
+# DateS (date, in format YYYYMMDD): start date of the considered verification period.
+# DateF (date, in format YYYYMMDD): final date of the considered verification period.
+# StepF_Start (integer, in hours): first final step of the accumulation periods to consider.
+# StepF_Final (integer, in hours): last final step of the accumulation periods to consider.
+# Disc_Step (integer, in hours): discretization for the final steps to consider.
+# Acc (number, in hours): rainfall accumulation to consider.
+# EFFCI_list (list of integers, from 1 to 10): list of EFFCI indexes to consider.
+# MagnitudeInPerc_Rain_Event_FR_list (list of integers, from 0 to 100): list of magnitudes, in 
+#     percentiles, of rainfall events that can potentially conduct to flash floods.
+# Perc_VRE (integer, from 0 to 100): percentile that defines the verifying rainfall event to consider.
+# RegionCode_list (list of integers): list of codes for the domain's regions. 
+# RegionName_list (list of strings): list of names for the domain's regions.
+# SystemFC_list (list of strings): list of names of forecasting systems to consider.
+# Git_repo (string): repository's local path.
+# FileIN_Mask (string): relative path of the file containing the domain's mask.
+# DirIN_Climate_Rain_FR (string): relative path of the file containing the climatology of the rainfall 
+#     events associated with flash floods. 
+# DirIN_FC (string): relative path of the directory containing the rainfall forecasts.
+# DirIN_GridFR (string): relative path containing the gridded flood reports.
+# DirOUT (string): relative path of the directory containing the daily probabilistic contingency tables.
+
 # INPUT PARAMETERS
 DateS = datetime(2020,1,1,0)
 DateF = datetime(2020,12,31,0)
@@ -23,7 +50,7 @@ DirIN_Climate_Rain_FR = "Data/Compute/05_Climate_Rain_FR"
 DirIN_FC = "Data/Raw/FC"
 DirIN_GridFR = "Data/Compute/03_GridFR_EFFCI_AccPer"
 DirOUT = "Data/Compute/07_Daily_Prob_Contingency_Tables"
-###############################################################################
+#################################################################################
 
 # Reading the file containing the mask for the considered domain
 mask = mv.values(mv.read(Git_repo + "/" + FileIN_Mask))
