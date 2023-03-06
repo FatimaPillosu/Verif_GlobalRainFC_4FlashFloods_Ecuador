@@ -6,8 +6,7 @@ import metview as mv
 
 #################################################################################
 # CODE DESCRIPTION
-# 05_Compute_Climate_Rain_FR.py computes the climatology of rainfall events 
-# associated with flash floods.
+# 07_Compute_Daily_Prob_Contingency_Tables.py computes daily probabilistic contingency tables. 
 
 # INPUT PARAMETERS DESCRIPTION
 # DateS (date, in format YYYYMMDD): start date of the considered verification period.
