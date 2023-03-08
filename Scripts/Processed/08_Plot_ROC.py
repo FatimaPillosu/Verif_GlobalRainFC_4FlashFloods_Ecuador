@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 # Colour_SystemFC_list (list of strings): colours used to plot ROC curves for different forecasting systems.
 # Git_repo (string): repository's local path.
 # DirIN (string): relative path containing the daily probabilistic contingency tables.
-# DirOUT (string): relative path of the directory containing the daily probabilistic contingency tables.
+# DirOUT (string): relative path of the directory containing the ROC curve plots.
 
 # INPUT PARAMETERS
 DateS = datetime(2020,1,1,0)
