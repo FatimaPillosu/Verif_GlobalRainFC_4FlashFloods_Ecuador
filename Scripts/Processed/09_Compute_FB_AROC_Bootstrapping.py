@@ -152,6 +152,7 @@ for indSystemFC in range(len(SystemFC_list)):
                                           DirIN_temp = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + SystemFC + "/EFFCI" + f"{EFFCI:02d}" + "/" + TheDate.strftime("%Y%m%d%H")
                                           FileNameIN_temp = "CT_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + "_" + RegionName + ".csv"
                                           if os.path.isfile(DirIN_temp + "/" + FileNameIN_temp):
+                                                ProbThr = pd.read_csv(DirIN_temp + "/" + FileNameIN_temp).to_numpy()[:,0]
                                                 ct_daily = pd.read_csv(DirIN_temp + "/" + FileNameIN_temp).to_numpy()[:,1:]
                                                 ct_tot = ct_tot + ct_daily
 
@@ -164,7 +165,6 @@ for indSystemFC in range(len(SystemFC_list)):
                                     AROC_array[indStepF, indBS+1] = AROC
                         
                         # Storing information about the probability thresholds considered
-                        ProbThr = pd.read_csv(DirIN_temp + "/" + FileNameIN_temp).to_numpy()[:,0]
                         FB_array[indStepF, 1,:] = ProbThr
                         
                         # Saving the FB array
