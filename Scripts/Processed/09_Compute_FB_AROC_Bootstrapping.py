@@ -169,14 +169,14 @@ for indSystemFC in range(len(SystemFC_list)):
                         
                         # Saving the FB array
                         DirOUT_temp= Git_repo + "/" + DirOUT_FB + "/" + f"{Acc:02d}" + "h"
-                        FileNameOUT_temp = "FB_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName + ".csv"
+                        FileNameOUT_temp = "FB_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName
                         if not os.path.exists(DirOUT_temp):
                               os.makedirs(DirOUT_temp)
                         np.save(DirOUT_temp + "/" + FileNameOUT_temp, FB_array)
 
                         # Saving the AROC array
                         DirOUT_temp= Git_repo + "/" + DirOUT_AROC + "/" + f"{Acc:02d}" + "h"
-                        FileNameOUT_temp = "AROC_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName + ".csv"
+                        FileNameOUT_temp = "AROC_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName
                         if not os.path.exists(DirOUT_temp):
                               os.makedirs(DirOUT_temp)
                         np.save(DirOUT_temp + "/" + FileNameOUT_temp, AROC_array)
