@@ -4,6 +4,7 @@ from  random import choices
 import numpy as np
 import pandas as pd
 
+
 ####################################################################################################
 # CODE DESCRIPTION
 # 09_Compute_FB_AROC_Bootstrapping.py computes frequency bias (FB) and area under the ROC curves (AROC), 
@@ -32,13 +33,13 @@ import pandas as pd
 DateS = datetime(2020,1,1,0)
 DateF = datetime(2020,12,31,0)
 StepF_Start = 12
-StepF_Final = 246
+StepF_Final = 30
 Disc_Step = 6
 Acc = 12
 EFFCI_list = [1,6,10]
 MagnitudeInPerc_Rain_Event_FR_list = [85,99]
 RepetitionsBS = 10000
-RegionName_list = ["Costa", "Sierra"]
+RegionName_list = ["Costa","Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
 NumEM_list = [51,99]
 Git_repo="/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
@@ -89,10 +90,8 @@ np.set_printoptions(suppress=True, formatter={'float_kind':'{:0.2f}'.format})
 print(" ")
 print("Computing FB and AROC, including " + str(RepetitionsBS) + " bootstrapped values")
 
-# Creating the list containing the dates considered in the computations
-original_dates_list = []
-for x in range(((DateF+timedelta(days=1))-DateS).days):
-      original_dates_list.append(DateS+timedelta(days=x))
+# Computing the totals number of days contained in the considered verification period
+NumTotDays = (DateF-DateS).days + 1
 
 # Creating the list containing the steps to considered in the computations
 StepF_list = range(StepF_Start, (StepF_Final+1), Disc_Step)
@@ -123,8 +122,8 @@ for indSystemFC in range(len(SystemFC_list)):
                         print(" - For " + SystemFC + ", " + RegionName + ", EFFCI>=" + str(EFFCI) + ", VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile)")
 
                         # Initializing the variables containing the FB and AROC values, and the bootstrapped ones
-                        FB_array = np.empty([m,n+2,NumEM+1])
-                        AROC_array = np.empty([m,n+1])
+                        FB_array = np.zeros([m,n+2,NumEM+1])
+                        AROC_array = np.zeros([m,n+1])
 
                         # Computing FB and AROC for a specific lead time
                         for indStepF in range(len(StepF_list)):
@@ -137,32 +136,49 @@ for indSystemFC in range(len(SystemFC_list)):
                               FB_array[indStepF, 0,:] = StepF
                               AROC_array[indStepF, 0] = StepF
 
-                              # Creating the list of dates to considered from the boostrapping technique
-                              for indBS in range(RepetitionsBS+1):
+                              # Reading the daily probabilistic contingency tables for the original list of dates
+                              original_datesSTR_array = [] # list of dates for which a contingency table was created
+                              ct_AllDays_original = np.full((NumEM+1,4), np.nan) # initialize the 3d-array containing the daily contingency tables for those days in which one was computed with a 2-array full of NaNs with the same dimensions of the daily probabilistic contingency tables 
+                              TheDate = DateS
+                              while TheDate <= DateF:
+                                    DirIN_temp = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + SystemFC + "/EFFCI" + f"{EFFCI:02d}" + "/" + TheDate.strftime("%Y%m%d%H")
+                                    FileNameIN_temp = "CT_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + "_" + RegionName + ".csv"
+                                    if os.path.isfile(DirIN_temp + "/" + FileNameIN_temp): # if the files exists, add the correspondent daily probabilistic contingency table to the 3d-array
+                                          original_datesSTR_array.append(TheDate.strftime("%Y%m%d"))
+                                          ProbThr = pd.read_csv(DirIN_temp + "/" + FileNameIN_temp).to_numpy()[:,0]
+                                          ct_daily = pd.read_csv(DirIN_temp + "/" + FileNameIN_temp).to_numpy()[:,1:]
+                                          ct_AllDays_original = np.concatenate((ct_AllDays_original, ct_daily), axis=0)
+                                    else: # if the file does not exist, add a 2d-array filled with NaNs to the 3d-array
+                                          ct_AllDays_original = np.concatenate((ct_AllDays_original, np.full((NumEM+1,4), np.nan)), axis=0)
+                                    TheDate += timedelta(days=1)
+                              ct_AllDays_original = ct_AllDays_original.reshape((NumTotDays+1,(NumEM+1),4)) 
+                              
+                              # Eliminating the 2d-arrays containing only NaNs
+                              NumDays = len(original_datesSTR_array)
+                              ind_nan2del = np.any(~np.isnan(ct_AllDays_original), axis=(1,2))
+                              ct_AllDays_original = ct_AllDays_original[ind_nan2del]
+                              
+                              # Creating the bootstrapped contingency tables
+                              for ind_repBS in range(RepetitionsBS+1):
+                              
+                                    if ind_repBS == 0:
+                                          ct_BS = ct_AllDays_original
+                                    else:
+                                          datesBS_array = np.array(choices(population=original_datesSTR_array, k=NumDays)) # list of bootstrapped dates
+                                          indBS = np.searchsorted(original_datesSTR_array, datesBS_array) # indexes of the bootstrapped dates
+                                          ct_BS = ct_AllDays_original[indBS,:,:] # indexing the bootstrapped daily pro babilistic contingency tables
                                     
-                                    # Establishing whether to consider the original dates or the bootstrapped ones
-                                    if indBS == 0:
-                                          datesBS_list = original_dates_list
-                                    if indBS > 0:
-                                          datesBS_list = choices(population=original_dates_list, k=len(original_dates_list)) # it picks random values from the list with replacement
+                                    # Adding the correspondent elements of the daily probabilistic contingency tables over the condisered verification period
+                                    ct_BS_tot = np.sum(ct_BS,axis=0) 
                                     
-                                    # Reading the daily probabilistic contingency tables for the defined list of dates, and adding them together
-                                    ct_tot = np.zeros((NumEM+1,4), dtype=int)
-                                    for TheDate in datesBS_list:
-                                          DirIN_temp = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + SystemFC + "/EFFCI" + f"{EFFCI:02d}" + "/" + TheDate.strftime("%Y%m%d%H")
-                                          FileNameIN_temp = "CT_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + "_" + RegionName + ".csv"
-                                          if os.path.isfile(DirIN_temp + "/" + FileNameIN_temp):
-                                                ProbThr = pd.read_csv(DirIN_temp + "/" + FileNameIN_temp).to_numpy()[:,0]
-                                                ct_daily = pd.read_csv(DirIN_temp + "/" + FileNameIN_temp).to_numpy()[:,1:]
-                                                ct_tot = ct_tot + ct_daily
-
                                     # Computing and saving FB
-                                    FB = FreqBias(ct_tot)
-                                    FB_array[indStepF, indBS+2,:] = FB
+                                    FB = FreqBias(ct_BS_tot)
+                                    FB_array[indStepF, ind_repBS+2,:] = FB
 
                                     # Computing and saving AROC
-                                    AROC = AROC_trapezoidal(ct_tot)
-                                    AROC_array[indStepF, indBS+1] = AROC
+                                    AROC = AROC_trapezoidal(ct_BS_tot)
+                                    AROC_array[indStepF, ind_repBS+1] = AROC
+                        
                         
                         # Storing information about the probability thresholds considered
                         FB_array[indStepF, 1,:] = ProbThr
