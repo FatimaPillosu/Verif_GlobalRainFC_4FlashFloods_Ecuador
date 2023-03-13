@@ -60,10 +60,10 @@ def FreqBias(ct):
 def AROC_trapezoidal(ct):
       
       # Computing hit rates (hr) and false alarm rates (far). The arrays are reversed for a more intuitive reading of the elements.
-      hr = np.flipud( ct[:,0] / (ct[:,0] + ct[:,2]) )# hit rates (reverse the order of the elements 
-      far = np.flipud( ct[:,1] / (ct[:,1] + ct[:,3]) ) # false alarms (reverse the order of the elements for a more intuitive reading of the meaining of the element)
+      hr = ct[:,0] / (ct[:,0] + ct[:,2]) # hit rates
+      far = ct[:,1] / (ct[:,1] + ct[:,3]) # false alarms
       
-      # Adding the points (0,0) and (1,1) to the arrays to ensure the ROC curve is complete.
+      # Adding the points (0,0) and (1,1) to the arrays to ensure the ROC curve is closed.
       hr = np.insert(hr, 0, 0) 
       hr = np.insert(hr, -1, 1)
       far = np.insert(far, 0, 0) 
