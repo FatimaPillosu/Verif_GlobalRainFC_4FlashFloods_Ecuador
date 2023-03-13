@@ -85,8 +85,6 @@ def AROC_trapezoidal(ct):
       return aroc
 ####################################################################################################
 
-np.set_printoptions(suppress=True, formatter={'float_kind':'{:0.2f}'.format}) 
-
 print(" ")
 print("Computing FB and AROC, including " + str(RepetitionsBS) + " bootstrapped values")
 
@@ -96,7 +94,7 @@ NumTotDays = (DateF-DateS).days + 1
 # Creating the list containing the steps to considered in the computations
 StepF_list = range(StepF_Start, (StepF_Final+1), Disc_Step)
 
-# Initializing the variables containing the sizes of the FB and AROC variables
+# Computing the variables containing the sizes of the FB and AROC variables
 m = len(StepF_list)
 n = len(range(RepetitionsBS + 1))
 
@@ -137,8 +135,8 @@ for indSystemFC in range(len(SystemFC_list)):
                               AROC_array[indStepF, 0] = StepF
 
                               # Reading the daily probabilistic contingency tables for the original list of dates
-                              original_datesSTR_array = [] # list of dates for which a contingency table was created
-                              ct_AllDays_original = np.full((NumEM+1,4), np.nan) # initialize the 3d-array containing the daily contingency tables for those days in which one was computed with a 2-array full of NaNs with the same dimensions of the daily probabilistic contingency tables 
+                              original_datesSTR_array = [] # list of dates for which a contingency table was created (not all steps have one if the forecasts did not exist)
+                              ct_AllDays_original = np.full((NumEM+1,4), np.nan) # initialize the 3d-array containing the daily contingency tables for those days in which one was computed. The variable is initialized with a 2d-array filled of NaNs, and contains the same dimensions of the daily probabilistic contingency tables 
                               TheDate = DateS
                               while TheDate <= DateF:
                                     DirIN_temp = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + SystemFC + "/EFFCI" + f"{EFFCI:02d}" + "/" + TheDate.strftime("%Y%m%d%H")
@@ -151,36 +149,34 @@ for indSystemFC in range(len(SystemFC_list)):
                                     else: # if the file does not exist, add a 2d-array filled with NaNs to the 3d-array
                                           ct_AllDays_original = np.concatenate((ct_AllDays_original, np.full((NumEM+1,4), np.nan)), axis=0)
                                     TheDate += timedelta(days=1)
-                              ct_AllDays_original = ct_AllDays_original.reshape((NumTotDays+1,(NumEM+1),4)) 
-                              
-                              # Eliminating the 2d-arrays containing only NaNs
+                              ct_AllDays_original = ct_AllDays_original.reshape((NumTotDays+1,(NumEM+1),4)) # reshape the long 2d-array into a 3d-array 
                               NumDays = len(original_datesSTR_array)
                               ind_nan2del = np.any(~np.isnan(ct_AllDays_original), axis=(1,2))
-                              ct_AllDays_original = ct_AllDays_original[ind_nan2del]
+                              ct_AllDays_original = ct_AllDays_original[ind_nan2del] # eliminate the 2d-arrays containing only NaNs
                               
-                              # Creating the bootstrapped contingency tables
+                              # Computing FB and AROC for the original and the bootstrapped probabilistic contingency tables
                               for ind_repBS in range(RepetitionsBS+1):
-                              
-                                    if ind_repBS == 0:
-                                          ct_BS = ct_AllDays_original
-                                    else:
+                                    
+                                    # Selecting the original or the bootstrapped contingency tables
+                                    if ind_repBS == 0: # original
+                                          ct = ct_AllDays_original
+                                    else: # bootstrapped
                                           datesBS_array = np.array(choices(population=original_datesSTR_array, k=NumDays)) # list of bootstrapped dates
                                           indBS = np.searchsorted(original_datesSTR_array, datesBS_array) # indexes of the bootstrapped dates
-                                          ct_BS = ct_AllDays_original[indBS,:,:] # indexing the bootstrapped daily pro babilistic contingency tables
+                                          ct = ct_AllDays_original[indBS,:,:] # indexing the bootstrapped daily probabilistic contingency tables
                                     
                                     # Adding the correspondent elements of the daily probabilistic contingency tables over the condisered verification period
-                                    ct_BS_tot = np.sum(ct_BS,axis=0) 
+                                    ct_tot = np.sum(ct, axis=0) #2d-array, of the same dimensions of the daily probabilistic contingency tables
                                     
-                                    # Computing and saving FB
-                                    FB = FreqBias(ct_BS_tot)
+                                    # Computing FB
+                                    FB = FreqBias(ct_tot)
                                     FB_array[indStepF, ind_repBS+2,:] = FB
 
-                                    # Computing and saving AROC
-                                    AROC = AROC_trapezoidal(ct_BS_tot)
+                                    # Computing AROC
+                                    AROC = AROC_trapezoidal(ct_tot)
                                     AROC_array[indStepF, ind_repBS+1] = AROC
                         
-                        
-                        # Storing information about the probability thresholds considered
+                        # Storing information about the probability thresholds considered for FB
                         FB_array[indStepF, 1,:] = ProbThr
                         
                         # Saving the FB array
