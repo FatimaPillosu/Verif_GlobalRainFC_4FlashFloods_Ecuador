@@ -7,7 +7,7 @@ import pandas as pd
 
 ####################################################################################################
 # CODE DESCRIPTION
-# 09_Compute_FB_AROC_Bootstrapping.py computes frequency bias (FB) and area under the ROC curves (AROC), 
+# 08_Compute_FB_AROC_Bootstrapping.py computes frequency bias (FB) and area under the ROC curves (AROC), 
 # including the bootstrapped values to estimate the statistical significance of FB and AROC.
 
 # INPUT PARAMETERS DESCRIPTION
