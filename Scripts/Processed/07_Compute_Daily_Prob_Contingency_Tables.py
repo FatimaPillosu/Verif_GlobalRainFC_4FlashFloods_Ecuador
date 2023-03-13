@@ -2,11 +2,12 @@ import os
 from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
-import metview as mv
+import metview as mv 
 
 #################################################################################
 # CODE DESCRIPTION
-# 07_Compute_Daily_Prob_Contingency_Tables.py computes daily probabilistic contingency tables. 
+# 07_Compute_Daily_Prob_Contingency_Tables.py computes daily probabilistic contingency tables, 
+# and stores them in a 3d-array whose dimensions are (NumDays, NumProbThr, NumElementsCT).
 
 # INPUT PARAMETERS DESCRIPTION
 # DateS (date, in format YYYYMMDD): start date of the considered verification period.
@@ -49,7 +50,7 @@ DirIN_Climate_Rain_FR = "Data/Compute/05_Climate_Rain_FR"
 DirIN_FC = "Data/Raw/FC"
 DirIN_GridFR = "Data/Compute/03_GridFR_EFFCI_AccPer"
 DirOUT = "Data/Compute/07_Daily_Prob_Contingency_Tables"
-#################################################################################
+################################################################################
 
 # Reading the file containing the mask for the considered domain
 mask = mv.values(mv.read(Git_repo + "/" + FileIN_Mask))
@@ -62,24 +63,22 @@ print(" ")
 # Creating the daily probabilistic contingency tables for a specific forecasting system
 for SystemFC in SystemFC_list:
 
-      # Creating the daily probabilistic contingency tables for a specific date
-      TheDate = DateS
-      while TheDate <= DateF:
+      # Initializing the list containing, for a specific lead time, the dates for which the rainfall forecasts exist
+      StepF_Dates_list = []
+
+      # Creating the daily probabilistic contingency tables for a specific lead time
+      for StepF in range(StepF_Start, (StepF_Final+1), Disc_Step):
             
-            # Creating the daily probabilistic contingency tables for a specific lead time
-            for StepF in range(StepF_Start, (StepF_Final+1), Disc_Step):
-                  
-                  # Defining the beginning of the accumulation period
-                  StepS = StepF - Acc
+            print(" - For " + SystemFC + ", StepF=" + str(StepF))
 
-                  # Defining the valid time for the accumulation period
-                  ValidTimeS = TheDate + timedelta(hours=StepS)
-                  ValidTimeF = TheDate + timedelta(hours=StepF)
-
-                  print(" - for " + SystemFC + ", FC: "  + TheDate.strftime("%Y%m%d") + " at " + TheDate.strftime("%H") + " UTC (t+" + str(StepS) + ",t+" + str(StepF) + "), VT: " + ValidTimeS.strftime("%Y%m%d") + " at " + ValidTimeS.strftime("%H") + " UTC and " + ValidTimeF.strftime("%Y%m%d") + " at " + ValidTimeF.strftime("%H") + " UTC")
+            # Creating the daily probabilistic contingency tables for a specific date
+            TheDate = DateS
+            while TheDate <= DateF:
                   
-                  # Reading the rainfall forecasts
-                  tp = []
+                  print("     - reading date: " + TheDate.strftime("%Y-%m-%d"))
+
+                  # Reading the rainfall forecasts for the considered date
+                  tp = [] # variable needed to asses whether the forecasts for the considered date exist
                   if SystemFC == "ENS":
                         # Note: converting the forecasts in accumulated rainfall over the considered period. Converting also their units from m to mm.
                         FileIN_FC_temp1= Git_repo + "/" + DirIN_FC + "/" + SystemFC + "/" + TheDate.strftime("%Y%m%d%H") + "/tp_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepS:03d}" + ".grib"
@@ -94,11 +93,14 @@ for SystemFC in SystemFC_list:
                         if os.path.isfile(FileIN_FC_temp):
                               tp = mv.values(mv.read(FileIN_FC_temp))
                   
-                  # Checking that the requested forecasts exists and were read correctly. If not, the following lead time is considered.
+                  # Checking that the rainfall forecasts exist for the considered date. If not, they are not added in the 3d-array
                   if len(tp) != 0:
                         
                         # Extracting the number of ensemble members in the considered forecasting system
                         num_em = tp.shape[0]
+
+                        # Defining the valid time for the accumulation period
+                        ValidTimeF = TheDate + timedelta(hours=StepF)
 
                         # Creating the daily probabilistic contingency tables for a specific EFFCI index
                         for EFFCI in EFFCI_list: 
