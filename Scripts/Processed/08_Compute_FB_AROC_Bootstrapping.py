@@ -48,18 +48,15 @@ DirOUT_FB = "Data/Compute/08_FB_Bootstrapping"
 DirOUT_AROC = "Data/Compute/08_AROC_Bootstrapping"
 ####################################################################################################
 
+
 # COSTUME FUNCTIONS
 
-###############################
-# Computation of the frequency bias #
-###############################
+# Computation of the frequency bias
 def FreqBias(ct):
       FB = ( ct[:,0] + ct[:,1] ) / (ct[:,0] + ct[:,2])
       return FB
 
-#######################################################################
-# Computation of the area under the ROC curve, using the trapezoidal approximation  #
-#######################################################################
+# Computation of the area under the ROC curve, using the trapezoidal approximation
 def AROC_trapezoidal(ct):
       
       # Computing hit rates (hr) and false alarm rates (far). The arrays are reversed for a more intuitive reading of the elements.
@@ -84,6 +81,7 @@ def AROC_trapezoidal(ct):
 
       return aroc
 ####################################################################################################
+
 
 print(" ")
 print("Computing FB and AROC, including " + str(RepetitionsBS) + " bootstrapped values")
