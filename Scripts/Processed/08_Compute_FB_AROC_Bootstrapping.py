@@ -59,7 +59,7 @@ def FreqBias(ct):
 # Computation of the area under the ROC curve, using the trapezoidal approximation
 def AROC_trapezoidal(ct):
       
-      # Computing hit rates (hr) and false alarm rates (far). The arrays are reversed for a more intuitive reading of the elements.
+      # Computing hit rates (hr) and false alarm rates (far).
       hr = ct[:,0] / (ct[:,0] + ct[:,2]) # hit rates
       far = ct[:,1] / (ct[:,1] + ct[:,3]) # false alarms
       
