@@ -44,8 +44,8 @@ SystemFC_list = ["ENS", "ecPoint"]
 NumEM_list = [51,99]
 Git_repo="/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
 DirIN = "Data/Compute/07_Daily_Prob_Contingency_Tables"
-DirOUT_FB = "Data/Compute/09_FB_Bootstrapping"
-DirOUT_AROC = "Data/Compute/09_AROC_Bootstrapping"
+DirOUT_FB = "Data/Compute/08_FB_Bootstrapping"
+DirOUT_AROC = "Data/Compute/08_AROC_Bootstrapping"
 ####################################################################################################
 
 # COSTUME FUNCTIONS
