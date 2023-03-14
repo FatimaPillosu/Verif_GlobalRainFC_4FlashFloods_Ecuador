@@ -137,8 +137,8 @@ for indSystemFC in range(len(SystemFC_list)):
                               ct_AllDays_original = np.full((NumEM+1,4), np.nan) # initialize the 3d-array containing the daily contingency tables for those days in which one was computed. The variable is initialized with a 2d-array filled of NaNs, and contains the same dimensions of the daily probabilistic contingency tables 
                               TheDate = DateS
                               while TheDate <= DateF:
-                                    DirIN_temp = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + SystemFC + "/EFFCI" + f"{EFFCI:02d}" + "/" + TheDate.strftime("%Y%m%d%H")
-                                    FileNameIN_temp = "CT_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + "_" + RegionName + ".csv"
+                                    DirIN_temp= Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC
+                                    FileNameIN_temp = "CT_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + ".csv"
                                     if os.path.isfile(DirIN_temp + "/" + FileNameIN_temp): # if the files exists, add the correspondent daily probabilistic contingency table to the 3d-array
                                           original_datesSTR_array.append(TheDate.strftime("%Y%m%d"))
                                           ProbThr = pd.read_csv(DirIN_temp + "/" + FileNameIN_temp).to_numpy()[:,0]
