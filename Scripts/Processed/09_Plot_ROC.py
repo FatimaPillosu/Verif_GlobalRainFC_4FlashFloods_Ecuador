@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 #####################################################################################
 # CODE DESCRIPTION
 # 09_Plot_ROC.py plots ROC curves.
-# Note: the code can take up 25 minutes to run in serial.
+# Note: the code can take up 20 minutes to run in serial.
 
 # INPUT PARAMETERS DESCRIPTION
 # DateS (date, in format YYYYMMDD): start date of the considered verification period.
