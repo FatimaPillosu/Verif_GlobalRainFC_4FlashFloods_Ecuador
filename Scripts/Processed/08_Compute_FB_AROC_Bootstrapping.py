@@ -9,6 +9,7 @@ import pandas as pd
 # CODE DESCRIPTION
 # 08_Compute_FB_AROC_Bootstrapping.py computes frequency bias (FB) and area under the ROC curves (AROC), 
 # including the bootstrapped values to estimate the statistical significance of FB and AROC.
+# Note: the code can take up to 2 hours to run.
 
 # INPUT PARAMETERS DESCRIPTION
 # DateS (date, in format YYYYMMDD): start date of the considered verification period.
