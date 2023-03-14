@@ -8,6 +8,8 @@ import metview as mv
 # CODE DESCRIPTION
 # 07_Compute_Daily_Prob_Contingency_Tables.py computes daily probabilistic contingency tables, 
 # and stores them in a 3d-array whose dimensions are (NumDays, NumProbThr, NumElementsCT).
+# Note: the code can take up 4 days to run in serial. It is recommended to run separate months in 
+# parallel to take down the runtime to 8 hours.
 
 # INPUT PARAMETERS DESCRIPTION
 # DateS (date, in format YYYYMMDD): start date of the considered verification period.

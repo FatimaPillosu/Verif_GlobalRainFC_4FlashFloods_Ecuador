@@ -7,7 +7,7 @@ import metview as mv
 ########################################################################################
 # CODE DESCRIPTION
 # 05_Compute_Climate_Rain_FR.py computes the climatology of rainfall events associated with flash floods.
-# Note: the code can take up  3 hours to run in serial.
+# Note: the code can take up 3 hours to run in serial.
 
 # INPUT PARAMETERS DESCRIPTION
 # Year (year, in YYYY format): year to consider.
