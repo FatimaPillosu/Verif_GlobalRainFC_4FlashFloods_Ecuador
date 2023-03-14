@@ -9,6 +9,7 @@ import metview as mv
 # the point flood reports, for specific EFFCI indexes and accumulation periods. The fields are 
 # saved in .grib files that contain the number of flood reports in each grid-box of the domain of 
 # interest. The file names contain the end time of the accumulation period.
+# Note: the code can take up 5 minutes to run in serial.
 
 # INPUT PARAMETERS DESCRIPTION
 # Year (year, in YYYY format): year to consider.
