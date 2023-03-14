@@ -11,6 +11,7 @@ from matplotlib.dates import DateFormatter
 # 04_Plot_Distr_PointFR_GridFR_EFFCI_AccPer.py plots the distribution of point and gridded 
 # flood reports, per grid-box, in the considered domain, for each day in the considered period  
 # of time.
+# Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
 # DateS (date, in format YYYYMMDD): start date of the considered period of time.
