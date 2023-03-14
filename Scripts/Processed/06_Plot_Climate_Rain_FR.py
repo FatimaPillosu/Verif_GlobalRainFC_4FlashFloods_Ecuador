@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 ##########################################################################################
 # CODE DESCRIPTION
 # 06_Plot_Climate_Rain_FR.py plots the climatology of rainfall events associated with flash floods.
+# Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
 # Acc (number, in hours): accumulation to consider.
@@ -23,7 +24,7 @@ import matplotlib.pyplot as plt
 Acc = 12
 EFFCI_list = [1,6,10]
 Max_Rain_Plot = 100
-Max_Rain_Plot_Disc = 20
+Max_Rain_Plot_Disc = 10
 MagnitudeInPerc_Rain_Event_FR_list = [50, 75, 85, 90, 95, 98, 99]
 MagnitudeInPerc_Rain_Event_FR_colours_list = ["orange", "lime", "purple", "cyan", "blue", "magenta", "red"]
 RegionName_list = ["Costa","Sierra"]
