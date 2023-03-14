@@ -7,6 +7,7 @@ import metview as mv
 ########################################################################################
 # CODE DESCRIPTION
 # 05_Compute_Climate_Rain_FR.py computes the climatology of rainfall events associated with flash floods.
+# Note: the code can take up  3 hours to run in serial.
 
 # INPUT PARAMETERS DESCRIPTION
 # Year (year, in YYYY format): year to consider.
@@ -54,8 +55,7 @@ for EFFCI in EFFCI_list:
       for RegionName in RegionName_list:
 
             print(" ")
-            print("EFFCI: ", EFFCI, ", Region: ", RegionName)
-            print("  Considering the following point point flood reports...")
+            print("Computing the rainfall climatologies for EFFCI: " + str(EFFCI) + ", Region: " + RegionName)
 
             # Extracting the point point flood reports for a specific year, EFFCI  index and region
             PointFR_temp = PointFR.loc[(PointFR["year"] == Year) & (PointFR["EFFCI"] >= EFFCI) & (PointFR["Georegion"] == RegionName)]
@@ -71,7 +71,7 @@ for EFFCI in EFFCI_list:
             # Computing the rainfall climatology
             for ind_PointFR in range(len(PointFR_temp)):
                   
-                  print("     - ", (ind_PointFR+1), "/", len(PointFR_temp))
+                  print(" - Considering point flood report n." + str(ind_PointFR+1) + " of " + str(len(PointFR_temp)))
 
                   # Extracting the lat/lon coordinates and the date/time of single point point flood reports
                   lat_temp = lat_list[ind_PointFR]
@@ -124,4 +124,4 @@ for EFFCI in EFFCI_list:
             FileNameOUT = "Climate_Rain_FR_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_" +  RegionName.split()[1] + ".csv"
             if not os.path.exists(DirOUT_temp):
                   os.makedirs(DirOUT_temp)
-            np.savetxt(DirOUT_temp + "/" + FileNameOUT, climate_rain_FR, delimiter=",", fmt=Format, header=Headers)            
+            np.savetxt(DirOUT_temp + "/" + FileNameOUT, climate_rain_FR, delimiter=",", fmt=Format, header=Headers, comments='')            
