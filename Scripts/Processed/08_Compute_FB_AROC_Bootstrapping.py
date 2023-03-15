@@ -34,11 +34,11 @@ import pandas as pd
 DateS = datetime(2020,1,1,0)
 DateF = datetime(2020,12,31,0)
 StepF_Start = 12
-StepF_Final = 246
+StepF_Final = 18
 Disc_Step = 6
 Acc = 12
-EFFCI_list = [1,6,10]
-MagnitudeInPerc_Rain_Event_FR_list = [85,99]
+EFFCI_list = [1]
+MagnitudeInPerc_Rain_Event_FR_list = [85]
 RepetitionsBS = 10000
 RegionName_list = ["Costa","Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
@@ -104,24 +104,24 @@ for indSystemFC in range(len(SystemFC_list)):
       SystemFC = SystemFC_list[indSystemFC]
       NumEM = NumEM_list[indSystemFC]
 
-      # Computing FB and AROC for a specific region
-      for indRegion in range(len(RegionName_list)): 
+      # Computing FB and AROC for a specific EFFCI index
+      for EFFCI in EFFCI_list:
+            
+            # Computing FB and AROC for a specific VRE
+            for MagnitudeInPerc_Rain_Event_FR in MagnitudeInPerc_Rain_Event_FR_list:
 
-            # Selecting the region to consider
-            RegionName = RegionName_list[indRegion]
-
-            # Computing FB and AROC for a specific EFFCI index
-            for EFFCI in EFFCI_list:
+                  # Computing FB and AROC for a specific region
+                  for indRegion in range(len(RegionName_list)): 
                   
-                  # Computing FB and AROC for a specific VRE
-                  for MagnitudeInPerc_Rain_Event_FR in MagnitudeInPerc_Rain_Event_FR_list:
+                        # Selecting the region to consider
+                        RegionName = RegionName_list[indRegion]
 
                         print(" - For " + SystemFC + ", " + RegionName + ", EFFCI>=" + str(EFFCI) + ", VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile)")
 
                         # Initializing the variables containing the FB and AROC values, and the bootstrapped ones
                         FB_array = np.zeros([m,n+2,NumEM+1])
                         AROC_array = np.zeros([m,n+1])
-
+            
                         # Computing FB and AROC for a specific lead time
                         for indStepF in range(len(StepF_list)):
                               
@@ -138,8 +138,8 @@ for indSystemFC in range(len(SystemFC_list)):
                               ct_AllDays_original = np.full((NumEM+1,4), np.nan) # initialize the 3d-array containing the daily contingency tables for those days in which one was computed. The variable is initialized with a 2d-array filled of NaNs, and contains the same dimensions of the daily probabilistic contingency tables 
                               TheDate = DateS
                               while TheDate <= DateF:
-                                    DirIN_temp= Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC
-                                    FileNameIN_temp = "CT_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + ".csv"
+                                    DirIN_temp= Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC + "/" + RegionName
+                                    FileNameIN_temp = "CT_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + ".csv"
                                     if os.path.isfile(DirIN_temp + "/" + FileNameIN_temp): # if the files exists, add the correspondent daily probabilistic contingency table to the 3d-array
                                           original_datesSTR_array.append(TheDate.strftime("%Y%m%d"))
                                           ProbThr = pd.read_csv(DirIN_temp + "/" + FileNameIN_temp).to_numpy()[:,0]
@@ -178,16 +178,16 @@ for indSystemFC in range(len(SystemFC_list)):
                               # Storing information about the probability thresholds considered for FB
                               FB_array[indStepF, 1,:] = ProbThr
                               
-                              # Saving the FB array
-                              DirOUT_temp= Git_repo + "/" + DirOUT_FB + "/" + f"{Acc:02d}" + "h"
-                              FileNameOUT_temp = "FB_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName
-                              if not os.path.exists(DirOUT_temp):
-                                    os.makedirs(DirOUT_temp)
-                              np.save(DirOUT_temp + "/" + FileNameOUT_temp, FB_array)
+                        # Saving the FB array
+                        DirOUT_temp= Git_repo + "/" + DirOUT_FB + "/" + f"{Acc:02d}" + "h"
+                        FileNameOUT_temp = "FB_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName
+                        if not os.path.exists(DirOUT_temp):
+                              os.makedirs(DirOUT_temp)
+                        np.save(DirOUT_temp + "/" + FileNameOUT_temp, FB_array)
 
-                              # Saving the AROC array
-                              DirOUT_temp= Git_repo + "/" + DirOUT_AROC + "/" + f"{Acc:02d}" + "h"
-                              FileNameOUT_temp = "AROC_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName
-                              if not os.path.exists(DirOUT_temp):
-                                    os.makedirs(DirOUT_temp)
-                              np.save(DirOUT_temp + "/" + FileNameOUT_temp, AROC_array)
+                        # Saving the AROC array
+                        DirOUT_temp= Git_repo + "/" + DirOUT_AROC + "/" + f"{Acc:02d}" + "h"
+                        FileNameOUT_temp = "AROC_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName
+                        if not os.path.exists(DirOUT_temp):
+                              os.makedirs(DirOUT_temp)
+                        np.save(DirOUT_temp + "/" + FileNameOUT_temp, AROC_array)

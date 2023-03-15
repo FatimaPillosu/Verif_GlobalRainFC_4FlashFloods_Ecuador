@@ -34,8 +34,8 @@ import metview as mv
 # DirOUT (string): relative path of the directory containing the daily probabilistic contingency tables.
 
 # INPUT PARAMETERS
-DateS = datetime(2020,1,1,0)
-DateF = datetime(2020,12,31,0)
+DateS = datetime(2020,2,1,0)
+DateF = datetime(2020,2,29,0)
 StepF_Start = 12
 StepF_Final = 246
 Disc_Step = 6
@@ -172,8 +172,8 @@ for SystemFC in SystemFC_list:
                                           ct = daily_prob_ct(tp_region, GridFR_region, vre, NumEM)
 
                                           # Saving the probabilistic contingency table
-                                          DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC
-                                          FileNameOUT_temp = "CT_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + ".csv"
+                                          DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC + "/" + RegionName
+                                          FileNameOUT_temp = "CT_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + ".csv"
                                           if not os.path.exists(DirOUT_temp):
                                                 os.makedirs(DirOUT_temp)
                                           ct_df = pd.DataFrame(ct, columns = ["N. OF MEMBERS (AT LEAST) EXCEEDING VRE", "HITS", "FALSE ALARMS", "MISSES", "CORRECT NEGATIVES"])

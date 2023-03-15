@@ -26,9 +26,9 @@ import matplotlib.pyplot as plt
 
 # INPUT PARAMETERS
 Acc = 12
-EFFCI_list = [6]
-MagnitudeInPerc_Rain_Event_FR_list = [99]
-CL = 95
+EFFCI_list = [1,6,10]
+MagnitudeInPerc_Rain_Event_FR_list = [85,99]
+CL = 99
 RegionName_list = ["Costa", "Sierra"]
 Lines_Region_list = ["o-", "o-"]
 SystemFC_list = ["ENS", "ecPoint"]
