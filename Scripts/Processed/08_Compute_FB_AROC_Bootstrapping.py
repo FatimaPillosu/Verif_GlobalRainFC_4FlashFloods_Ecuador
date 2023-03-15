@@ -34,11 +34,11 @@ import pandas as pd
 DateS = datetime(2020,1,1,0)
 DateF = datetime(2020,12,31,0)
 StepF_Start = 12
-StepF_Final = 18
+StepF_Final = 246
 Disc_Step = 6
 Acc = 12
-EFFCI_list = [1]
-MagnitudeInPerc_Rain_Event_FR_list = [85]
+EFFCI_list = [1,6,10]
+MagnitudeInPerc_Rain_Event_FR_list = [85,99]
 RepetitionsBS = 10000
 RegionName_list = ["Costa","Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
