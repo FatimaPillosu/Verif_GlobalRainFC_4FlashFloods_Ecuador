@@ -1,7 +1,5 @@
 import os
-from datetime import datetime, timedelta
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 
 #####################################################################################
@@ -28,8 +26,8 @@ import matplotlib.pyplot as plt
 Acc = 12
 EFFCI_list = [1,6,10]
 MagnitudeInPerc_Rain_Event_FR_list = [85,99]
-CL = 99
-RegionName_list = ["Costa", "Sierra"]
+CL = 95
+RegionName_list = ["Costa","Sierra"]
 Lines_Region_list = ["o-", "o-"]
 SystemFC_list = ["ENS", "ecPoint"]
 Colour_SystemFC_list = ["magenta", "cyan"]
@@ -47,9 +45,6 @@ for EFFCI in EFFCI_list:
 
             print("Plotting AROC curves for EFFCI>=" + str(EFFCI) + ", VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile) ...") 
 
-            # Setting the figure
-            fig, ax = plt.subplots(figsize=(12, 10))
-
             # Plotting AROC for a specific region
             for indRegion in range(len(RegionName_list)): 
 
@@ -57,6 +52,9 @@ for EFFCI in EFFCI_list:
                   RegionName = RegionName_list[indRegion]
                   Lines_Region = Lines_Region_list[indRegion]
                   
+                  # Setting the figure
+                  fig, ax = plt.subplots(figsize=(12, 10))
+
                   # Plotting AROC for a specific forecasting system
                   for indSystemFC in range(len(SystemFC_list)):
                         
@@ -73,17 +71,17 @@ for EFFCI in EFFCI_list:
 
                         # Computing the confidence intervals from the bootstrapped AROC values
                         alpha = 100 - CL # significance level (in %)
-                        CI_lower = np.percentile(aroc_BS, alpha/2, axis=1)
-                        CI_upper = np.percentile(aroc_BS, 100 - (alpha/2), axis=1)
+                        CI_lower = np.nanpercentile(aroc_BS, alpha/2, axis=1)
+                        CI_upper = np.nanpercentile(aroc_BS, 100 - (alpha/2), axis=1)
 
                         # Plotting the ROC curves
-                        ax.plot(StepF, aroc_real, Lines_Region, color=Colour_SystemFC, label=SystemFC + " - " + RegionName, linewidth=2)
+                        ax.plot(StepF, aroc_real, Lines_Region, color=Colour_SystemFC, label=SystemFC, linewidth=2)
                         ax.fill_between(StepF, CI_lower, CI_upper, color=Colour_SystemFC, alpha=0.2, edgecolor="none")
                   
                   # Setting the plot metadata
                   ax.plot([StepF[0], StepF[-1]], [0.5, 0.5], "-", color="grey", linewidth=2)
                   DiscStep = ((StepF[-1] - StepF[0]) / (len(StepF)-1))
-                  ax.set_title("Area Under the ROC curve\n" + r"EFFCI>=" + str(EFFCI) + " - VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile), Region=" +  RegionName, fontsize=20, pad=20)
+                  ax.set_title("Area Under the ROC curve\n" + r"EFFCI>=" + str(EFFCI) + " - VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile), Region=" +  RegionName + ", CL=" + str(CL) + "%", fontsize=20, pad=20)
                   ax.set_xlabel("Step ad the end of the " + str(Acc) + "-hourly accumulation period [hours]", fontsize=18, labelpad=10)
                   ax.set_ylabel("AROC [-]", fontsize=18, labelpad=10)
                   ax.set_xlim([StepF[0]-1, StepF[-1]+1])
@@ -92,7 +90,13 @@ for EFFCI in EFFCI_list:
                   ax.set_yticks(np.arange(0.4,1.1, 0.1))
                   ax.xaxis.set_tick_params(labelsize=16, rotation=90)
                   ax.yaxis.set_tick_params(labelsize=16)
-                  ax.legend(loc="lower right", fontsize=16)
+                  ax.legend(loc="lower left", fontsize=16)
                   ax.grid()
-                  plt.show()
-                  exit()
+                  
+                  # Saving the plot
+                  DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
+                  FileNameOUT_temp = "AROC_" + f"{Acc:02d}" + "h_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName + ".jpeg"
+                  if not os.path.exists(DirOUT_temp):
+                        os.makedirs(DirOUT_temp)
+                  plt.savefig(DirOUT_temp + "/" + FileNameOUT_temp)
+                  plt.close() 
