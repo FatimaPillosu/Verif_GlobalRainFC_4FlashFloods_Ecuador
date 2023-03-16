@@ -87,7 +87,7 @@ for EFFCI in EFFCI_list:
                               ax.fill_between(percentiles, CI_lower, CI_upper, color=Colour_SystemFC, alpha=0.2, edgecolor="none")
                         
                         # Setting the plot metadata
-                        ax.set_title("Frequency Bias\n" + r"EFFCI>=" + str(EFFCI) + " - VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile), Region=" +  RegionName + ", CL=" + str(CL) + "%", fontsize=20, pad=20)
+                        ax.set_title("Frequency Bias\n" + "StepF=" + f"{StepF_2_Plot:03d}" + r", EFFCI>=" + str(EFFCI) + ", VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile), Region=" +  RegionName + ", CL=" + str(CL) + "%", fontsize=20, pad=20)
                         ax.set_xlabel("Percentiles [-]", fontsize=18, labelpad=10)
                         ax.set_ylabel("Frequency Bias [-]", fontsize=18, labelpad=10)
                         ax.set_xlim([-1,101])
