@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 #####################################################################################
 # CODE DESCRIPTION
 # 10_Plot_AROC_CI.py plots AROC and confidence intervals (CI).
+# Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
 # Acc (number, in hours): rainfall accumulation to consider.
@@ -12,15 +13,12 @@ import matplotlib.pyplot as plt
 # MagnitudeInPerc_Rain_Event_FR_list (list of integers, from 0 to 100): list of magnitudes, in 
 #     percentiles, of rainfall events that can potentially conduct to flash floods.
 # CL (integer from 0 to 100, in percent): confidence level for the definition of the confidence intervals.
-# Perc_VRE (integer, from 0 to 100): percentile that defines the verifying rainfall event to consider.
 # RegionName_list (list of strings): list of names for the domain's regions.
-# Lines_Region_list (list of strings): types of lines used to plot ROC curves for different regions. 
 # SystemFC_list (list of strings): list of names of forecasting systems to consider.
-# NumEM_list (list of integers): numer of ensemble members in the considered forecasting systems.
-# Colour_SystemFC_list (list of strings): colours used to plot ROC curves for different forecasting systems.
+# Colour_SystemFC_list (list of strings): colours used to plot the AROC values for different forecasting systems.
 # Git_repo (string): repository's local path.
-# DirIN (string): relative path containing the daily probabilistic contingency tables.
-# DirOUT (string): relative path of the directory containing the daily probabilistic contingency tables.
+# DirIN (string): relative path containing the real and boostrapped AROC values.
+# DirOUT (string):  relative path of the directory containing the plots of the real and boostrapped AROC values.
 
 # INPUT PARAMETERS
 Acc = 12
@@ -28,7 +26,6 @@ EFFCI_list = [1,6,10]
 MagnitudeInPerc_Rain_Event_FR_list = [85,99]
 CL = 95
 RegionName_list = ["Costa","Sierra"]
-Lines_Region_list = ["o-", "o-"]
 SystemFC_list = ["ENS", "ecPoint"]
 Colour_SystemFC_list = ["magenta", "cyan"]
 Git_repo="/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
@@ -37,25 +34,21 @@ DirOUT = "Data/Plot/10_AROC"
 #####################################################################################
 
 
-# Plotting ROC curves for a specific EFFCI index
+# Plotting AROC values for a specific EFFCI index
 for EFFCI in EFFCI_list:
        
-       # Plotting ROC curves for a specific VRE
+       # Plotting AROC values for a specific VRE
       for MagnitudeInPerc_Rain_Event_FR in MagnitudeInPerc_Rain_Event_FR_list:
 
-            print("Plotting AROC curves for EFFCI>=" + str(EFFCI) + ", VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile) ...") 
+            print("Plotting AROC values for EFFCI>=" + str(EFFCI) + ", VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile) ...") 
 
-            # Plotting AROC for a specific region
-            for indRegion in range(len(RegionName_list)): 
+            # Plotting AROC values for a specific region
+            for RegionName in RegionName_list: 
 
-                  # Selecting the region to plot, and its correspondent line type in the plot
-                  RegionName = RegionName_list[indRegion]
-                  Lines_Region = Lines_Region_list[indRegion]
-                  
                   # Setting the figure
                   fig, ax = plt.subplots(figsize=(12, 10))
 
-                  # Plotting AROC for a specific forecasting system
+                  # Plotting AROC values for a specific forecasting system
                   for indSystemFC in range(len(SystemFC_list)):
                         
                         # Selecting the forecasting system to plot, and its correspondent colour in the plot
@@ -74,14 +67,14 @@ for EFFCI in EFFCI_list:
                         CI_lower = np.nanpercentile(aroc_BS, alpha/2, axis=1)
                         CI_upper = np.nanpercentile(aroc_BS, 100 - (alpha/2), axis=1)
 
-                        # Plotting the ROC curves
-                        ax.plot(StepF, aroc_real, Lines_Region, color=Colour_SystemFC, label=SystemFC, linewidth=2)
+                        # Plotting the AROC values
+                        ax.plot(StepF, aroc_real, "o-", color=Colour_SystemFC, label=SystemFC, linewidth=2)
                         ax.fill_between(StepF, CI_lower, CI_upper, color=Colour_SystemFC, alpha=0.2, edgecolor="none")
                   
                   # Setting the plot metadata
                   ax.plot([StepF[0], StepF[-1]], [0.5, 0.5], "-", color="grey", linewidth=2)
                   DiscStep = ((StepF[-1] - StepF[0]) / (len(StepF)-1))
-                  ax.set_title("Area Under the ROC curve\n" + r"EFFCI>=" + str(EFFCI) + " - VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile), Region=" +  RegionName + ", CL=" + str(CL) + "%", fontsize=20, pad=20)
+                  ax.set_title("Area Under the ROC curve\n" + r"EFFCI>=" + str(EFFCI) + ", VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile), Region=" +  RegionName + ", CL=" + str(CL) + "%", fontsize=20, pad=20)
                   ax.set_xlabel("Step ad the end of the " + str(Acc) + "-hourly accumulation period [hours]", fontsize=18, labelpad=10)
                   ax.set_ylabel("AROC [-]", fontsize=18, labelpad=10)
                   ax.set_xlim([StepF[0]-1, StepF[-1]+1])
