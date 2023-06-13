@@ -6,6 +6,7 @@ import metview as mv
 ###################################################################################################
 # CODE DESCRIPTION
 # 02_Plot_PointFR_EFFCI.py plots maps that show the location of point flood reports exceeding considered EFFCI indexes. 
+# Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
 # Year_list (list of years, in YYYY format): years to extract from the raw table.

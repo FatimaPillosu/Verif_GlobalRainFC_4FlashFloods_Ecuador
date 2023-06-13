@@ -1,4 +1,2 @@
-Data/Raw/FC/*
-Data/Raw/OBS/*
-Data/Processed/Compute/01_Clean_PointFR/*
-Data/Processed/Compute/03_GridFR_EFFCI_AccPer/*
+Data/Raw/*
+Data/Compute/*

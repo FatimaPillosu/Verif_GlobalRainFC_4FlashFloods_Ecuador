@@ -13,6 +13,7 @@ import pandas as pd
 # are assigned to the appropriate region according to the developed mask. The 
 # cleaned reports are saved in a .csv table that has the same format of the raw 
 # reports. 
+# Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
 # TimeZone (string): time zone to consider for the point flood reports.
