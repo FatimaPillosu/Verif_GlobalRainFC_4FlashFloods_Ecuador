@@ -26,7 +26,7 @@ from matplotlib.dates import DateFormatter
 
 # INPUT PARAMETERS
 DateS = datetime(2020,1,1)
-DateF = datetime(2020,1,31)
+DateF = datetime(2020,12,31)
 Acc = 12
 AccPerS_list = [0,6,12,18]
 EFFCI_list = [1,6,10]
@@ -40,10 +40,10 @@ DirOUT = "Data/Plot/04_Distr_PointFR_GridFR_EFFCI_AccPer"
 # Considering a specific EFFCI index
 for EFFCI in EFFCI_list: 
 
-      print("Creating and saving the distribution plots of the point and gridded flood reports per grid-box with EFFCI>=" + str(EFFCI) + " for " + str(len(AccPerS_list)) + "  " + str(Acc) + "-hourly accumulation periods")
+      print("Creating and saving the distribution plots of the point and gridded flood reports, per grid-box, with EFFCI>=" + str(EFFCI) + " for " + str(len(AccPerS_list)) + "  " + str(Acc) + "-hourly accumulation periods")
             
       # Create the figure for all the plots
-      fig, axarr = plt.subplots(len(AccPerS_list), 1, figsize=(20, 8), sharex=True)
+      fig, axarr = plt.subplots(len(AccPerS_list), 1, figsize=(13, 10), sharex=True)
       ind_plot = 0
 
       # Considering a specific accumulation period
@@ -61,7 +61,7 @@ for EFFCI in EFFCI_list:
             TheDate_list = []
             TheDate = DateS
             while TheDate <= DateF:
-                  print(TheDate)
+                  
                   # Defining the valid date for the considered end of the accumulation period
                   Date_AccPerF = TheDate + timedelta(hours=AccPerF) 
 
@@ -87,40 +87,32 @@ for EFFCI in EFFCI_list:
             ind_plot = ind_plot + 1
 
       # Complete the figure
-      fig.suptitle(str(Acc) + "-hourly accumulated flood reports (FR), per grid-box, with EFFCI>=" + str(EFFCI), fontsize=24, weight="bold")
-      axarr[0].legend(loc="upper right",  fontsize=18)
+      fig.suptitle(str(Acc) + "-hourly accumulated flood reports (FR), per grid-box, with EFFCI>=" + str(EFFCI), fontsize=20, weight="bold")
+      axarr[0].legend(loc="upper center",  bbox_to_anchor=(0.5, 1.3), ncol=2,  fontsize=14)
       axarr[3].set_xlabel("Days", fontsize=20, labelpad=10)
       ind_plot = 0
-      
       for ax in axarr:
-            
             # setting legend for each sub-plot
-            ax.text(0.13, 0.85, "Accumulation period starting at " + f"{AccPerS_list[ind_plot]:02d}" + " UTC", transform=ax.transAxes, ha="center", va="center", fontsize=16, bbox=dict(facecolor="white", alpha=1, edgecolor="grey"))
+            ax.text(0.82, 0.85, "Accumulation period starting at " + f"{AccPerS_list[ind_plot]:02d}" + " UTC", transform=ax.transAxes, ha="center", va="center", fontsize=14, bbox=dict(facecolor="white", alpha=1, edgecolor="grey"))
             ind_plot = ind_plot + 1
-
             # setting x-axis
             ax.set_xlim(-1, (len(TheDate_list)+1))
             ax.xaxis.set_major_formatter(DateFormatter("%b-%d"))
             ax.xaxis.set_major_locator(mdates.MonthLocator(bymonthday=1, interval=1))
             ax.xaxis.set_tick_params(labelsize=14)
-
             # setting y-axis
-            ax.set_ylabel("n. FR", fontsize=20, labelpad=10)
+            ax.set_ylabel("n. FR", fontsize=20)
             ax.set_yticks(np.arange(0, MaxFR+1, 2))
             ax.yaxis.set_tick_params(labelsize=14)
-            
             # setting the plot grid
             ax.grid()
-            
       plt.tight_layout()
 
       # Saving the plot
       DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
-      FileNameOUT = "Distr_PointFR_GridFR_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + f"{Acc:02d}" + "h _EFFCI" + f"{EFFCI:02d}" + ".png"
+      FileNameOUT = "Distr_PointFR_GridFR_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + f"{Acc:02d}" + "h _EFFCI" + f"{EFFCI:02d}" + ".svg"
       FileOUT = DirOUT_temp + "/" + FileNameOUT
       if not os.path.exists(DirOUT_temp):
             os.makedirs(DirOUT_temp)
-      plt.savefig(FileOUT)
-
+      fig.savefig(FileOUT, format="svg")
       plt.close()
-      exit()
