@@ -19,17 +19,19 @@ from matplotlib.dates import DateFormatter
 # Acc (number, in hours): accumulation to consider.
 # AccPerS_list (list of numbers, in UTC hour): start of the accumulation periods to consider.
 # EFFCI_list (list of integers, from 1 to 10): EFFCI indexes to consider.
+# MaxFR (integer): maximum number of flood reports in the whole period.
 # Git_repo (string): repository's local path.
 # DirIN (string): relative path of the directory containing the gridded, accumulated flood reports.
 # DirOUT (string): relative path of the directory containing the distribution's plots.
 
 # INPUT PARAMETERS
 DateS = datetime(2020,1,1)
-DateF = datetime(2020,12,31)
+DateF = datetime(2020,1,31)
 Acc = 12
 AccPerS_list = [0,6,12,18]
 EFFCI_list = [1,6,10]
-Git_repo="/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
+MaxFR = 12
+Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 DirIN = "Data/Compute/03_GridFR_EFFCI_AccPer"
 DirOUT = "Data/Plot/04_Distr_PointFR_GridFR_EFFCI_AccPer"
 ##############################################################################
@@ -38,10 +40,15 @@ DirOUT = "Data/Plot/04_Distr_PointFR_GridFR_EFFCI_AccPer"
 # Considering a specific EFFCI index
 for EFFCI in EFFCI_list: 
 
+      print("Creating and saving the distribution plots of the point and gridded flood reports per grid-box with EFFCI>=" + str(EFFCI) + " for " + str(len(AccPerS_list)) + "  " + str(Acc) + "-hourly accumulation periods")
+            
+      # Create the figure for all the plots
+      fig, axarr = plt.subplots(len(AccPerS_list), 1, figsize=(20, 8), sharex=True)
+      ind_plot = 0
+
       # Considering a specific accumulation period
       for AccPerS in AccPerS_list:
             
-            print("Creating and saving the plot of the distribution of point and gridded flood reports per grid-box with EFFCI>=" + str(EFFCI) + ", accumulated over " + str(Acc) + "-hourly periods starting at " + str(AccPerS) + " UTC")
             
             # Defining the end of the considered accumulation period
             AccPerF = AccPerS + Acc
@@ -54,7 +61,7 @@ for EFFCI in EFFCI_list:
             TheDate_list = []
             TheDate = DateS
             while TheDate <= DateF:
-                  
+                  print(TheDate)
                   # Defining the valid date for the considered end of the accumulation period
                   Date_AccPerF = TheDate + timedelta(hours=AccPerF) 
 
@@ -70,32 +77,50 @@ for EFFCI in EFFCI_list:
                   TheDate_list.append(TheDate)
 
                   TheDate += timedelta(days=1) 
-
-            # Creating the plot of the distribution of point and gridded flood reports per grid-box in the considered domain
-            fig, ax = plt.subplots(figsize=(20, 8))
+            
+            # Plot data on each subplot
+            width = 0.9
             idx = np.asarray([i for i in range(len(TheDate_list))])
-            width = 0.5
-            ax.bar(idx, Num_PointFR, color='orange', width=width, label="PointFR")
-            ax.bar(idx+width, Num_GridFR, color='green', width=width, label="GridFR")
-            ax.set_title("Flood reports per grid-box with EFFCI>=" + str(EFFCI) + ", accumulated over " + str(Acc) + "-hourly periods starting at " + str(AccPerS) + " UTC between " + DateS.strftime("%d-%m-%Y") + " and " + DateF.strftime("%d-%m-%Y"), fontsize=20, pad=30)
-            ax.legend(loc="upper right", fontsize=18)
-            ax.set_xlabel("Days", fontsize=18, labelpad=10)
-            ax.set_xlim([0, (len(TheDate_list)+1)])
-            ax.set_xticks(idx)
-            ax.set_xticklabels(TheDate_list)
+            axarr[ind_plot].bar(idx, Num_PointFR, color="orange", width=width, label="PointFR")
+            axarr[ind_plot].bar(idx, Num_GridFR, color="green", width=width, label="GridFR")
+            
+            ind_plot = ind_plot + 1
+
+      # Complete the figure
+      fig.suptitle(str(Acc) + "-hourly accumulated flood reports (FR), per grid-box, with EFFCI>=" + str(EFFCI), fontsize=24, weight="bold")
+      axarr[0].legend(loc="upper right",  fontsize=18)
+      axarr[3].set_xlabel("Days", fontsize=20, labelpad=10)
+      ind_plot = 0
+      
+      for ax in axarr:
+            
+            # setting legend for each sub-plot
+            ax.text(0.13, 0.85, "Accumulation period starting at " + f"{AccPerS_list[ind_plot]:02d}" + " UTC", transform=ax.transAxes, ha="center", va="center", fontsize=16, bbox=dict(facecolor="white", alpha=1, edgecolor="grey"))
+            ind_plot = ind_plot + 1
+
+            # setting x-axis
+            ax.set_xlim(-1, (len(TheDate_list)+1))
             ax.xaxis.set_major_formatter(DateFormatter("%b-%d"))
             ax.xaxis.set_major_locator(mdates.MonthLocator(bymonthday=1, interval=1))
             ax.xaxis.set_tick_params(labelsize=14)
-            ax.set_ylabel("N. of Flood Reports", fontsize=18, labelpad=10)
-            ax.set_ylim([0,12])
-            ax.set_yticks(np.arange(0, 13))
+
+            # setting y-axis
+            ax.set_ylabel("n. FR", fontsize=20, labelpad=10)
+            ax.set_yticks(np.arange(0, MaxFR+1, 2))
             ax.yaxis.set_tick_params(labelsize=14)
+            
+            # setting the plot grid
             ax.grid()
             
-            # Saving the plot
-            DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}"
-            FileNameOUT = "Distr_PointFR_GridFR_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + f"{Acc:02d}" + "h _EFFCI" + f"{EFFCI:02d}" + "_" +  f"{AccPerS:02d}" + ".jpeg"
-            FileOUT = DirOUT_temp + "/" + FileNameOUT
-            if not os.path.exists(DirOUT_temp):
-                  os.makedirs(DirOUT_temp)
-            plt.savefig(FileOUT)
+      plt.tight_layout()
+
+      # Saving the plot
+      DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
+      FileNameOUT = "Distr_PointFR_GridFR_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + f"{Acc:02d}" + "h _EFFCI" + f"{EFFCI:02d}" + ".png"
+      FileOUT = DirOUT_temp + "/" + FileNameOUT
+      if not os.path.exists(DirOUT_temp):
+            os.makedirs(DirOUT_temp)
+      plt.savefig(FileOUT)
+
+      plt.close()
+      exit()

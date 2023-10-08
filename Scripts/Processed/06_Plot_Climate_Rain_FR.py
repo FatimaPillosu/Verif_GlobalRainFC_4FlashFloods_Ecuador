@@ -28,7 +28,7 @@ Max_Rain_Plot_Disc = 10
 MagnitudeInPerc_Rain_Event_FR_list = [50, 75, 85, 90, 95, 98, 99]
 MagnitudeInPerc_Rain_Event_FR_colours_list = ["orange", "lime", "purple", "cyan", "blue", "magenta", "red"]
 RegionName_list = ["Costa","Sierra"]
-Git_repo="/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
+Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 DirIN = "Data/Compute/05_Climate_Rain_FR"
 DirOUT = "Data/Plot/06_Climate_Rain_FR"
 ##########################################################################################

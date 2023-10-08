@@ -23,7 +23,7 @@ import pandas as pd
 
 # INPUT PARAMETERS
 TimeZone = "America/Lima"
-Git_repo="/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
+Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN = "Data/Raw/OBS/PointFR/Ecu_FF_Hist_ECMWF.csv"
 FileOUT = "Data/Compute/01_Clean_PointFR/Ecu_FF_Hist_ECMWF.csv"
 ##################################################################
