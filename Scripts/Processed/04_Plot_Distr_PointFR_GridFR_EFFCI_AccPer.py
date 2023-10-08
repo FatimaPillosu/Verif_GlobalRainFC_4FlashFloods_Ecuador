@@ -87,9 +87,12 @@ for EFFCI in EFFCI_list:
             ind_plot = ind_plot + 1
 
       # Complete the figure
-      fig.suptitle(str(Acc) + "-hourly accumulated flood reports (FR), per grid-box, with EFFCI>=" + str(EFFCI), fontsize=20, weight="bold")
+      fig.suptitle("Timeseries of " + str(Acc) + "-hourly accumulated flood reports (FR) with EFFCI>=" + str(EFFCI) + ", per grid-box,  in " + str(DateS.year), fontsize=16, weight="bold")
+      
+      
+      
       axarr[0].legend(loc="upper center",  bbox_to_anchor=(0.5, 1.3), ncol=2,  fontsize=14)
-      axarr[3].set_xlabel("Days", fontsize=20, labelpad=10)
+      axarr[3].set_xlabel("Days", fontsize=14, labelpad=10)
       ind_plot = 0
       for ax in axarr:
             # setting legend for each sub-plot
@@ -101,7 +104,7 @@ for EFFCI in EFFCI_list:
             ax.xaxis.set_major_locator(mdates.MonthLocator(bymonthday=1, interval=1))
             ax.xaxis.set_tick_params(labelsize=14)
             # setting y-axis
-            ax.set_ylabel("n. FR", fontsize=20)
+            ax.set_ylabel("n. FR", fontsize=14)
             ax.set_yticks(np.arange(0, MaxFR+1, 2))
             ax.yaxis.set_tick_params(labelsize=14)
             # setting the plot grid
