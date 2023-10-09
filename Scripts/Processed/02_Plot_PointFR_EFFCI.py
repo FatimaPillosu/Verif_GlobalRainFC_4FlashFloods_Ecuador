@@ -146,6 +146,6 @@ for Year in Year_list:
             # Saving the plot
             print("Saving the map plot ...")
             FileOUT = DirOUT + "/PointFR_" + str(Year) + "_EFFCI" + f"{EFFCI:02d}"
-            svg = mv.svg_output(output_name = FileOUT)
-            mv.setoutput(svg)
+            png = mv.png_output(output_name = FileOUT)
+            mv.setoutput(png)
             mv.plot(geo_view, Mask, mask_shading, PointFR_geo, PointFR_contour, PointFR_shades, coastlines, no_title)
