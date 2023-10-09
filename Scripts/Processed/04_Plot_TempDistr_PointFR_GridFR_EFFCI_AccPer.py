@@ -8,7 +8,7 @@ from matplotlib.dates import DateFormatter
 
 ##############################################################################
 # CODE DESCRIPTION
-# 04_Plot_Distr_PointFR_GridFR_EFFCI_AccPer.py plots the distribution of point and gridded 
+# 04_Plot_TempDistr_PointFR_GridFR_EFFCI_AccPer.py plots the distribution of point and gridded 
 # flood reports, per grid-box, in the considered domain, for each day in the considered period  
 # of time.
 # Note: runtime negligible.

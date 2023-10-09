@@ -84,13 +84,11 @@ for Year in Year_list:
                   map_coastline_colour = "blue",
                   map_coastline_thickness = 4,
                   map_coastline_sea_shade = "on",
-                  map_coastline_sea_shade_colour = "rgb(0.6791,0.8111,0.9523)",
+                  map_coastline_sea_shade_colour = "RGB(0.7084,0.9465,0.9465)",
                   map_boundaries = "on",
                   map_boundaries_colour = "blue",
                   map_boundaries_thickness = 4,
                   map_grid = "on",
-                  map_grid_latitude_increment  = 10,
-                  map_grid_longitude_increment = 10,
                   map_label = "on"
                   )
 
@@ -138,6 +136,6 @@ for Year in Year_list:
             # Saving the plot
             print("Saving the map plot ...")
             FileOUT = DirOUT + "/PointFR_" + str(Year) + "_EFFCI" + f"{EFFCI:02d}"
-            png = mv.png_output(output_name = FileOUT)
-            mv.setoutput(png)
+            svg = mv.svg_output(output_name = FileOUT)
+            mv.setoutput(svg)
             mv.plot(geo_view, Mask, mask_shading, PointFR_geo, PointFR_contour, PointFR_shades, coastlines)
