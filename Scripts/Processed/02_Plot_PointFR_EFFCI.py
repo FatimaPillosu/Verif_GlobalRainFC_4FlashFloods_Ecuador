@@ -11,6 +11,7 @@ import metview as mv
 # INPUT PARAMETERS DESCRIPTION
 # Year_list (list of years, in YYYY format): years to extract from the raw table.
 # EFFCI_list (list of integers, from 1 to 10): EFFCI indexes to consider.
+# CornersDomain_list (list of floats): coordinates [N/E/S/W] of the domain to plot.
 # RegionCode_list (list of integers): codes for the domain's regions to consider. 
 # RegionName_list (list of strings): names for the domain's regions to consider.
 # RegionColour_list (list of strings): rgb-codes for the domain's regions to consider.
@@ -33,18 +34,17 @@ DirOUT = "Data/Plot/02_PointFR_EFFCI"
 ###################################################################################################
 
 
-# Setting general variables
-RegionCode_list = (np.array(([0] + RegionCode_list), dtype=float) + 0.1).tolist()
-FileIN_Mask = Git_repo + "/" + FileIN_Mask
-FileIN = Git_repo + "/" + FileIN
+# Setting output directory
 DirOUT= Git_repo + "/" + DirOUT
 if not os.path.exists(DirOUT):
     os.makedirs(DirOUT)
 
 # Reading the domain's mask
+FileIN_Mask = Git_repo + "/" + FileIN_Mask
 Mask = mv.read(FileIN_Mask)
 
 # Reading the cleaned point flood reports
+FileIN = Git_repo + "/" + FileIN
 PointFR = pd.read_csv(FileIN)
  
 # Selecting the point flood reports for the years of interest
@@ -61,6 +61,7 @@ for Year in Year_list:
             PointFR_EFFCI = PointFR_Year.loc[PointFR_Year["EFFCI"] >= EFFCI]
             
             # Replacing the regions' names with the regions' codes
+            RegionCode_list = (np.array(([0] + RegionCode_list), dtype=float) + 0.1).tolist()
             for indRegion in range(len(RegionName_list)):
                   
                   RegionName = RegionName_list[indRegion]
