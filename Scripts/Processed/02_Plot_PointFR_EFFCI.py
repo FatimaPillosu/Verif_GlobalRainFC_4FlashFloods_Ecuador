@@ -22,7 +22,7 @@ import metview as mv
 # INPUT PARAMETERS
 Year_list = [2019,2020]
 EFFCI_list = [1,6,10]
-CornersDomain_list = [1.6,-81.2,-5.11,-75]
+CornersDomain_list = [2,-81.5,-5.5,-74.5]
 RegionCode_list = [1,2,3]
 RegionName_list = ["La Costa", "La Sierra", "El Oriente"]
 RegionColour_list = ["RGB(255/255,234/255,0/255)", "RGB(193/255,154/255,107/255)", "RGB(170/255,255/255,0/255)"]
@@ -81,17 +81,20 @@ for Year in Year_list:
             # Plotting the point flood reports
             coastlines = mv.mcoast(
                   map_coastline_resolution = "full",
-                  map_coastline_colour = "blue",
-                  map_coastline_thickness = 4,
+                  map_coastline_colour = "charcoal",
+                  map_coastline_thickness = 1,
                   map_coastline_sea_shade = "on",
-                  map_coastline_sea_shade_colour = "rgb(0.6791,0.8111,0.9523)",
+                  map_coastline_sea_shade_colour = "rgb(0.6455,0.903,0.9545)",
                   map_boundaries = "on",
-                  map_boundaries_colour = "blue",
-                  map_boundaries_thickness = 4,
+                  map_boundaries_colour = "charcoal",
+                  map_boundaries_thickness = 1,
                   map_grid = "on",
-                  map_grid_latitude_increment  = 10,
-                  map_grid_longitude_increment = 10,
-                  map_label = "on"
+                  map_grid_latitude_increment  = 2,
+                  map_grid_longitude_increment = 2,
+                  map_label = "on",
+                  map_label_font = "arial",
+                  map_label_colour = "charcoal",
+                  map_label_height = 0.6
                   )
 
             geo_view = mv.geoview(
@@ -101,6 +104,7 @@ for Year in Year_list:
                   )
 
             mask_shading = mv.mcont(
+                  legend = "off",
                   contour = "off",
                   contour_level_selection_type = "level_list",
                   contour_level_list = RegionCode_list,
@@ -112,19 +116,19 @@ for Year in Year_list:
                   )
 
             PointFR_contour = mv.msymb(
-                  legend = "on",
+                  legend = "off",
                   symbol_type = "marker",
                   symbol_table_mode = "on",
                   symbol_outline = "on",
                   symbol_min_table = [0.1],
                   symbol_max_table = [3.1],
-                  symbol_colour_table = ["RGB(0000,0.0000,0.0000)"],
+                  symbol_colour_table = "charcoal",
                   symbol_marker_table = 15,
                   symbol_height_table = 0.4
                   )
 
             PointFR_shades = mv.msymb(
-                  legend = "on",
+                  legend = "off",
                   symbol_type = "marker",
                   symbol_table_mode = "on",
                   symbol_outline = "on",
@@ -135,9 +139,13 @@ for Year in Year_list:
                   symbol_height_table = 0.3
                   )
 
+            no_title = mv.mtext(
+                  text_line_1 = " "
+                  )
+
             # Saving the plot
             print("Saving the map plot ...")
             FileOUT = DirOUT + "/PointFR_" + str(Year) + "_EFFCI" + f"{EFFCI:02d}"
             png = mv.png_output(output_name = FileOUT)
             mv.setoutput(png)
-            mv.plot(geo_view, Mask, mask_shading, PointFR_geo, PointFR_contour, PointFR_shades, coastlines)
+            mv.plot(geo_view, Mask, mask_shading, PointFR_geo, PointFR_contour, PointFR_shades, coastlines, no_title)
