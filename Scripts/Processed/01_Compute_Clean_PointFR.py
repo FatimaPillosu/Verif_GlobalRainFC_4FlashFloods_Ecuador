@@ -5,7 +5,7 @@ from dateutil.parser import parse
 import numpy as np
 import pandas as pd
 
-##################################################################
+#####################################################################
 # CODE DESCRIPTION
 # 01_Compute_Clean_PointFR.py cleans the point flood reports by checking that 
 # instances with no lat/lon corrdinates, time and date are deleted. It also 
@@ -26,7 +26,7 @@ TimeZone = "America/Lima"
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN = "Data/Raw/OBS/PointFR/Ecu_FF_Hist_ECMWF.csv"
 FileOUT = "Data/Compute/01_Clean_PointFR/Ecu_FF_Hist_ECMWF.csv"
-##################################################################
+#####################################################################
 
 
 # Setting general variables

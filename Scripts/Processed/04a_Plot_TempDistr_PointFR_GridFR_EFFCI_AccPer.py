@@ -8,9 +8,9 @@ from matplotlib.dates import DateFormatter
 
 ##############################################################################
 # CODE DESCRIPTION
-# 04_Plot_TempDistr_PointFR_GridFR_EFFCI_AccPer.py plots the distribution of point and gridded 
-# flood reports, per grid-box, in the considered domain, for each day in the considered period  
-# of time.
+# 04a_Plot_TempDistr_PointFR_GridFR_EFFCI_AccPer.py plots the temporal distribution of point 
+# and gridded flood reports, per grid-box, in the considered domain, for each day in the 
+# verification period of interest.
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -33,22 +33,21 @@ EFFCI_list = [1,6,10]
 MaxFR = 12
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 DirIN = "Data/Compute/03_GridFR_EFFCI_AccPer"
-DirOUT = "Data/Plot/04_Distr_PointFR_GridFR_EFFCI_AccPer"
+DirOUT = "Data/Plot/04a_TempDistr_PointFR_GridFR_EFFCI_AccPer"
 ##############################################################################
 
 
 # Considering a specific EFFCI index
 for EFFCI in EFFCI_list: 
 
-      print("Creating and saving the distribution plots of the point and gridded flood reports, per grid-box, with EFFCI>=" + str(EFFCI) + " for " + str(len(AccPerS_list)) + "  " + str(Acc) + "-hourly accumulation periods")
+      print("Creating and saving the distribution plots of the point and gridded flood reports, per grid-box, with EFFCI>=" + str(EFFCI) + ", for " + str(len(AccPerS_list)) + " " + str(Acc) + "-hourly accumulation periods")
             
       # Create the figure for all the plots
-      fig, axarr = plt.subplots(len(AccPerS_list), 1, figsize=(13, 10), sharex=True)
+      fig, axarr = plt.subplots(len(AccPerS_list), 1, figsize=(10, 10), sharex=True)
       ind_plot = 0
 
       # Considering a specific accumulation period
       for AccPerS in AccPerS_list:
-            
             
             # Defining the end of the considered accumulation period
             AccPerF = AccPerS + Acc
@@ -72,7 +71,7 @@ for EFFCI in EFFCI_list:
                   # Extracting the number of point and gridded flood reports per grid-box in the considered domain
                   Num_PointFR.append(int(np.sum(FR)))
                   Num_GridFR.append(np.sum(FR>0))
-
+                  
                   # Creating the list containing the dates in the period of interest
                   TheDate_list.append(TheDate)
 
@@ -81,28 +80,25 @@ for EFFCI in EFFCI_list:
             # Plot data on each subplot
             width = 0.9
             idx = np.asarray([i for i in range(len(TheDate_list))])
-            axarr[ind_plot].bar(idx, Num_PointFR, color="orange", width=width, label="PointFR")
-            axarr[ind_plot].bar(idx, Num_GridFR, color="green", width=width, label="GridFR")
+            axarr[ind_plot].bar(idx, Num_PointFR, color="#372800", width=width, label="Point_FR")
+            axarr[ind_plot].bar(idx, Num_GridFR, color="#f67293", width=width, label="Grid_FR")
             
             ind_plot = ind_plot + 1
 
       # Complete the figure
-      fig.suptitle("Timeseries of " + str(Acc) + "-hourly accumulated flood reports (FR) with EFFCI>=" + str(EFFCI) + ", per grid-box,  in " + str(DateS.year), fontsize=16, weight="bold")
-      
-      
-      
+      fig.suptitle("Number of flood reports (FR) in " +  str(DateS.year) + " accumulated over a " + str(Acc) + "-hourly period (EFFCI>=" + str(EFFCI) + ")", fontsize=14, weight="bold")
       axarr[0].legend(loc="upper center",  bbox_to_anchor=(0.5, 1.3), ncol=2,  fontsize=14)
       axarr[3].set_xlabel("Days", fontsize=14, labelpad=10)
       ind_plot = 0
       for ax in axarr:
             # setting legend for each sub-plot
-            ax.text(0.82, 0.85, "Accumulation period starting at " + f"{AccPerS_list[ind_plot]:02d}" + " UTC", transform=ax.transAxes, ha="center", va="center", fontsize=14, bbox=dict(facecolor="white", alpha=1, edgecolor="grey"))
+            ax.text(0.77, 0.85, "Accumulation period starting at " + f"{AccPerS_list[ind_plot]:02d}" + " UTC", transform=ax.transAxes, ha="center", va="center", fontsize=14, bbox=dict(facecolor="white", alpha=1, edgecolor="grey"))
             ind_plot = ind_plot + 1
             # setting x-axis
             ax.set_xlim(-1, (len(TheDate_list)+1))
             ax.xaxis.set_major_formatter(DateFormatter("%b-%d"))
             ax.xaxis.set_major_locator(mdates.MonthLocator(bymonthday=1, interval=1))
-            ax.xaxis.set_tick_params(labelsize=14)
+            ax.xaxis.set_tick_params(labelsize=14, rotation=45)
             # setting y-axis
             ax.set_ylabel("n. FR", fontsize=14)
             ax.set_yticks(np.arange(0, MaxFR+1, 2))
