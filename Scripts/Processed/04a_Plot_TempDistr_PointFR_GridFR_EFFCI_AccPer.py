@@ -86,23 +86,26 @@ for EFFCI in EFFCI_list:
             ind_plot = ind_plot + 1
 
       # Complete the figure
-      fig.suptitle("Number of flood reports (FR) in " +  str(DateS.year) + " accumulated over a " + str(Acc) + "-hourly period (EFFCI>=" + str(EFFCI) + ")", fontsize=14, weight="bold")
+      fig.suptitle("Counts of flood reports (FR) in " +  str(DateS.year) + " with EFFCI>=" + str(EFFCI) + ", accumulated over " + str(Acc) + "-hourly periods", fontsize=14, weight="bold", color="#333333")
+      legend = axarr[0].legend()
+      for text in legend.get_texts():
+            text.set_color("#333333")
       axarr[0].legend(loc="upper center",  bbox_to_anchor=(0.5, 1.3), ncol=2,  fontsize=14)
-      axarr[3].set_xlabel("Days", fontsize=14, labelpad=10)
+      axarr[3].set_xlabel("Days", fontsize=14, labelpad=10, color="#333333")
       ind_plot = 0
       for ax in axarr:
             # setting legend for each sub-plot
-            ax.text(0.77, 0.85, "Accumulation period starting at " + f"{AccPerS_list[ind_plot]:02d}" + " UTC", transform=ax.transAxes, ha="center", va="center", fontsize=14, bbox=dict(facecolor="white", alpha=1, edgecolor="grey"))
+            ax.text(0.85, 0.85, "Period starting at " + f"{AccPerS_list[ind_plot]:02d}" + " UTC", transform=ax.transAxes, ha="center", va="center", fontsize=14, bbox=dict(facecolor="white", alpha=1, edgecolor="#333333"), color="#333333")
             ind_plot = ind_plot + 1
             # setting x-axis
             ax.set_xlim(-1, (len(TheDate_list)+1))
             ax.xaxis.set_major_formatter(DateFormatter("%b-%d"))
             ax.xaxis.set_major_locator(mdates.MonthLocator(bymonthday=1, interval=1))
-            ax.xaxis.set_tick_params(labelsize=14, rotation=45)
+            ax.xaxis.set_tick_params(labelsize=14, rotation=45, colors="#333333")
             # setting y-axis
-            ax.set_ylabel("n. FR", fontsize=14)
+            ax.set_ylabel("Counts", fontsize=14, color="#333333")
             ax.set_yticks(np.arange(0, MaxFR+1, 2))
-            ax.yaxis.set_tick_params(labelsize=14)
+            ax.yaxis.set_tick_params(labelsize=14, colors="#333333")
             # setting the plot grid
             ax.grid()
       plt.tight_layout()

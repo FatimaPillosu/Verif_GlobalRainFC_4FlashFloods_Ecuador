@@ -26,7 +26,7 @@ import metview as mv
 DateS = datetime(2020,2,28,0)
 Acc = 12
 EFFCI = 6
-CornersDomain_list = [1.6,-81.2,-5.11,-75]
+CornersDomain_list = [2,-81.5,-5.5,-74.5] 
 RegionCode_list = [1,2,3]
 RegionName_list = ["La Costa", "La Sierra", "El Oriente"]
 RegionColour_list = ["RGB(255/255,234/255,0/255)", "RGB(193/255,154/255,107/255)", "RGB(170/255,255/255,0/255)"]
@@ -123,8 +123,15 @@ GridFR_shading = mv.mcont(
       contour_shade_colour_list = ["#f67293"]
       )
 
-no_title = mv.mtext(
-      text_line_1 = " "
+title = mv.mtext(
+      text_line_count = 3,
+      text_line_1 = "Spatial distribution of flood reports (FR) with EFFCI>=" + f"{EFFCI:02d}",
+      text_line_2 = "over the " + f"{Acc:02d}" + "-hourly period starting on " + DateF.strftime("%Y-%m-%d") + " at " + DateS.strftime("%H") + " UTC",
+      text_line_3 = " ",
+      text_font = "sansserif",
+      text_colour = "charcoal",
+      text_font_size = 0.6,
+      text_font_style = "bold"
       )
 
 # Saving the plot
@@ -135,4 +142,4 @@ if not os.path.exists(DirOUT):
 FileOUT = DirOUT + "/GridFR_" + DateF.strftime("%Y%m%d") + "_" + DateF.strftime("%H") + "_EFFCI" + f"{EFFCI:02d}"
 png = mv.png_output(output_name = FileOUT)
 mv.setoutput(png)
-mv.plot(geo_view, mask, mask_shading, GridFR, GridFR_shading, PointFR, PointFR_contour, no_title)
+mv.plot(geo_view, mask, mask_shading, GridFR, GridFR_shading, PointFR, PointFR_contour, title)
