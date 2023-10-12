@@ -72,7 +72,7 @@ for SystemFC in SystemFC_list:
             map_label = "on",
             map_label_font = "arial",
             map_label_colour = "charcoal",
-            map_label_height = 0.4
+            map_label_height = 0.6
             )
 
         geo_view = mv.geoview(
@@ -96,7 +96,7 @@ for SystemFC in SystemFC_list:
         legend = mv.mlegend(
             legend_text_colour = "charcoal",
             legend_text_font = "arial",
-            legend_text_font_size = 0.4,
+            legend_text_font_size = 0.6,
             legend_entry_plot_direction = "column",
             legend_automatic_posiution = "right",
             legend_box_blanking = "on",
@@ -124,7 +124,7 @@ for SystemFC in SystemFC_list:
             text_line_4 = " ",
             text_colour = "charcoal",
             text_font = "arial",
-            text_font_size = 0.4
+            text_font_size = 0.6
             )
         
         # Saving the maps
