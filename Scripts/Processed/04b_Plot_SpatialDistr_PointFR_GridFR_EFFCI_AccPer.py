@@ -4,10 +4,10 @@ import numpy as np
 import pandas as pd
 import metview as mv
 
-###################################################################################################
+################################################################################################################
 # CODE DESCRIPTION
-# 04b_Plot_SpatialDistr_GridFR_EFFCI.py plots a map that shows the location of point and grid flood reports, for a specific
-# date and EFFCI index.
+# 04b_Plot_SpatialDistr_GridFR_EFFCI.py plots a map that shows the location of point and grid flood reports, for 
+# a specific date and EFFCI index.
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -35,7 +35,7 @@ FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 FileIN_PointFR = "Data/Compute/01_Clean_PointFR/Ecu_FF_Hist_ECMWF.csv"
 DirIN_GridFR = "Data/Compute/03_GridFR_EFFCI_AccPer"
 DirOUT = "Data/Plot/04b_SpatialDistr_GridFR_EFFCI"
-###################################################################################################
+################################################################################################################
 
 
 # Defining the accumulation period
