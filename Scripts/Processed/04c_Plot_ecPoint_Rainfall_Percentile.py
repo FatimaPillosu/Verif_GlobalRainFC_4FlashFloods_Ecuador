@@ -24,7 +24,7 @@ import metview as mv
 # INPUT PARAMETERS
 BaseDate = datetime(2020,2,26,0)
 BaseTime = 0
-StepF = 72
+StepF = 66
 Acc = 12
 Perc_list = [85, 99]
 CornersDomain_list = [2,-81.5,-5.5,-74.5] 
@@ -103,19 +103,19 @@ for SystemFC in SystemFC_list:
             legend_entry_text_width = 30
             )
 
-        ValidityDateS = BaseDate + timedelta(hours = (BaseTime + StepS - 5))
+        ValidityDateS = BaseDate + timedelta(hours = (BaseTime + StepS))
         DayVS = ValidityDateS.strftime("%d")
         MonthVS = ValidityDateS.strftime("%B")
         YearVS = ValidityDateS.strftime("%Y")
         TimeVS = ValidityDateS.strftime("%H")
-        ValidityDateF = BaseDate + timedelta(hours = (BaseTime + StepF - 5))
+        ValidityDateF = BaseDate + timedelta(hours = (BaseTime + StepF))
         DayVF = ValidityDateF.strftime("%d")
         MonthVF = ValidityDateF.strftime("%B")
         YearVF = ValidityDateF.strftime("%Y")
         TimeVF = ValidityDateF.strftime("%H")
         title_plot1 = SystemFC + " Rainfall - " + str(Perc) + "th percentile (mm/" + str(Acc) + "h)"
         title_plot2 = "RUN: " + BaseDate.strftime("%d") + " " + BaseDate.strftime("%B") + " " + BaseDate.strftime("%Y") + ", " + f"{BaseTime:02d}" + " UTC" + " " + "(t+" + str(StepS) + ", t+" + str(StepF) + ")"
-        title_plot3 = "VT (Local Time): " + DayVS + " " + MonthVS + " " + YearVS + " " + TimeVS + " UTC - " + DayVF + " " + MonthVF + " " + YearVF + " " + TimeVF  + " UTC"          
+        title_plot3 = "VT: " + DayVS + " " + MonthVS + " " + YearVS + " " + TimeVS + " UTC - " + DayVF + " " + MonthVF + " " + YearVF + " " + TimeVF  + " UTC"          
         title = mv.mtext(
             text_line_count = 4,
             text_line_1 = title_plot1,
