@@ -23,7 +23,7 @@ import metview as mv
 # DirOUT (string): relative path where to store the map plots.
 
 # INPUT PARAMETERS
-DateS = datetime(2020,2,28,0)
+DateS = datetime(2020,2,28,6)
 Acc = 12
 EFFCI = 6
 CornersDomain_list = [2,-81.5,-5.5,-74.5] 
@@ -139,7 +139,7 @@ print("Saving the map plot ...")
 DirOUT= Git_repo + "/" + DirOUT
 if not os.path.exists(DirOUT):
       os.makedirs(DirOUT)
-FileOUT = DirOUT + "/GridFR_" + DateF.strftime("%Y%m%d") + "_" + DateF.strftime("%H") + "_EFFCI" + f"{EFFCI:02d}"
+FileOUT = DirOUT + "/GridFR_" + DateS.strftime("%Y%m%d") + "_" + DateS.strftime("%H") + "_EFFCI" + f"{EFFCI:02d}"
 png = mv.png_output(output_name = FileOUT)
 mv.setoutput(png)
 mv.plot(geo_view, mask, mask_shading, GridFR, GridFR_shading, PointFR, PointFR_contour, title)
