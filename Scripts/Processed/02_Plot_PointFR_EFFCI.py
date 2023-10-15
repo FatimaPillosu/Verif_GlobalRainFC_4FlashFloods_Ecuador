@@ -46,6 +46,9 @@ Mask = mv.read(FileIN_Mask)
 # Reading the cleaned point flood reports
 FileIN = Git_repo + "/" + FileIN
 PointFR = pd.read_csv(FileIN)
+
+# Sorting the region codes for plotting
+RegionCode_list = (np.array(([0] + RegionCode_list), dtype=float) + 0.1).tolist()
  
 # Selecting the point flood reports for the years of interest
 for Year in Year_list: 
@@ -61,7 +64,6 @@ for Year in Year_list:
             PointFR_EFFCI = PointFR_Year.loc[PointFR_Year["EFFCI"] >= EFFCI]
             
             # Replacing the regions' names with the regions' codes
-            RegionCode_list = (np.array(([0] + RegionCode_list), dtype=float) + 0.1).tolist()
             for indRegion in range(len(RegionName_list)):
                   
                   RegionName = RegionName_list[indRegion]
