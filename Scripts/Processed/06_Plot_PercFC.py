@@ -4,9 +4,10 @@ import numpy as np
 import pandas as pd
 import metview as mv
 
-#######################################################################################################################
+#####################################################################
 # CODE DESCRIPTION
-# 04c_Plot_ecPoint_Rainfall_Percentile.py plots a map that shows rainfall totals associated with a specific percentile.
+# 06_Plot_PercFC.py plots a map that shows the rainfall totals associated with 
+# specific percentiles.
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -31,8 +32,8 @@ CornersDomain_list = [2,-81.5,-5.5,-74.5]
 SystemFC_list = ["ENS", "ecPoint"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 DirIN = "Data/Raw/FC"
-DirOUT = "Data/Plot/04c_ecPoint_Rainfall_Percentile"
-#######################################################################################################################
+DirOUT = "Data/Plot/06_PercFC"
+#####################################################################
 
 
 StepS = StepF - Acc
