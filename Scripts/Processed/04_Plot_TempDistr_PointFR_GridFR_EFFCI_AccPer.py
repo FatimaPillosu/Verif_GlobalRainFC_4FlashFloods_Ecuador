@@ -9,8 +9,8 @@ from matplotlib.dates import DateFormatter
 ##############################################################################
 # CODE DESCRIPTION
 # 04_Plot_TempDistr_PointFR_GridFR_EFFCI_AccPer.py plots the temporal distribution of point 
-# and gridded flood reports, per grid-box, in the considered domain, for each day in the 
-# verification period of interest.
+# and gridded flood reports for each day in the verification period, EFFCI index, and 
+# accumulation period.
 # Note: the code takes 5 minutes to run in serial.
 
 # INPUT PARAMETERS DESCRIPTION

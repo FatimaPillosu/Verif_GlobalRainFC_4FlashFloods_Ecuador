@@ -4,22 +4,24 @@ import numpy as np
 import pandas as pd
 import metview as mv
 
-################################################################################################################
+###################################################################################################
 # CODE DESCRIPTION
-# 04b_Plot_SpatialDistr_GridFR_EFFCI.py plots a map that shows the location of point and grid flood reports, for 
-# a specific date and EFFCI index.
+# 05_Plot_SpatialDistr_PointFR_GridFR_EFFCI_AccPer.py plots a map that shows the location of point and grid flood 
+# reports, for a specific date, EFFCI index, and accumulation period.
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
 # Date (date, in YYYY format): date to plot.
 # Acc (number, in hours): accumulation to consider.
 # EFFCI (integer, from 1 to 10): EFFCI index.
+# CornersDomain_list (list of floats): coordinates [N/E/S/W] of the domain to plot.
 # RegionCode_list (list of integers): codes for the domain's regions to consider. 
 # RegionName_list (list of strings): names for the domain's regions to consider.
 # RegionColour_list (list of strings): rgb-codes for the domain's regions to consider.
 # Git_repo (string): repository's local path.
 # FileIN_Mask (string): relative path of the file containing the domain's mask.
-# FileIN (string): relative path of the file containing the clean point flood reports.
+# FileIN_PointFR (string): relative path of the file containing the clean point flood reports.
+# DirIN_GridFR (string): relative path of the directory containing the gridded, accumulated flood reports.
 # DirOUT (string): relative path where to store the map plots.
 
 # INPUT PARAMETERS
@@ -34,9 +36,11 @@ Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 FileIN_PointFR = "Data/Compute/01_Clean_PointFR/Ecu_FF_Hist_ECMWF.csv"
 DirIN_GridFR = "Data/Compute/03_GridFR_EFFCI_AccPer"
-DirOUT = "Data/Plot/04b_SpatialDistr_GridFR_EFFCI"
-################################################################################################################
+DirOUT = "Data/Plot/05_SpatialDistr_PointFR_GridFR_EFFCI_AccPer"
+###################################################################################################
 
+
+print("Plotting the location of point and gridded flood reports with EFFCI>=" + str(EFFCI) + " for the " + str(Acc) + "-hourly accumulation period starting on " + DateS.strftime("%Y%m%d") + " at " + DateS.strftime("%H") + " UTC")
 
 # Defining the accumulation period
 DateF = DateS + timedelta(hours=Acc) 
@@ -135,7 +139,6 @@ title = mv.mtext(
       )
 
 # Saving the plot
-print("Saving the map plot ...")
 DirOUT= Git_repo + "/" + DirOUT
 if not os.path.exists(DirOUT):
       os.makedirs(DirOUT)
