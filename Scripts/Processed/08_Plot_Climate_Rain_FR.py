@@ -2,9 +2,9 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 
-##########################################################################################
+#################################################################################################
 # CODE DESCRIPTION
-# 06_Plot_Climate_Rain_FR.py plots the climatology of rainfall events associated with flash floods.
+# 08_Plot_Climate_Rain_FR.py plots the climatology of rainfall events associated with flash floods.
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -12,8 +12,7 @@ import matplotlib.pyplot as plt
 # EFFCI_list (list of integers, from 1 to 10): EFFCI indexes to consider.
 # Max_Rain_Plot (positive integer, in mm): maximum rainfall values to plot.
 # Max_Rain_Plot_Disc (positive integer, in mm): discretization for the rainfall values in the plot.
-# MagnitudeInPerc_Rain_Event_FR_list (list of integers, from 0 to 100): magnitude, in 
-#     percentile, of rainfall events that can potentially conduct to flash floods.
+# MagnitudeInPerc_Rain_Event_FR_list (list of integers, from 0 to 100): potentially flash-flood-leading rainfall events.
 # MagnitudeInPerc_Rain_Event_FR_colours_list (list of strings): colours to assign to each magnitude
 # RegionName_list (list of strings): names for the domain's regions.
 # Git_repo (string): repository's local path.
@@ -23,15 +22,15 @@ import matplotlib.pyplot as plt
 # INPUT PARAMETERS
 Acc = 12
 EFFCI_list = [1,6,10]
-Max_Rain_Plot = 100
-Max_Rain_Plot_Disc = 10
+Max_Rain_Plot = 350
+Max_Rain_Plot_Disc = 50
 MagnitudeInPerc_Rain_Event_FR_list = [50, 75, 85, 90, 95, 98, 99]
-MagnitudeInPerc_Rain_Event_FR_colours_list = ["orange", "lime", "purple", "cyan", "blue", "magenta", "red"]
+MagnitudeInPerc_Rain_Event_FR_colours_list = ["#a3842c", "#99eedf", "purple", "#bdfff6", "#008970", "#ffb8b1", "orange"]
 RegionName_list = ["Costa","Sierra"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-DirIN = "Data/Compute/05_Climate_Rain_FR"
-DirOUT = "Data/Plot/06_Climate_Rain_FR"
-##########################################################################################
+DirIN = "Data/Compute/07_Climate_Rain_FR"
+DirOUT = "Data/Plot/08_Climate_Rain_FR"
+#################################################################################################
 
 # Plotting the climatology of rainfall events associated with flash floods for a specific EFFCI index 
 for EFFCI in EFFCI_list:
@@ -64,20 +63,20 @@ for EFFCI in EFFCI_list:
             
             # Setting the plot metadata - Normal plot
             ax.plot([0,Max_Rain_Plot], [25, 25], "-", color="grey", linewidth=3)
-            ax.set_title("Climatology of rainfall events associated with flash floods\n" + r"EFFCI>=" + str(EFFCI) + ", Region=" + RegionName, fontsize=20, pad=20)
-            ax.set_xlabel("Rainfall [ mm/" + str(Acc) + "h ]", fontsize=18, labelpad=10)
-            ax.set_ylabel("Percentiles [-]", fontsize=18, labelpad=10)
+            ax.set_title("Climatology of rainfall events associated with flash floods\n" + r"EFFCI>=" + str(EFFCI) + ", Region=" + RegionName, fontsize=20, pad=20, weight="bold", color="#333333")
+            ax.set_xlabel("Rainfall [ mm/" + str(Acc) + "h ]", fontsize=18, labelpad=10, color="#333333")
+            ax.set_ylabel("Percentiles [-]", fontsize=18, labelpad=10, color="#333333")
             ax.set_xlim([0,Max_Rain_Plot])
             ax.set_ylim([0,100])
             ax.set_xticks(range(0, Max_Rain_Plot + 1, Max_Rain_Plot_Disc))
             ax.set_yticks(range(0,101, 10))
-            ax.xaxis.set_tick_params(labelsize=18)
-            ax.yaxis.set_tick_params(labelsize=18)
+            ax.xaxis.set_tick_params(labelsize=18, color="#333333")
+            ax.yaxis.set_tick_params(labelsize=18, color="#333333")
             ax.grid()
 
             # Saving the plot
             DirOUT_temp = Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}"
-            FileNameOUT_temp = "Climate_Rain_FR_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_" +  RegionName + "_MaxRain" + str(Max_Rain_Plot) + ".jpeg"
+            FileNameOUT_temp = "Climate_Rain_FR_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_" +  RegionName + "_MaxRain" + str(Max_Rain_Plot) + ".png"
             if not os.path.exists(DirOUT_temp):
                   os.makedirs(DirOUT_temp)
             plt.savefig(DirOUT_temp + "/" + FileNameOUT_temp)

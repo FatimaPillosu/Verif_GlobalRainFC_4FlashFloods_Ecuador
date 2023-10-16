@@ -8,7 +8,7 @@ import metview as mv
 
 #################################################################################
 # CODE DESCRIPTION
-# 08_Compute_Counts_FC_OBS_Exceeding_VRE.py computes daily counts of ensemble members 
+# 10_Compute_Counts_FC_OBS_Exceeding_VRE.py computes daily counts of ensemble members 
 # and observations exceeding a considered VRE. 
 # Note: the code can take up 4 days to run in serial. It is recommended to run separate months in 
 # parallel to take down the runtime to 8 hours. 
@@ -47,13 +47,13 @@ MagnitudeInPerc_Rain_Event_FR_list = [85, 99]
 Perc_VRE = 25
 RegionCode_list = [1,2];
 RegionName_list = ["Costa","Sierra"];
-SystemFC_list = ["ecPoint"]
+SystemFC_list = ["ENS", "ecPoint"]
 Git_repo = "/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
-DirIN_Climate_Rain_FR = "Data/Compute/05_Climate_Rain_FR"
+DirIN_Climate_Rain_FR = "Data/Compute/07_Climate_Rain_FR"
 DirIN_FC = "Data/Raw/FC"
 DirIN_GridFR = "Data/Compute/03_GridFR_EFFCI_AccPer"
-DirOUT = "Data/Compute/08_Counts_FC_OBS_Exceeding_VRE"
+DirOUT = "Data/Compute/10_Counts_FC_OBS_Exceeding_VRE"
 ################################################################################
 
 # Sorting the range of dates to process
@@ -72,7 +72,7 @@ for SystemFC in SystemFC_list:
             
             # Creating the daily probabilistic contingency tables for a specific date
             TheDate = DateS
-            TheDate = datetime(2020,2,28,0)
+
             while TheDate <= DateF:
                   
                   print(" ")
