@@ -1,21 +1,18 @@
 import os
-import sys
 from datetime import datetime, timedelta
-import calendar
 import numpy as np
 import pandas as pd
 import metview as mv 
 
 #################################################################################
 # CODE DESCRIPTION
-# 10_Compute_Counts_FC_OBS_Exceeding_VRE.py computes daily counts of ensemble members 
-# and observations exceeding a considered VRE. 
+# 10_Compute_Counts_FC_OBS_Exceeding_VRT.py computes daily counts of ensemble members 
+# and observations exceeding a considered VRT. 
 # Note: the code can take up 4 days to run in serial. It is recommended to run separate months in 
 # parallel to take down the runtime to 8 hours. 
 
 # INPUT PARAMETERS DESCRIPTION
 # Year (integer, in format YYYY): year to consider in the processing.
-# Month (integer, in format MM): month to consider in the processing.
 # StepF_Start (integer, in hours): first final step of the accumulation periods to consider.
 # StepF_Final (integer, in hours): last final step of the accumulation periods to consider.
 # Disc_Step (integer, in hours): discretization for the final steps to consider.
@@ -23,7 +20,7 @@ import metview as mv
 # EFFCI_list (list of integers, from 1 to 10): list of EFFCI indexes to consider.
 # MagnitudeInPerc_Rain_Event_FR_list (list of integers, from 0 to 100): list of magnitudes, in 
 #     percentiles, of rainfall events that can potentially conduct to flash floods.
-# Perc_VRE (integer, from 0 to 100): percentile that defines the verifying rainfall event to consider.
+# Perc_VRT (integer, from 0 to 100): percentile that defines the verifying rainfall event to consider.
 # RegionCode_list (list of integers): list of codes for the domain's regions. 
 # RegionName_list (list of strings): list of names for the domain's regions.
 # SystemFC_list (list of strings): list of names of forecasting systems to consider.
@@ -36,35 +33,33 @@ import metview as mv
 # DirOUT (string): relative path of the directory containing the daily probabilistic contingency tables.
 
 # INPUT PARAMETERS
-Year = int(sys.argv[1])
-Month = int(sys.argv[2])
+Year = 2020
 StepF_Start = 12
 StepF_Final = 246
 Disc_Step = 6
 Acc = 12
 EFFCI_list = [1,6,10]
 MagnitudeInPerc_Rain_Event_FR_list = [85, 99]
-Perc_VRE = 25
+Perc_VRT = 25
 RegionCode_list = [1,2];
 RegionName_list = ["Costa","Sierra"];
-SystemFC_list = ["ENS", "ecPoint"]
+SystemFC_list = ["ecPoint"]
 Git_repo = "/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN_Climate_Rain_FR = "Data/Compute/07_Climate_Rain_FR"
 DirIN_FC = "Data/Raw/FC"
 DirIN_GridFR = "Data/Compute/03_GridFR_EFFCI_AccPer"
-DirOUT = "Data/Compute/10_Counts_FC_OBS_Exceeding_VRE"
+DirOUT = "Data/Compute/10_Counts_FC_OBS_Exceeding_VRT"
 ################################################################################
 
 # Sorting the range of dates to process
-_, last_day_month = calendar.monthrange(Year, Month)
-DateS = datetime(Year, Month, 1)
-DateF = datetime(Year, Month, last_day_month)
+DateS = datetime(Year, 1, 1)
+DateF = datetime(Year, 12,31)
 
 # Reading the file containing the mask for the considered domain
 mask = mv.values(mv.read(Git_repo + "/" + FileIN_Mask))
 
-# Creating the daily counts of forecasts and observations exceeding a VRE
+# Creating the daily counts of forecasts and observations exceeding a VRT
 for SystemFC in SystemFC_list:
 
       # Creating the daily probabilistic contingency tables for a specific lead time
@@ -127,7 +122,7 @@ for SystemFC in SystemFC_list:
 
                                     # Selecting the grid-boxes in the observational fields belonging to the considered region
                                     GridFR_region = GridFR[ind_mask_region]
-                                    count_obs_exceed_vre = np.sum(GridFR_region > 0)
+                                    count_obs_exceed_VRT = np.sum(GridFR_region > 0)
                                     
                                     # Reading the climatology of rainfall events associated with flash floods
                                     File_Rain_Climate_FR = Git_repo + "/" + DirIN_Climate_Rain_FR + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/Climate_Rain_FR_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName + ".csv"
@@ -136,21 +131,21 @@ for SystemFC in SystemFC_list:
                                     # Creating the daily probabilistic contingency tables for a specific magnitude of rainfall events associated with flash floods
                                     for MagnitudeInPerc_Rain_Event_FR in MagnitudeInPerc_Rain_Event_FR_list:
                               
-                                          print("     - Computing ct for VRE>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th perc)" + "," + RegionName + ", EFFCI>=" + str(EFFCI))
+                                          print("     - Computing ct for VRT>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th perc)" + "," + RegionName + ", EFFCI>=" + str(EFFCI))
 
-                                          # Selecting the considered verifying rainfall event (VRE)
-                                          vre = climate_rain_FR["RainEvent_Magnitude_" + str(MagnitudeInPerc_Rain_Event_FR) + "th_Percentile"][Perc_VRE]
+                                          # Selecting the considered verifying rainfall event (VRT)
+                                          VRT = climate_rain_FR["RainEvent_Magnitude_" + str(MagnitudeInPerc_Rain_Event_FR) + "th_Percentile"][Perc_VRT]
 
-                                          # Computing the counts of forecasts and observations exceeding the considered VRE
-                                          count_fc_exceed_vre = np.sum(tp_region >= vre)
-                                          count_fc_obs_exceed_vre = np.hstack([count_fc_exceed_vre,count_obs_exceed_vre])
+                                          # Computing the counts of forecasts and observations exceeding the considered VRT
+                                          count_fc_exceed_VRT = np.sum(tp_region >= VRT)
+                                          count_fc_obs_exceed_VRT = np.hstack([count_fc_exceed_VRT,count_obs_exceed_VRT])
                                           
                                           # Saving the counts
-                                          DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC + "/" + RegionName
-                                          FileNameOUT_temp = "Count_FC_OBS_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}"
+                                          DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC + "/" + RegionName
+                                          FileNameOUT_temp = "Count_FC_OBS_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}"
                                           if not os.path.exists(DirOUT_temp):
                                                 os.makedirs(DirOUT_temp)
-                                          np.save(DirOUT_temp + "/" + FileNameOUT_temp, count_fc_obs_exceed_vre)
+                                          np.save(DirOUT_temp + "/" + FileNameOUT_temp, count_fc_obs_exceed_VRT)
 
                   else:
 
