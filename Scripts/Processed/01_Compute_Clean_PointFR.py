@@ -8,11 +8,10 @@ import pandas as pd
 #####################################################################
 # CODE DESCRIPTION
 # 01_Compute_Clean_PointFR.py cleans the point flood reports by checking that 
-# instances with no lat/lon corrdinates, time and date are deleted. It also 
-# converts the local reporting times into outc times, and checks that the reports 
-# are assigned to the appropriate region according to the developed mask. The 
-# cleaned reports are saved in a .csv table that has the same format of the raw 
-# reports. 
+# instances with no lat/lon coordinates, time and date are deleted. It also converts 
+# the local reporting times into outc times, and checks that the reports are assigned
+# to the appropriate region according to the developed mask. The cleaned reports 
+# are saved in a .csv table that has the same format of the raw reports. 
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION

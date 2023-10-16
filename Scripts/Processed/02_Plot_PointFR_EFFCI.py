@@ -142,8 +142,13 @@ for Year in Year_list:
                   symbol_height_table = 0.3
                   )
 
-            no_title = mv.mtext(
-                  text_line_1 = " "
+            title = mv.mtext(
+                  text_line_count = 2,
+                  text_line_1 = "Point Flood Reports for " + str(Year) + " with EFFCI >= " + str(EFFCI),
+                  text_line_2 = " ",
+                  text_colour = "charcoal",
+                  text_font = "arial",
+                  text_font_size = 0.6
                   )
 
             # Saving the plot
@@ -151,4 +156,4 @@ for Year in Year_list:
             FileOUT = DirOUT + "/PointFR_" + str(Year) + "_EFFCI" + f"{EFFCI:02d}"
             png = mv.png_output(output_name = FileOUT)
             mv.setoutput(png)
-            mv.plot(geo_view, Mask, mask_shading, PointFR_geo, PointFR_contour, PointFR_shades, coastlines, no_title)
+            mv.plot(geo_view, Mask, mask_shading, PointFR_geo, PointFR_contour, PointFR_shades, coastlines, title)

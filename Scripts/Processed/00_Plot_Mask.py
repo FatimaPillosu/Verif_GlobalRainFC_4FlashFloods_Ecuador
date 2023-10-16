@@ -2,12 +2,13 @@ import os
 import numpy as np
 import metview as mv
 
-###################################################################
+###################################################################################################
 # CODE DESCRIPTION
 # 00_Plot_Mask.py plots the map that shows the mask for the domain of interest. 
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
+# MaskName (string): name for the considered domain.
 # CornersDomain_list (list of floats): coordinates [N/E/S/W] of the domain to plot.
 # RegionCode_list (list of integers): codes for the domain's regions to consider. 
 # RegionName_list (list of strings): names for the domain's regions to consider.
@@ -17,6 +18,7 @@ import metview as mv
 # DirOUT (string): relative path where to store the mask's map plot.
 
 # INPUT PARAMETERS
+MaskName = "Ecuador"
 CornersDomain_list = [2,-81.5,-5.5,-74.5]
 RegionCode_list = [1,2,3]
 RegionName_list = ["La Costa", "La Sierra", "El Oriente"]
@@ -24,7 +26,7 @@ RegionColour_list = ["RGB(255/255,234/255,0/255)", "RGB(193/255,154/255,107/255)
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirOUT = "Data/Plot/00_Mask"
-###################################################################
+###################################################################################################
 
 
 # Reading the domain's mask and extracting the coordinates of the domain's points
@@ -95,8 +97,13 @@ mask_points_symbol = mv.msymb(
       symbol_height_table = 0.3
       )
 
-no_title = mv.mtext(
-      text_line_1 = " "
+title = mv.mtext(
+      text_line_count = 2,
+      text_line_1 = "Mask for " + MaskName + " and location of model grid-boxes",
+      text_line_2 = " ",
+      text_colour = "charcoal",
+      text_font = "arial",
+      text_font_size = 0.6
       )
 
 # Saving the plot
@@ -107,4 +114,4 @@ if not os.path.exists(DirOUT):
 FileOUT = DirOUT + "/Mask"
 png = mv.png_output(output_name = FileOUT)
 mv.setoutput(png)
-mv.plot(geo_view, mask, mask_shading, mask_points_geo, mask_points_symbol, no_title)
+mv.plot(geo_view, mask, mask_shading, mask_points_geo, mask_points_symbol, title)
