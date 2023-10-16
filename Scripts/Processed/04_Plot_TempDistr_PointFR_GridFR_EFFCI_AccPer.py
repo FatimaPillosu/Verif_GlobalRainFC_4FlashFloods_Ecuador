@@ -8,10 +8,10 @@ from matplotlib.dates import DateFormatter
 
 ##############################################################################
 # CODE DESCRIPTION
-# 04a_Plot_TempDistr_PointFR_GridFR_EFFCI_AccPer.py plots the temporal distribution of point 
+# 04_Plot_TempDistr_PointFR_GridFR_EFFCI_AccPer.py plots the temporal distribution of point 
 # and gridded flood reports, per grid-box, in the considered domain, for each day in the 
 # verification period of interest.
-# Note: runtime negligible.
+# Note: the code takes 5 minutes to run in serial.
 
 # INPUT PARAMETERS DESCRIPTION
 # DateS (date, in format YYYYMMDD): start date of the considered period of time.
@@ -33,7 +33,7 @@ EFFCI_list = [1,6,10]
 MaxFR = 12
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 DirIN = "Data/Compute/03_GridFR_EFFCI_AccPer"
-DirOUT = "Data/Plot/04a_TempDistr_PointFR_GridFR_EFFCI_AccPer"
+DirOUT = "Data/Plot/04_TempDistr_PointFR_GridFR_EFFCI_AccPer"
 ##############################################################################
 
 
@@ -90,12 +90,12 @@ for EFFCI in EFFCI_list:
       legend = axarr[0].legend()
       for text in legend.get_texts():
             text.set_color("#333333")
-      axarr[0].legend(loc="upper center",  bbox_to_anchor=(0.5, 1.3), ncol=2,  fontsize=14)
+      axarr[0].legend(loc="upper center",  bbox_to_anchor=(0.5, 1.3), ncol=2,  fontsize=14, frameon=False)
       axarr[3].set_xlabel("Days", fontsize=14, labelpad=10, color="#333333")
       ind_plot = 0
       for ax in axarr:
             # setting legend for each sub-plot
-            ax.text(0.85, 0.85, "Period starting at " + f"{AccPerS_list[ind_plot]:02d}" + " UTC", transform=ax.transAxes, ha="center", va="center", fontsize=14, bbox=dict(facecolor="white", alpha=1, edgecolor="#333333"), color="#333333")
+            ax.text(0.84, 0.85, "Period starting at " + f"{AccPerS_list[ind_plot]:02d}" + " UTC", transform=ax.transAxes, ha="center", va="center", fontsize=14, bbox=dict(facecolor="white", alpha=1, edgecolor="#333333"), color="#333333")
             ind_plot = ind_plot + 1
             # setting x-axis
             ax.set_xlim(-1, (len(TheDate_list)+1))
@@ -112,9 +112,9 @@ for EFFCI in EFFCI_list:
 
       # Saving the plot
       DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
-      FileNameOUT = "Distr_PointFR_GridFR_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + f"{Acc:02d}" + "h _EFFCI" + f"{EFFCI:02d}" + ".svg"
+      FileNameOUT = "TempDistr_PointFR_GridFR_AccPer_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + f"{Acc:02d}" + "h _EFFCI" + f"{EFFCI:02d}" + ".png"
       FileOUT = DirOUT_temp + "/" + FileNameOUT
       if not os.path.exists(DirOUT_temp):
             os.makedirs(DirOUT_temp)
-      fig.savefig(FileOUT, format="svg")
+      fig.savefig(FileOUT)
       plt.close()

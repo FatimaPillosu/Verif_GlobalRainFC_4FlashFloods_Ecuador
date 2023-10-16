@@ -47,7 +47,7 @@ MagnitudeInPerc_Rain_Event_FR_list = [85, 99]
 Perc_VRE = 25
 RegionCode_list = [1,2];
 RegionName_list = ["Costa","Sierra"];
-SystemFC_list = ["ENS", "ecPoint"]
+SystemFC_list = ["ecPoint"]
 Git_repo = "/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN_Climate_Rain_FR = "Data/Compute/05_Climate_Rain_FR"
@@ -57,9 +57,9 @@ DirOUT = "Data/Compute/08_Counts_FC_OBS_Exceeding_VRE"
 ################################################################################
 
 # Sorting the range of dates to process
-_, last_day = calendar.monthrange(Year, Month)
-DateS = datetime(2020, 1, 1)
-DateF = datetime(2020, 12, 31)
+_, last_day_month = calendar.monthrange(Year, Month)
+DateS = datetime(Year, Month, 1)
+DateF = datetime(Year, Month, last_day_month)
 
 # Reading the file containing the mask for the considered domain
 mask = mv.values(mv.read(Git_repo + "/" + FileIN_Mask))
@@ -72,6 +72,7 @@ for SystemFC in SystemFC_list:
             
             # Creating the daily probabilistic contingency tables for a specific date
             TheDate = DateS
+            TheDate = datetime(2020,2,28,0)
             while TheDate <= DateF:
                   
                   print(" ")
@@ -93,10 +94,10 @@ for SystemFC in SystemFC_list:
                         FileIN_FC_temp= Git_repo + "/" + DirIN_FC + "/" + SystemFC + "/" + TheDate.strftime("%Y%m%d%H") + "/Pt_BC_PERC_" + f"{Acc:03d}" + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + ".grib"
                         if os.path.isfile(FileIN_FC_temp):
                               tp = mv.values(mv.read(FileIN_FC_temp))
-                              
+                                  
                   # Checking that the rainfall forecasts exist for the considered date. If not, they are not added in the 3d-array
                   if len(tp) != 0:
-                        
+
                         # Extracting the number of ensemble members in the considered forecasting system
                         NumEM = tp.shape[0]
 
@@ -121,8 +122,12 @@ for SystemFC in SystemFC_list:
                                     # Selecting the grid-boxes belonging to the considered region
                                     ind_mask_region = np.where(mask == RegionCode)[0]
 
-                                    # Selecting the grid-boxes in the observational fileds belonging to the considered region
+                                    # Selecting the grid-boxes in the forecast fields belonging to the considered region 
+                                    tp_region = tp[:, ind_mask_region].flatten()
+
+                                    # Selecting the grid-boxes in the observational fields belonging to the considered region
                                     GridFR_region = GridFR[ind_mask_region]
+                                    count_obs_exceed_vre = np.sum(GridFR_region > 0)
                                     
                                     # Reading the climatology of rainfall events associated with flash floods
                                     File_Rain_Climate_FR = Git_repo + "/" + DirIN_Climate_Rain_FR + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/Climate_Rain_FR_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName + ".csv"
@@ -136,17 +141,13 @@ for SystemFC in SystemFC_list:
                                           # Selecting the considered verifying rainfall event (VRE)
                                           vre = climate_rain_FR["RainEvent_Magnitude_" + str(MagnitudeInPerc_Rain_Event_FR) + "th_Percentile"][Perc_VRE]
 
-                                          # Selecting the grid-boxes in the forecast fields belonging to the considered region 
-                                          tp_region = tp[:, ind_mask_region]
-
                                           # Computing the counts of forecasts and observations exceeding the considered VRE
-                                          count_fc_exceed_vre = np.sum(np.sum((tp_region >= vre), axis=0))
-                                          count_obs_exceed_vre = np.sum(GridFR_region >= vre)
+                                          count_fc_exceed_vre = np.sum(tp_region >= vre)
                                           count_fc_obs_exceed_vre = np.hstack([count_fc_exceed_vre,count_obs_exceed_vre])
                                           
                                           # Saving the counts
                                           DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC + "/" + RegionName
-                                          FileNameOUT_temp = "Count_FC_OBS_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + ".csv"
+                                          FileNameOUT_temp = "Count_FC_OBS_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRE" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}"
                                           if not os.path.exists(DirOUT_temp):
                                                 os.makedirs(DirOUT_temp)
                                           np.save(DirOUT_temp + "/" + FileNameOUT_temp, count_fc_obs_exceed_vre)
