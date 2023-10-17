@@ -2,8 +2,6 @@ import os
 from datetime import datetime, timedelta
 from  random import choices
 import numpy as np
-import pandas as pd
-
 
 ######################################################################################
 # CODE DESCRIPTION
@@ -33,12 +31,12 @@ import pandas as pd
 DateS = datetime(2020,1,1,0)
 DateF = datetime(2020,12,31,0)
 StepF_Start = 12
-StepF_Final = 246
+StepF_Final = 120
 Disc_Step = 6
 Acc = 12
-EFFCI_list = [1,6,10]
+EFFCI_list = [6]
 MagnitudeInPerc_Rain_Event_FR_list = [85,99]
-RepetitionsBS = 0
+RepetitionsBS = 100
 RegionName_list = ["Costa","Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
 NumEM_list = [51,99]
@@ -106,32 +104,23 @@ for indSystemFC in range(len(SystemFC_list)):
                               # Computing FB for the original and the bootstrapped dates
                               for ind_repBS in range(RepetitionsBS+1):
                                    
-                                   # Selecting the list of dates to consider
+                                    # Selecting the list of dates to consider
                                     if ind_repBS == 0: # selecting the original dates
                                           TheDates_BS = TheDates_original
                                     else: # selecting the bootstrapped dates
                                           TheDates_BS = np.array(choices(population=TheDates_original, k=NumTotDays)) # list of bootstrapped dates
 
                                     # Computing the FB for the selected dates
-                                    tot_count_fc_exceed_VRT = 0
-                                    tot_count_obs_exceed_VRT = 0
+                                    tot_count_yes_fc = 0
+                                    tot_count_yes_obs = 0
                                     for TheDate_BS in TheDates_BS:
-                                          FileIN = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/EFFCI" +  f"{EFFCI:02d}" + "/VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC + "/" + RegionName + "/Count_FC_OBS_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate_BS.strftime("%Y%m%d") + "_" + TheDate_BS.strftime("%H") + "_" + f"{StepF:03d}" + ".csv.npy"
-                                          tot_count_fc_exceed_VRT = tot_count_fc_exceed_VRT + np.load(FileIN)[0]
-                                          tot_count_obs_exceed_VRT = tot_count_obs_exceed_VRT  + np.load(FileIN)[1]
+                                          FileIN = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/EFFCI" +  f"{EFFCI:02d}" + "/VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC + "/" + RegionName + "/Count_FC_OBS_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate_BS.strftime("%Y%m%d") + "_" + TheDate_BS.strftime("%H") + "_" + f"{StepF:03d}" + ".npy"
+                                          tot_count_yes_fc = tot_count_yes_fc + np.load(FileIN)[0]
+                                          tot_count_yes_obs = tot_count_yes_obs  + np.load(FileIN)[1]
                                           
                                     # Computing FB
-                                    if tot_count_obs_exceed_VRT != 0:
-                                          tempFB = tot_count_fc_exceed_VRT / (NumEM * tot_count_obs_exceed_VRT)
-                                    else:
-                                          tempFB = tot_count_fc_exceed_VRT / NumEM # the proportion of ensemble members that incorrectly predicted the event is computed to avoid diving by zero
-                                    FB_array[indStepF, ind_repBS+1] = tempFB
-                                    
-                                    print("     tot_count_fc_exceed_VRT=", str(tot_count_fc_exceed_VRT), "; tot_count_obs_exceed_VRT=", str(tot_count_obs_exceed_VRT))
+                                    FB_array[indStepF, ind_repBS+1] = tot_count_yes_fc / (NumEM * tot_count_yes_obs)
                         
-                        
-                        print(FB_array)
-                        exit()
                         # Saving the FB array
                         DirOUT_temp= Git_repo + "/" + DirOUT_FB + "/" + f"{Acc:02d}" + "h"
                         FileNameOUT_temp = "FB_" + f"{Acc:02d}" + "h_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName
