@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import metview as mv
 
-########################################################################################
+##########################################################################################################
 # CODE DESCRIPTION
 # 07_Compute_Climate_Rain_FR.py computes the climatology of rainfall events associated with flash floods.
 # Note: the code can take up 3 hours to run in serial.
@@ -13,8 +13,7 @@ import metview as mv
 # Year (year, in YYYY format): year to consider.
 # Acc (number, in hours): accumulation to consider.
 # EFFCI_list (list of integers, from 1 to 10): EFFCI indexes to consider.
-# MagnitudeInPerc_Rain_Event_FR_list (list of integers, from 0 to 100): magnitude, in 
-#     percentile, of rainfall events that can potentially conduct to flash floods.
+# MagnitudeInPerc_Rain_Event_FR_list (list of integers, from 0 to 100): magnitude of potentially flash-flood-leading rainfall events.
 # Climate_Percs (list of floats, from 0 to 100): list of percentiles to compute for the rainfall climatology.
 # Format_Climate_Percs (string): format in the output files for the climatology percentiles.
 # RegionName_list (list of strings): names for the domain's regions.
@@ -35,7 +34,7 @@ Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_FR = "Data/Compute/01_Clean_PointFR/Ecu_FF_Hist_ECMWF.csv"
 DirIN_FC = "Data/Raw/FC/ecPoint"
 DirOUT = "Data/Compute/07_Climate_Rain_FR"
-########################################################################################
+##########################################################################################################
 
 # Reading the cleaned point point flood reports for the considered year
 PointFR = pd.read_csv(Git_repo + "/" + FileIN_FR)

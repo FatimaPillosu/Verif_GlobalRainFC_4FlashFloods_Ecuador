@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 
-#################################################################################################
+##########################################################################################################
 # CODE DESCRIPTION
 # 08_Plot_Climate_Rain_FR.py plots the climatology of rainfall events associated with flash floods.
 # Note: runtime negligible.
@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 # EFFCI_list (list of integers, from 1 to 10): EFFCI indexes to consider.
 # Max_Rain_Plot (positive integer, in mm): maximum rainfall values to plot.
 # Max_Rain_Plot_Disc (positive integer, in mm): discretization for the rainfall values in the plot.
-# MagnitudeInPerc_Rain_Event_FR_list (list of integers, from 0 to 100): potentially flash-flood-leading rainfall events.
-# MagnitudeInPerc_Rain_Event_FR_colours_list (list of strings): colours to assign to each magnitude
+# MagnitudeInPerc_Rain_Event_FR_list (list of integers, from 0 to 100): magnitude of potentially flash-flood-leading rainfall events.
+# MagnitudeInPerc_Rain_Event_FR_colours_list (list of strings): colours to assign to each magnitude.
 # RegionName_list (list of strings): names for the domain's regions.
 # Git_repo (string): repository's local path.
 # DirIN (string): relative path of the directory containing the the rainfall climatologies.
@@ -30,7 +30,7 @@ RegionName_list = ["Costa","Sierra"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 DirIN = "Data/Compute/07_Climate_Rain_FR"
 DirOUT = "Data/Plot/08_Climate_Rain_FR"
-#################################################################################################
+##########################################################################################################
 
 # Plotting the climatology of rainfall events associated with flash floods for a specific EFFCI index 
 for EFFCI in EFFCI_list:
