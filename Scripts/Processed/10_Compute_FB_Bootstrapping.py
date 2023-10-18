@@ -31,12 +31,12 @@ import numpy as np
 DateS = datetime(2020,1,1,0)
 DateF = datetime(2020,12,31,0)
 StepF_Start = 12
-StepF_Final = 120
+StepF_Final = 246
 Disc_Step = 6
 Acc = 12
-EFFCI_list = [6]
+EFFCI_list = [1,6,10]
 MagnitudeInPerc_Rain_Event_FR_list = [85,99]
-RepetitionsBS = 100
+RepetitionsBS = 10000
 RegionName_list = ["Costa","Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
 NumEM_list = [51,99]
@@ -49,15 +49,16 @@ DirOUT_FB = "Data/Compute/10_FB_Bootstrapping"
 print(" ")
 print("Computing FB, including " + str(RepetitionsBS) + " bootstrapped values")
 
-# Computing the totals number of days contained in the considered verification period
-NumTotDays = (DateF-DateS).days + 1
+# Sorting the dates to consider in the bootstrapping
+NumDays = (DateF-DateS).days + 1
+Dates_Orig = np.array([DateS + timedelta(days=i) for i in range(NumDays)])
+Dates_BS = (np.array([choices(population=Dates_Orig, k=NumDays) for i in range(RepetitionsBS)])).flatten()
+temp = {value: index for index, value in enumerate(Dates_Orig)}
+ind_Dates_BS = (np.array([temp[elem] for elem in Dates_BS])).reshape(RepetitionsBS,NumDays)
 
 # Creating the list containing the steps to considered in the computations
 StepF_list = range(StepF_Start, (StepF_Final+1), Disc_Step)
-
-# Computing the variables containing the sizes of the FC variables
-m = len(StepF_list)
-n = len(range(RepetitionsBS + 1))
+NumStepF = len(StepF_list)
 
 # Computing FB for a specific forecasting system
 for indSystemFC in range(len(SystemFC_list)):
@@ -80,50 +81,38 @@ for indSystemFC in range(len(SystemFC_list)):
 
                         print(" - For " + SystemFC + ", " + RegionName + ", EFFCI>=" + str(EFFCI) + ", VRT>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile)")
 
-                        # Initializing the variables containing the FB values, and the bootstrapped ones
-                        FB_array = np.zeros([m,n+1])
-            
+                        # Initializing the variable that will contained the FB values
+                        FB_BS = np.empty((NumStepF, RepetitionsBS + 2))
+
                         # Computing FB for a specific lead time
-                        for indStepF in range(len(StepF_list)):
+                        for indStepF in range(NumStepF):
                               
                               # Selecting the StepF to consider
                               StepF = StepF_list[indStepF]
+                              FB_BS[indStepF,0] = StepF
+
                               print("     - Considering StepF=" + str(StepF) + " ...")
 
-                              # Storing information about the step computed
-                              FB_array[indStepF, 0] = StepF
+                              # Reading the counts of yes-events in the forecasts and observations for the original dates
+                              count_yes_fc = np.empty(NumDays) * np.nan
+                              count_yes_obs = np.empty(NumDays) * np.nan
+                              for ind_Date in range(len(Dates_Orig)):
+                                    TheDate = Dates_Orig[ind_Date]
+                                    FileIN = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/EFFCI" +  f"{EFFCI:02d}" + "/VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC + "/" + RegionName + "/Count_FC_OBS_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + ".npy"
+                                    if os.path.isfile(FileIN):
+                                          count_yes_fc[ind_Date] = np.round(np.load(FileIN)[0]/NumEM).astype(int)
+                                          count_yes_obs[ind_Date] = np.load(FileIN)[1]
+                              FB_BS[indStepF,1] = np.nansum(count_yes_fc) / np.nansum(count_yes_obs)
 
-                              # Generating the list of days to use during the bootstrapping 
-                              TheDate = DateS
-                              TheDates_original = []
-                              while TheDate <= DateF:
-                                    TheDates_original.append(TheDate)
-                                    TheDate += timedelta(days=1)
-                              TheDates_original = np.array(TheDates_original)
-                              
-                              # Computing FB for the original and the bootstrapped dates
-                              for ind_repBS in range(RepetitionsBS+1):
-                                   
-                                    # Selecting the list of dates to consider
-                                    if ind_repBS == 0: # selecting the original dates
-                                          TheDates_BS = TheDates_original
-                                    else: # selecting the bootstrapped dates
-                                          TheDates_BS = np.array(choices(population=TheDates_original, k=NumTotDays)) # list of bootstrapped dates
+                              # Extracting the bootstrapped values for the counts
+                              for ind_BS in range(RepetitionsBS):
+                                    count_yes_fc_BS = count_yes_fc[ind_Dates_BS[ind_BS,:]]
+                                    count_yes_obs_BS = count_yes_obs[ind_Dates_BS[ind_BS,:]]
+                                    FB_BS[indStepF,ind_BS+2] = np.nansum(count_yes_fc_BS) / np.nansum(count_yes_obs_BS)
 
-                                    # Computing the FB for the selected dates
-                                    tot_count_yes_fc = 0
-                                    tot_count_yes_obs = 0
-                                    for TheDate_BS in TheDates_BS:
-                                          FileIN = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/EFFCI" +  f"{EFFCI:02d}" + "/VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC + "/" + RegionName + "/Count_FC_OBS_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate_BS.strftime("%Y%m%d") + "_" + TheDate_BS.strftime("%H") + "_" + f"{StepF:03d}" + ".npy"
-                                          tot_count_yes_fc = tot_count_yes_fc + np.load(FileIN)[0]
-                                          tot_count_yes_obs = tot_count_yes_obs  + np.load(FileIN)[1]
-                                          
-                                    # Computing FB
-                                    FB_array[indStepF, ind_repBS+1] = tot_count_yes_fc / (NumEM * tot_count_yes_obs)
-                        
                         # Saving the FB array
                         DirOUT_temp= Git_repo + "/" + DirOUT_FB + "/" + f"{Acc:02d}" + "h"
                         FileNameOUT_temp = "FB_" + f"{Acc:02d}" + "h_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName
                         if not os.path.exists(DirOUT_temp):
                               os.makedirs(DirOUT_temp)
-                        np.save(DirOUT_temp + "/" + FileNameOUT_temp, FB_array)
+                        np.save(DirOUT_temp + "/" + FileNameOUT_temp, FB_BS)

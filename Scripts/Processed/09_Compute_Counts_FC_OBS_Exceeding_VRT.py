@@ -8,8 +8,7 @@ import metview as mv
 # CODE DESCRIPTION
 # 09_Compute_Counts_FC_OBS_Exceeding_VRT.py computes daily counts of ensemble members and observations exceeding a 
 # considered VRT. 
-# Note: the code can take up 4 days to run in serial. It is recommended to run separate months in parallel to take down the 
-# runtime to 8 hours. 
+# Note: the code can take up 4 days to run in serial.
 
 # INPUT PARAMETERS DESCRIPTION
 # Year (integer, in format YYYY): year to consider in the processing.

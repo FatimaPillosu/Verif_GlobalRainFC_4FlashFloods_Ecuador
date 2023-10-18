@@ -9,7 +9,7 @@ import pandas as pd
 # CODE DESCRIPTION
 # 13_Compute_AROC_Bootstrapping.py computes the area under the ROC curves (AROC), including the bootstrapped 
 # values to estimate the statistical significance of the estimates.
-# Note: the code can take up to 2 hours to run.
+# Note: the code can take up to 2 hours to run to run in series.
 
 # INPUT PARAMETERS DESCRIPTION
 # DateS (date, in format YYYYMMDD): start date of the considered verification period.

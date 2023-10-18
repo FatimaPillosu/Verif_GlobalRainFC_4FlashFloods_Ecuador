@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 #####################################################################################
 # CODE DESCRIPTION
 # 11_Plot_FB_CI.py plots Frequency Bias (FB) and confidence intervals (CI).
-# Note: the code can take up 20 minutes to run in serial.
+# Note: the code can take up 10 minutes to run in serial.
 
 # INPUT PARAMETERS DESCRIPTION
 # Acc (number, in hours): rainfall accumulation to consider.
@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 Acc = 12
 EFFCI_list = [1,6,10]
 MagnitudeInPerc_Rain_Event_FR_list = [85,99]
-CL = 95
+CL = 99
 RegionName_list = ["Costa","Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
 Colour_SystemFC_list = ["#ec4d37", "#00539CFF"]
@@ -48,7 +48,7 @@ for EFFCI in EFFCI_list:
             for RegionName in RegionName_list: 
                   
                   # Setting the figure
-                  fig, ax = plt.subplots(figsize=(12, 10))
+                  fig, ax = plt.subplots(figsize=(14, 10))
 
                   # Plotting FB for a specific forecasting system
                   for indSystemFC in range(len(SystemFC_list)):
@@ -62,13 +62,13 @@ for EFFCI in EFFCI_list:
                         FileNameIN_temp = "FB_" + f"{Acc:02d}" + "h_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName + ".npy"
                         StepF = np.load(DirIN_temp + "/" + FileNameIN_temp)[:,0].astype(int)
                         fb_real = np.load(DirIN_temp + "/" + FileNameIN_temp)[:,1]
-                        fb_BS = np.load(DirIN_temp + "/" + FileNameIN_temp)[:,3:]
+                        fb_BS = np.load(DirIN_temp + "/" + FileNameIN_temp)[:,2:]
                         
                         # Computing the confidence intervals from the bootstrapped FB values
                         alpha = 100 - CL # significance level (in %)
-                        CI_lower = np.nanpercentile(fb_BS, alpha/2, axis=0)
-                        CI_upper = np.nanpercentile(fb_BS, 100 - (alpha/2), axis=0)
-
+                        CI_lower = np.nanpercentile(fb_BS, alpha/2, axis=1)
+                        CI_upper = np.nanpercentile(fb_BS, 100 - (alpha/2), axis=1)
+                        
                         # Plotting the FB values
                         ax.plot(StepF, fb_real, "o-", color=Colour_SystemFC, label=SystemFC, linewidth=3)
                         ax.fill_between(StepF, CI_lower, CI_upper, color=Colour_SystemFC, alpha=0.2, edgecolor="none")
@@ -80,8 +80,6 @@ for EFFCI in EFFCI_list:
                   ax.set_ylabel("Frequency Bias [-]", fontsize=20, labelpad=10, color="#333333")
                   ax.set_xlim([StepF[0]-1, StepF[-1]+1])
                   ax.set_xticks(np.arange(StepF[0], (StepF[-1]+1), DiscStep))
-                  ax.set_ylim([0, np.max(CI_upper)+100])
-                  ax.set_yticks(np.arange(0,max(CI_upper)+100, 1000))
                   ax.xaxis.set_tick_params(labelsize=20, rotation=90, color="#333333")
                   ax.yaxis.set_tick_params(labelsize=16, color="#333333")
                   ax.legend(loc="upper center",  bbox_to_anchor=(0.5, 1.08), ncol=2, fontsize=20, frameon=False)
