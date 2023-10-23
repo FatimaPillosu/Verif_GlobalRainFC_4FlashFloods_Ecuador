@@ -4,10 +4,9 @@ import numpy as np
 import metview as mv
 import matplotlib.pyplot as plt
 
-
 #####################################################################################################################
 # CODE DESCRIPTION
-# 17_Plot_Count_NumRainOBS_AccPer.py plots the counts of rain observations in each considered accumulation period. 
+# 20_Plot_Count_NumRainOBS_AccPer.py plots the counts of rain observations in each considered accumulation period. 
 # Note: runtime code negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -34,7 +33,7 @@ RegionCode_list = [1,2]
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 DirIN = "Data/Raw/OBS/Rain"
-DirOUT = "Data/Plot/17_Count_NumRainOBS_AccPer"
+DirOUT = "Data/Plot/20_Count_NumRainOBS_AccPer"
 #####################################################################################################################
 
 # Setting some general parameters and variables

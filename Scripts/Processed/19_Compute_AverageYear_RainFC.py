@@ -3,10 +3,10 @@ from datetime import datetime, timedelta
 import numpy as np
 import metview as mv
 
-
-#############################################################################################
+###################################################################################
 # CODE DESCRIPTION
-# 18_Plot_Average_Rain_Year_AccPer.py plots the average rain in a year for each considered accumulation period.
+# 19_Compute_AverageYear_RainFC.py computes the annual average rain for different accumulation 
+# periods and different lead times.
 # Note: It can take up to 24 hours to run is series.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -39,8 +39,8 @@ RegionCode_list = [1,2]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN = "Data/Raw/FC"
-DirOUT = "Data/Compute/18_Average_Rain_Year_AccPer"
-#############################################################################################
+DirOUT = "Data/Compute/19_AverageYear_RainFC"
+###################################################################################
 
 # Reading the Mask for the regions in the considered domain
 mask = mv.values(mv.read(Git_repo + "/" + FileIN_Mask))
@@ -100,7 +100,7 @@ for LT_day in np.arange(LT_S,LT_F+1):
                   
                   # Saving the plot
                   DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
-                  FileNameOUT_temp = "Average_Rain_Year_" + f"{Acc:02d}" + "h_AccPerS_" + f"{AccPerS:02d}" + "UTC_LT" + f"{LT_day:02d}" + "day_" + SystemFC
+                  FileNameOUT_temp = "AverageYear_RainFC" + f"{Acc:02d}" + "h_AccPerS_" + f"{AccPerS:02d}" + "UTC_LT" + f"{LT_day:02d}" + "day_" + SystemFC
                   if not os.path.exists(DirOUT_temp):
                         os.makedirs(DirOUT_temp)
                   np.save(DirOUT_temp + "/" + FileNameOUT_temp, tp_av_year)

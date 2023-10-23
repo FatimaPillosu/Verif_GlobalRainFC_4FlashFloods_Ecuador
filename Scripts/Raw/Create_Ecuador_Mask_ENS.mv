@@ -1,6 +1,6 @@
 # Metview Macro
 
-###############################################################
+#####################################################################
 # CODE DESCRIPTION
 # Create_Ecuador_Mask_ENS.mv creates Ecuador's mask for the ECMWF ENS 
 # grid, and saves the mask as .grib and .csv files.
@@ -13,9 +13,9 @@
 # DirOUT (string): relative path where to store the mask
 
 # INPUT PARAMETERS
-Git_repo = "/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
+Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 DirOUT = "Data/Raw/Ecuador_Mask_ENS"
-###############################################################
+#####################################################################
 
 
 # Retrieving the raw data needed to create Ecuador's mask

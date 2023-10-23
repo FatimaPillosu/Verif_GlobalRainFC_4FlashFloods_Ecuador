@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 ##########################################################################################################
 # CODE DESCRIPTION
-# 08_Plot_Climate_Rain_FR.py plots the climatology of rainfall events associated with flash floods.
+# 10_Plot_Climate_Rain_FR.py plots the climatology of rainfall events associated with flash floods.
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -28,8 +28,8 @@ MagnitudeInPerc_Rain_Event_FR_list = [50, 75, 85, 90, 95, 98, 99]
 MagnitudeInPerc_Rain_Event_FR_colours_list = ["#6b9bd1", "#ffb8b1", "purple", "#82cbb2", "#bc987e", "#b7b1d2", "orange"]
 RegionName_list = ["Costa","Sierra"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-DirIN = "Data/Compute/07_Climate_Rain_FR"
-DirOUT = "Data/Plot/08_Climate_Rain_FR"
+DirIN = "Data/Compute/09_Climate_Rain_FR"
+DirOUT = "Data/Plot/10_Climate_Rain_FR"
 ##########################################################################################################
 
 # Plotting the climatology of rainfall events associated with flash floods for a specific EFFCI index 

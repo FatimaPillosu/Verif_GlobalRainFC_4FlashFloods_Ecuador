@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 ##########################################################################################
 # CODE DESCRIPTION
-# 14_Plot_AROC_CI.py plots AROC and confidence intervals (CI).
+# 13_Plot_AROC_CI.py plots AROC and confidence intervals (CI).
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -29,8 +29,8 @@ RegionName_list = ["Costa","Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
 Colour_SystemFC_list = ["#ec4d37", "#00539CFF"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-DirIN = "Data/Compute/13_AROC_Bootstrapping"
-DirOUT = "Data/Plot/14_AROC"
+DirIN = "Data/Compute/12_AROC_Bootstrapping"
+DirOUT = "Data/Plot/13_AROC"
 ##########################################################################################
 
 

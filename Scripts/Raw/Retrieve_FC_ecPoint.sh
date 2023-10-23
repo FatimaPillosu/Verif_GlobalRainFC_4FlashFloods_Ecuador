@@ -1,6 +1,6 @@
 #!/bin/bash
 
-################################################################
+##############################################################################################################
 # CODE DESCRIPTION
 # Retrieve_FC_ecPoint retrieves ecPoint-Rainfall forecasts from ECFS.
 # Files contain global rainfall forecasts for the considered accumulation period, 
@@ -23,9 +23,9 @@ BaseDateF=20201231
 BaseTime=0
 Acc=12
 VersFC="1.2"
-Git_repo="/ec/vol/ecpoint/mofp/PhD/Papers2Write/FlashFloods_Ecuador"
+Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 DirOUT="Data/Raw/FC/ecPoint"
-################################################################
+##############################################################################################################
 
 
 # Setting general variables
