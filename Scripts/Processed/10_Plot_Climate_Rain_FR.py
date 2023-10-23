@@ -22,8 +22,8 @@ import matplotlib.pyplot as plt
 # INPUT PARAMETERS
 Acc = 12
 EFFCI_list = [1,6,10]
-Max_Rain_Plot = 100
-Max_Rain_Plot_Disc = 20
+Max_Rain_Plot = 350
+Max_Rain_Plot_Disc = 50
 MagnitudeInPerc_Rain_Event_FR_list = [50, 75, 85, 90, 95, 98, 99]
 MagnitudeInPerc_Rain_Event_FR_colours_list = ["#6b9bd1", "#ffb8b1", "purple", "#82cbb2", "#bc987e", "#b7b1d2", "orange"]
 RegionName_list = ["Costa","Sierra"]
