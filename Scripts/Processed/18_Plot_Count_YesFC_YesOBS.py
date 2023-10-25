@@ -31,115 +31,92 @@ from matplotlib.ticker import MaxNLocator
 # DirOUT (string): relative path of the directory containing the FB values, including the bootstrapped ones.
 
 # INPUT PARAMETERS
+Acc = 12
 DateS = datetime(2020,1,1,0)
 DateF = datetime(2020,12,31,0)
-StepF_Start = 12
-StepF_Final = 120
-Disc_Step = 6
 StepF_2_Plot = 72
-Acc = 12
-EFFCI_list = [6]
+EFFCI = 6
+Max_Count_Plot_yaxis = 40
 MagnitudeInPerc_Rain_Event_FR_list = [85,99]
-RepetitionsBS = 100
-RegionName_list = ["Costa","Sierra"]
+RegionName_list = ["Costa", "Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
+NumEM_list = [51, 99]
 Colour_SystemFC_list = ["#ec4d37", "#00539CFF"]
-NumEM_list = [51,99]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 DirIN = "Data/Compute/15_Counts_FC_OBS_Exceeding_VRT"
 DirOUT = "Data/Plot/18_Count_YesFC_YesOBS"
 #####################################################################################################################
 
 
-# Creating the list containing the steps to considered in the computations
-StepF_list = np.arange(StepF_Start, (StepF_Final+1), Disc_Step)
-m = len(StepF_list)
-ind_StepF_2_Plot = np.where(StepF_list == StepF_2_Plot)[0][0]
+# Plotting the counts for a specific VRT
+for MagnitudeInPerc_Rain_Event_FR in MagnitudeInPerc_Rain_Event_FR_list:
 
-# Generating the list of days in the verification period
-TheDates_original = []
-TheDate = DateS
-while TheDate <= DateF:
-      TheDates_original.append(TheDate)
-      TheDate += timedelta(days=1)
-n = len(TheDates_original)
-
-# Computing the counts for a specific EFFCI index
-for EFFCI in EFFCI_list:
+      # Plotting the counts for a specific region
+      for indRegion in range(len(RegionName_list)): 
       
-      # Computing the counts for a specific VRT
-      for MagnitudeInPerc_Rain_Event_FR in MagnitudeInPerc_Rain_Event_FR_list:
+            RegionName = RegionName_list[indRegion]
+            print(" - Plot the count of yes forecasts and observation events for  " + RegionName + ", EFFCI>=" + str(EFFCI) + ", VRT>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile), StepF=" + str(StepF_2_Plot))
+    
+            # Setting the figure where to plot the counts
+            fig, ax1 = plt.subplots(figsize=(12, 8), sharex=True)
 
-            # Computing the counts for a specific region
-            for indRegion in range(len(RegionName_list)): 
-            
-                  # Selecting the region to consider
-                  RegionName = RegionName_list[indRegion]
-
-                  print(" - Plot the count of yes forecasts and observation events for  " + RegionName + ", EFFCI>=" + str(EFFCI) + ", VRT>=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th percentile)")
-
-                  # Setting the figure
-                  fig, ax = plt.subplots(2, 1, figsize=(12, 10), sharex=True)
-
-                  # Computing the counts for a specific forecasting system
-                  for indSystemFC in range(len(SystemFC_list)):
-                        
-                        # Selecting the forecasting system to consider and the colour to associate to it in the plots
-                        SystemFC = SystemFC_list[indSystemFC]
-                        Colour_SystemFC = Colour_SystemFC_list[indSystemFC]
-                        NumEM = NumEM_list[indSystemFC]
-
-                        # Initializing the variables containing the FB values, and the bootstrapped ones
-                        tot_count_yes_fc = np.zeros([m,n+1])
-                        tot_count_yes_obs = np.zeros([m,n+1])
-                        
-                        # Computing FB for a specific lead time
-                        for indStepF in range(len(StepF_list)):
-                              
-                              # Selecting the StepF to consider
-                              StepF = StepF_list[indStepF]
-                              print("     - Considering " + SystemFC + " and StepF=" + str(StepF) + " ...")
-
-                              # Storing information about the step computed
-                              tot_count_yes_fc[indStepF, 0] = StepF
-                              tot_count_yes_obs[indStepF, 0] = StepF
-
-                              # Computing the counts for the selected dates
-                              for ind_TheDate in range(n):
-                                    TheDate = TheDates_original[ind_TheDate]
-                                    FileIN = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/EFFCI" +  f"{EFFCI:02d}" + "/VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC + "/" + RegionName + "/Count_FC_OBS_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + ".npy"
-                                    tot_count_yes_fc[indStepF, ind_TheDate+1] = int(np.load(FileIN)[0] / NumEM)
-                                    tot_count_yes_obs[indStepF, ind_TheDate+1] = np.load(FileIN)[1]
-                                    TheDate += timedelta(days=1)
-
-                        print(tot_count_yes_fc)
-                        
-                        # Plotting the counts
-                        ax[0].plot(TheDates_original, tot_count_yes_fc[ind_StepF_2_Plot,1:], ".-", color=Colour_SystemFC, label=SystemFC, linewidth=1)
+            # Initializing the variable that contains the maximum count in the forecasts
+            max_count_yes_fc_list = []
                   
-                  # Adding metadata to the plot
-                  ax[1].bar(TheDates_original, tot_count_yes_obs[ind_StepF_2_Plot,1:], color="black", label="Flood reports")
-                  fig.suptitle(r"$\bf{Counts\ of\ yes-events\ in\ forecasts\ and\ observations}$" + "\nEFFCI>=" +  str(EFFCI) + ", VRT=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th perc), Region=" + RegionName + ", " + str(Acc) + "-hourly period ending at StepF=" + str(StepF_2_Plot), fontsize=16, color="#333333")
-                  ax[0].legend(loc="upper right", fontsize=16)
-                  ax[1].legend(loc="upper right", fontsize=16)
-                  ax[1].set_xlabel("Days", fontsize=16, color="#333333")
-                  ax[1].xaxis.set_major_formatter(DateFormatter("%d-%b-%y"))
-                  ax[1].xaxis.set_major_locator(mdates.MonthLocator(bymonthday=1, interval=1))
-                  ax[1].xaxis.set_major_locator(MaxNLocator(integer=True))
-                  ax[1].xaxis.set_tick_params(labelsize=16, rotation=45, colors="#333333")
-                  ax[0].set_ylabel("Counts", fontsize=16, color="#333333")
-                  ax[0].yaxis.set_major_locator(MaxNLocator(integer=True))
-                  ax[0].yaxis.set_tick_params(labelsize=16, colors="#333333")
-                  ax[1].set_ylabel("Counts", fontsize=16, labelpad=30, color="#333333")
-                  ax[1].yaxis.set_major_locator(MaxNLocator(integer=True))
-                  ax[1].yaxis.set_tick_params(labelsize=16, colors="#333333")
-                  plt.tight_layout()
+            # Plotting the counts for a specific forecasting system
+            for indSystemFC in range(len(SystemFC_list)):
+                        
+                  SystemFC = SystemFC_list[indSystemFC]
+                  Colour_SystemFC = Colour_SystemFC_list[indSystemFC]
+                  NumEM = NumEM_list[indSystemFC]
 
-                  # Saving the plot
-                  DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
-                  FileNameOUT_temp = "Counts_YesFC_YesOBS_" + f"{Acc:02d}" + "h_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName + "_"+ f"{StepF_2_Plot:03d}" + ".jpeg"
-                  if not os.path.exists(DirOUT_temp):
-                        os.makedirs(DirOUT_temp)
-                  plt.savefig(DirOUT_temp + "/" + FileNameOUT_temp)
-                  plt.close() 
-                              
+                  # Initializing the variables containing the considered dates, and the correspondent forecasts and observations counts
+                  count_yes_fc = []
+                  count_yes_obs = []
+                  TheDates_list = []
+
+                  # Reading the counts for the selected dates
+                  TheDate = DateS
+                  while TheDate <= DateF:
+                        TheDates_list.append(TheDate)
+                        FileIN = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/EFFCI" +  f"{EFFCI:02d}" + "/VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF_2_Plot:03d}" + "/" + SystemFC + "/" + RegionName + "/Count_FC_OBS_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF_2_Plot:03d}" + ".npy"
+                        count_yes_fc.append(np.load(FileIN)[0] / NumEM)
+                        count_yes_obs.append(np.load(FileIN)[1])
+                        TheDate += timedelta(days=1)
+
+                  # Computing the max count in the forecasts
+                  max_count_yes_fc_list.append(np.max(np.array(count_yes_fc)))
+
+                  # Plotting the counts
+                  ax1.plot(TheDates_list, count_yes_fc, ".-", color=Colour_SystemFC, label=SystemFC, linewidth=1)
+
+            # Adding metadata to the plot
+            max_count_yes_fc = np.max(np.array(max_count_yes_fc_list))
+            ax1.set_title(r"$\bf{Count\ of\ yes-events\ in\ forecasts\ and\ observations}$" + "\nEFFCI>=" +  str(EFFCI) + ", VRT=tp(" + str(MagnitudeInPerc_Rain_Event_FR) + "th perc), Region=" + RegionName + ", " + str(Acc) + "-hourly period ending at StepF=" + str(StepF_2_Plot),  pad=40, fontsize=16, color="#333333")
+            ax1.set_xlabel("Days", fontsize=16, color="#333333")
+            ax1.xaxis.set_major_formatter(DateFormatter("%d-%b"))
+            ax1.xaxis.set_major_locator(mdates.MonthLocator(bymonthday=1, interval=1))
+            ax1.xaxis.set_tick_params(labelsize=16, rotation=20, colors="#333333")
+            ax1.set_ylabel("Forecasts", fontsize=16, labelpad=10, color="#333333")
+            ax1.set_ylim([0, Max_Count_Plot_yaxis])
+            ax1.yaxis.set_tick_params(labelsize=16, colors="#333333")
+            ax1.legend(loc="upper right",  bbox_to_anchor=(0.5, 1.1), ncol=7, fontsize=20, frameon=False)
+            ax1.yaxis.grid(False)
+            ax1.xaxis.grid(True)
+
+            #ax1.yaxis.tick_right()  # Move y-axis ticks to the right
+            ax2 = ax1.twinx()
+            ax2.bar(TheDates_list, count_yes_obs, color="#333333", label="Flood reports")
+            ax2.invert_yaxis()
+            ax2.set_ylabel("Observations", fontsize=16, labelpad=10, color="#333333")
+            ax2.set_ylim([10, 0])
+            ax2.yaxis.set_tick_params(labelsize=16, colors="#333333")
+            ax2.legend(loc="upper left",  bbox_to_anchor=(0.6, 1.1), fontsize=20, frameon=False)
+            
+            # Saving the plot
+            DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
+            FileNameOUT_temp = "Counts_YesFC_YesOBS_" + f"{Acc:02d}" + "h_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName + "_"+ f"{StepF_2_Plot:03d}" + "MaxY" + str(Max_Count_Plot_yaxis) + ".jpeg"
+            if not os.path.exists(DirOUT_temp):
+                  os.makedirs(DirOUT_temp)
+            plt.savefig(DirOUT_temp + "/" + FileNameOUT_temp)
+            plt.close()                     
