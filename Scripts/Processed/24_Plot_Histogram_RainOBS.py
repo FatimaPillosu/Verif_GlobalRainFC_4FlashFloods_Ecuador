@@ -42,7 +42,7 @@ for AccPerF in AccPerF_list:
             RegionColour = RegionColour_list[ind_Region]
             
             # Setting the figure where to plot the timeseries
-            fig, ax = plt.subplots(figsize=(10, 8), sharex=True)
+            fig, ax = plt.subplots(figsize=(15, 12), sharex=True)
 
             # Reading the values of the rainfall observations
             FileIN = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/vals_obs_" + f"{Acc:02d}" + "h_" + RegionName + "_" + f"{AccPerF:02d}" + "UTC.npy"
@@ -50,13 +50,13 @@ for AccPerF in AccPerF_list:
 
             # Plot the timeseries
             ax.hist(vals_obs, bins=np.arange(0, int(np.max(vals_obs)+10)), color=RegionColour, edgecolor='black')
-            ax.set_title("Timeserie of rainfall observations between " + DateTimeS.strftime("%Y%m%d") + " and " + DateTimeS.strftime("%Y%m%d") + " for accumulation period ending at " + f"{AccPerF:02d}" + " UTC, Region= " + RegionName, fontsize=24, pad=40, color="#333333", weight="bold")
-            ax.set_xlabel("Bins [mm/" + str(Acc) + "h]", fontsize=20, labelpad=20, color="#333333")
-            ax.set_ylabel("Counts", fontsize=24, labelpad=16, color="#333333")
+            ax.set_title("Rainfall observations for accumulation periods ending at " + f"{AccPerF:02d}" + " UTC in " + RegionName + "\nObservations between " + DateTimeS.strftime("%Y%m%d") + " and " + DateTimeS.strftime("%Y%m%d"), fontsize=24, pad=10, color="#333333", weight="bold")
+            ax.set_xlabel("Bins [mm/" + str(Acc) + "h]", fontsize=24, labelpad=20, color="#333333")
+            ax.set_ylabel("Counts", fontsize=24, labelpad=24, color="#333333")
             ax.set_xticks(np.arange(0, int(np.max(vals_obs)+10), 5))
             ax.set_ylim([0,70])
-            ax.xaxis.set_tick_params(labelsize=16, rotation=90, color="#333333")
-            ax.yaxis.set_tick_params(labelsize=16, color="#333333")
+            ax.xaxis.set_tick_params(labelsize=24, rotation=30, color="#333333")
+            ax.yaxis.set_tick_params(labelsize=24, color="#333333")
             ax.grid()
             
             
