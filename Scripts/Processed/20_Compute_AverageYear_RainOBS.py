@@ -5,14 +5,14 @@ import metview as mv
 
 ######################################################################################
 # CODE DESCRIPTION
-# 21_Compute_AverageYear_RainOBS.py computes the annual average rain for different accumulation 
+# 20_Compute_AverageYear_RainOBS.py computes the annual average rain for different accumulation 
 # periods, and extracts the location of the rainfall observations used in the computations.
 # Note: the code takes up to 5 minutes to run in serial.
 
 # INPUT PARAMETERS DESCRIPTION
 # Acc (number, in hours): rainfall accumulation to consider.
-# DateS (date, in format YYYYMMDD): start date of the considered verification period.
-# DateF (date, in format YYYYMMDD): final date of the considered verification period.
+# DateTimeS (date, in format YYYYMMDD): start date of the considered verification period.
+# DateTimeF (date, in format YYYYMMDD): final date of the considered verification period.
 # AccPerF_list (list of integer, inUTC hours): list of the final times of the accumulation periods to consider.
 # RegionName_list (list of strings): list of names for the domain's regions.
 # RegionCode_list (list of integers): codes for the domain's regions to consider. 
@@ -31,9 +31,13 @@ RegionCode_list = [1,2]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN = "Data/Raw/OBS/Rain"
-DirOUT = "Data/Compute/21_AverageYear_RainOBS"
+DirOUT = "Data/Compute/20_AverageYear_RainOBS"
 ######################################################################################
 
+# Creating the output directory
+DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
+if not os.path.exists(DirOUT_temp):
+      os.makedirs(DirOUT_temp)
 
 # Reading the mask for the regions in the considered domain
 mask = mv.read(Git_repo + "/" + FileIN_Mask)
@@ -53,7 +57,7 @@ for ind_Region in range(len(RegionName_list)):
             AccPerF = AccPerF_list[ind_AccPerF]
 
             # Initializing the variable that will contain the rainfall observations for the region
-            obs_region = np.array([])
+            vals_obs_region = np.array([])
             lats_obs_region = np.array([])
             lons_obs_region = np.array([])
 
@@ -61,7 +65,7 @@ for ind_Region in range(len(RegionName_list)):
             TheDateTime = DateTimeS + timedelta(hours=AccPerF)
             while TheDateTime <= DateTimeF:
                   
-                  print("Post-processing observations for period starting on ", TheDateTime, " for ", RegionName)
+                  print("Post-processing observations for period ending on ", TheDateTime, " for ", RegionName)
             
                   # Reading global rainfall observations
                   FileIN = Git_repo + "/" + DirIN + "_" + f"{Acc:02d}" + "h/" + TheDateTime.strftime("%Y%m%d") + "/tp" + f"{Acc:02d}" + "_obs_" + TheDateTime.strftime("%Y%m%d") + TheDateTime.strftime("%H") + ".geo"
@@ -69,7 +73,7 @@ for ind_Region in range(len(RegionName_list)):
 
                   # Selecting the observations for the region and the considered accumulation period
                   mask_at_obs = mv.nearest_gridpoint(mask, obs)
-                  obs_region = np.concatenate((obs_region, mv.values(mv.filter(obs, mask_at_obs == RegionCode))))
+                  vals_obs_region = np.concatenate((vals_obs_region, mv.values(mv.filter(obs, mask_at_obs == RegionCode))))
                   lats_obs_region = np.concatenate((lats_obs_region, mv.latitudes(mv.filter(obs, mask_at_obs == RegionCode))))
                   lons_obs_region = np.concatenate((lons_obs_region, mv.longitudes(mv.filter(obs, mask_at_obs == RegionCode))))
                   
@@ -77,15 +81,16 @@ for ind_Region in range(len(RegionName_list)):
 
             # Computing the annual rainfall average 
             tp_av_year[ind_AccPerF,0] = AccPerF
-            tp_av_year[ind_AccPerF,1] = np.mean(obs_region)
+            tp_av_year[ind_AccPerF,1] = np.mean(vals_obs_region)
+
+            # Saving the observations timeseries
+            FileNameOUT_vals_obs = "vals_obs_" + f"{Acc:02d}" + "h_" + RegionName + "_" + f"{AccPerF:02d}" + "UTC"
+            FileNameOUT_lats_obs = "lats_obs_" + f"{Acc:02d}" + "h_" + RegionName + "_" + f"{AccPerF:02d}" + "UTC"
+            FileNameOUT_lons_obs = "lons_obs_" + f"{Acc:02d}" + "h_" + RegionName + "_" + f"{AccPerF:02d}" + "UTC"
+            np.save(DirOUT_temp + "/" + FileNameOUT_vals_obs, vals_obs_region)
+            np.save(DirOUT_temp + "/" + FileNameOUT_lats_obs, lats_obs_region)
+            np.save(DirOUT_temp + "/" + FileNameOUT_lons_obs, lons_obs_region)
 
       # Saving the plot
-      DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
-      FileNameOUT_temp = "AverageYear_RainOBS_" + f"{Acc:02d}" + "h_" + RegionName
-      FileNameOUT_lats = "RainOBS_lats_" + f"{Acc:02d}" + "h_" + RegionName
-      FileNameOUT_lons = "RainOBS_lons_" + f"{Acc:02d}" + "h_" + RegionName
-      if not os.path.exists(DirOUT_temp):
-            os.makedirs(DirOUT_temp)
-      np.save(DirOUT_temp + "/" + FileNameOUT_temp, tp_av_year)
-      np.save(DirOUT_temp + "/" + FileNameOUT_lats, lats_obs_region)
-      np.save(DirOUT_temp + "/" + FileNameOUT_lons, lons_obs_region)
+      FileNameOUT_av_obs = "AverageYear_RainOBS_" + f"{Acc:02d}" + "h_" + RegionName
+      np.save(DirOUT_temp + "/" + FileNameOUT_av_obs, tp_av_year)
