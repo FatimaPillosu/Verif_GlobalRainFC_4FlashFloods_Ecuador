@@ -15,7 +15,7 @@ import metview as mv
 # BaseDateTimeF (date, in format YYYYMMDDHH): final base date and time of the period to consider.
 # StepF_S (integer, in hours): lead time indicating the end of the first accumulation period to consider.
 # StepF_F (integer, in hours): lead time indicating the end of the last accumulation period to consider.
-# Disc_StepF (integer, in hours): discretization between accumulation periods
+# Disc_StepF (integer, in hours): discretization between accumulation periods.
 # SystemFC_list (list of strings): list of forecasting systems to consider.
 # RegionName_list (list of strings): list of names for the domain's regions.
 # RegionCode_list (list of integers): codes for the domain's regions to consider. 
@@ -32,7 +32,7 @@ StepF_S = 12
 StepF_F = 240
 Disc_StepF = 12
 SystemFC_list = ["ENS", "ecPoint"]
-RegionName_list = ["Costa", "Sierra"]
+RegionName_list = ["Costa","Sierra"]
 RegionCode_list = [1,2]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
@@ -90,13 +90,13 @@ for ind_Region in range(len(RegionName_list)):
 
                         BaseDateTime += timedelta(days=1)
 
-                  # Creating the annual rainfall average
+                  # Computing the annual rainfall average
                   tp_av_year[ind_StepF,0] = StepF
                   tp_av_year[ind_StepF,1] = np.mean(tp_av_year_temp)
                   
-                  # Saving the plot
-                  DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h" 
-                  FileNameOUT_temp = "AverageYear_RainFC" + f"{Acc:02d}" + "h_" + SystemFC + "_" + RegionName
-                  if not os.path.exists(DirOUT_temp):
-                        os.makedirs(DirOUT_temp)
-                  np.save(DirOUT_temp + "/" + FileNameOUT_temp, tp_av_year)
+            # Saving the plot
+            DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h" 
+            FileNameOUT_temp = "AverageYear_RainFC_" + f"{Acc:02d}" + "h_" + SystemFC + "_" + RegionName
+            if not os.path.exists(DirOUT_temp):
+                  os.makedirs(DirOUT_temp)
+            np.save(DirOUT_temp + "/" + FileNameOUT_temp, tp_av_year)
