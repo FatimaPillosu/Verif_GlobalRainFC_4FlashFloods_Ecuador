@@ -53,7 +53,7 @@ for AccPerF in AccPerF_list:
             ax.set_title("Rainfall observations for accumulation periods ending at " + f"{AccPerF:02d}" + " UTC in " + RegionName + "\nObservations between " + DateTimeS.strftime("%Y%m%d") + " and " + DateTimeS.strftime("%Y%m%d"), fontsize=24, pad=10, color="#333333", weight="bold")
             ax.set_xlabel("Bins [mm/" + str(Acc) + "h]", fontsize=24, labelpad=20, color="#333333")
             ax.set_ylabel("Counts", fontsize=24, labelpad=24, color="#333333")
-            ax.set_xticks(np.arange(0, int(np.max(vals_obs)+10), 5))
+            ax.set_xticks(np.arange(0, int(np.max(vals_obs)+10), 10))
             ax.set_ylim([0,70])
             ax.xaxis.set_tick_params(labelsize=24, rotation=30, color="#333333")
             ax.yaxis.set_tick_params(labelsize=24, color="#333333")
