@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 Acc = 12
 DateS = datetime(2010,1,1,0)
 DateF = datetime(2019,12,31,0)
-CL = 99
+CL = 95
 RegionName_list = ["Costa", "Sierra"]
 RegionColour_list = ["#ffea00", "#c19a6b"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
@@ -61,7 +61,7 @@ for ind_Region in range(len(RegionName_list)):
       ax.plot(rain_climate_original, percs, "-o", color=RegionColour, linewidth=2, markersize=5, markerfacecolor=RegionColour, markeredgecolor='black', markeredgewidth=0.5, label=RegionName)
 
 # Completing the plot
-ax.set_title("Observational rainfall climatology", fontsize=20, pad=30, weight="bold", color="#333333")
+ax.set_title("Observational rainfall climatology, CL = " + str(CL) + "%", fontsize=20, pad=30, weight="bold", color="#333333")
 ax.set_xlabel("Rainfall [mm/" + str(Acc) + "h]", fontsize=16, labelpad=10, color="#333333")
 ax.set_ylabel("Percentiles [-]", fontsize=16, labelpad=10, color="#333333")
 ax.set_xlim([0,int(np.max(maxCI))+1])
