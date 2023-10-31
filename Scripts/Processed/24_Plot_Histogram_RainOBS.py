@@ -61,7 +61,7 @@ for AccPerF in AccPerF_list:
             
             # Saving the plot
             DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
-            FileNameOUT_temp = "Histogram_RainOBS_" + f"{Acc:02d}" + "h_" + f"{AccPerF:02d}" + "UTC.jpeg"
+            FileNameOUT_temp = "Histogram_RainOBS_" + f"{Acc:02d}" + "h_" + RegionName  + "_" + f"{AccPerF:02d}" + "UTC.jpeg"
             if not os.path.exists(DirOUT_temp):
                   os.makedirs(DirOUT_temp)
             plt.savefig(DirOUT_temp + "/" + FileNameOUT_temp)
