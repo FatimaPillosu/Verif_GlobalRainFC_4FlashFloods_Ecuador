@@ -50,7 +50,7 @@ for AccPerF in AccPerF_list:
 
             # Plot the timeseries
             ax.hist(vals_obs, bins=np.arange(0, int(np.max(vals_obs)+10)), color=RegionColour, edgecolor='black')
-            ax.set_title("Rainfall observations for accumulation periods ending at " + f"{AccPerF:02d}" + " UTC in " + RegionName + "\nObservations between " + DateTimeS.strftime("%Y%m%d") + " and " + DateTimeS.strftime("%Y%m%d"), fontsize=24, pad=10, color="#333333", weight="bold")
+            ax.set_title("Rainfall observations for accumulation periods ending at " + f"{AccPerF:02d}" + " UTC in " + RegionName + "\nObservations between " + DateTimeS.strftime("%Y%m%d") + " and " + DateTimeF.strftime("%Y%m%d"), fontsize=24, pad=10, color="#333333", weight="bold")
             ax.set_xlabel("Bins [mm/" + str(Acc) + "h]", fontsize=24, labelpad=20, color="#333333")
             ax.set_ylabel("Counts", fontsize=24, labelpad=24, color="#333333")
             ax.set_xticks(np.arange(0, int(np.max(vals_obs)+10), 10))
