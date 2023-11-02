@@ -62,7 +62,7 @@ for EFFCI in EFFCI_list:
                   if MagnitudeInPerc_Rain_Event_FR == 85 or MagnitudeInPerc_Rain_Event_FR == 99:
                         LineWidth = 8
                   else:
-                        LineWidth = 3
+                        LineWidth = 8
                   ax.plot(climate_rain_FR, percentiles, color=MagnitudeInPerc_Rain_Event_FR_colours, linewidth=LineWidth, label=str(MagnitudeInPerc_Rain_Event_FR) + "th")
             
             # Setting the plot metadata - Normal plot
