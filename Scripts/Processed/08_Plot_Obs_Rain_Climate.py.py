@@ -44,7 +44,7 @@ for ind_Region in range(len(RegionName_list)):
 
       # Reading the observational rainfall climatologies
       DirIN_temp = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h"
-      FileIN_percs = "Percs_computed_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + ".npy"
+      FileIN_percs = "Percs_computed_"+ f"{Acc:02d}" + "h_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + ".npy"
       FileIN_rain_climate = "Obs_Rain_Climate_" + f"{Acc:02d}" + "h_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + RegionName + ".npy"
       percs = np.load(DirIN_temp + "/" + FileIN_percs)
       rain_climate_original = np.load(DirIN_temp + "/" + FileIN_rain_climate)[:,0]

@@ -56,16 +56,18 @@ for in_Region in range(len(RegionName_list)):
       print("Computing the rainfall calimatology from rainfall observations for " + RegionName)
 
       # Initializing the variable that will contain the original/bootstrapped percentiles
-      percs_obs = np.empty([len(Perc_list),RepetitionsBS+1]) * np.nan
-      print(percs_obs.shape)
-      exit()
+      obs_clim = np.empty([len(Perc_list),RepetitionsBS+1]) * np.nan
 
       # Reading the rainfall realizations from the observations
-      FileName_RainOBS = "Obs_Rain_" + f"{Acc:02d}" + "h_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + RegionName
-      if not os.path.exists(DirOUT_temp + "/" + FileName_RainOBS + ".npy"): # if the file exists already, the while loop is not necessary and it is skipped
+      FileNameOUT_RainOBS_vals = "Obs_Rain_Vals_" + f"{Acc:02d}" + "h_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + RegionName
+      FileNameOUT_RainOBS_lats = "Obs_Rain_Lats_" + f"{Acc:02d}" + "h_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + RegionName
+      FileNameOUT_RainOBS_lons = "Obs_Rain_Lons_" + f"{Acc:02d}" + "h_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + RegionName
+      if not os.path.exists(DirOUT_temp + "/" + FileNameOUT_RainOBS_vals + ".npy") and not os.path.exists(DirOUT_temp + "/" + FileNameOUT_RainOBS_lats + ".npy") and not os.path.exists(DirOUT_temp + "/" + FileNameOUT_RainOBS_lons + ".npy"): # if the files exist already, the while loop is not necessary and it is skipped
             
             # Initializing the variable that will contain the rainfall realizations
             vals_obs = np.array([])
+            lats_obs = np.array([])
+            lons_obs = np.array([])
 
             TheDate = DateS
             while TheDate <= DateF:
@@ -81,13 +83,20 @@ for in_Region in range(len(RegionName_list)):
                         # Extracting the observations for the region to consider
                         mask_obs = mv.nearest_gridpoint (mask,vals_obs_global)
                         vals_obs_region = mv.values(mv.filter(vals_obs_global, mask_obs == RegionCode))
+                        lats_obs_region = mv.latitudes(mv.filter(vals_obs_global, mask_obs == RegionCode))
+                        lons_obs_region = mv.longitudes(mv.filter(vals_obs_global, mask_obs == RegionCode))
+
                         if vals_obs_region is not None:
                               vals_obs = np.concatenate((vals_obs, vals_obs_region))
+                              lats_obs = np.concatenate((lats_obs, lats_obs_region))
+                              lons_obs = np.concatenate((lons_obs, lons_obs_region))
 
                   TheDate += timedelta(days=1)
       
             # Saving the rainfall observation realizations
-            np.save(DirOUT_temp + "/" + FileName_RainOBS, vals_obs)
+            np.save(DirOUT_temp + "/" + FileNameOUT_RainOBS_vals, vals_obs)
+            np.save(DirOUT_temp + "/" + FileNameOUT_RainOBS_lats, lats_obs)
+            np.save(DirOUT_temp + "/" + FileNameOUT_RainOBS_lons, lons_obs)
 
       else:
             
@@ -96,18 +105,16 @@ for in_Region in range(len(RegionName_list)):
 
       # Computing the percentiles for the original observations
       print("Computing the original percentiles")
-      percs_obs[:,0] = np.percentile(vals_obs, Perc_list)
+      obs_clim[:,0] = np.percentile(vals_obs, Perc_list)
 
       # Computing the percentiles for the bootstrapped observations
       print("Computing the bootstrapped percentiles")
       for ind_BS in range(1,RepetitionsBS+1):
             vals_obs_BS = np.array(choices(population=vals_obs, k=vals_obs.shape[0])) # list of bootstrapped obs
-            percs_obs[:,ind_BS] = np.percentile(vals_obs_BS, Perc_list)
+            obs_clim[:,ind_BS] = np.percentile(vals_obs_BS, Perc_list)
 
       # Saving the plot
-      DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
-      FileNameOUT_temp = "Obs_Rain_Climate_" + f"{Acc:02d}" + "h_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + RegionName
-      if not os.path.exists(DirOUT_temp):
-            os.makedirs(DirOUT_temp)
-      np.save(DirOUT_temp + "/" + FileNameOUT_temp, percs_obs)
-      np.save(DirOUT_temp + "/Percs_computed_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d"), Perc_list)
+      FileNameOUT_ClimOBS = "Obs_Rain_Climate_" + f"{Acc:02d}" + "h_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d") + "_" + RegionName
+      FileNameOUT_Percs = "Percs_computed_" + f"{Acc:02d}" + "h_" + DateS.strftime("%Y%m%d") + "_" + DateF.strftime("%Y%m%d")
+      np.save(DirOUT_temp + "/" + FileNameOUT_ClimOBS, obs_clim)
+      np.save(DirOUT_temp + "/" + FileNameOUT_Percs, Perc_list)
