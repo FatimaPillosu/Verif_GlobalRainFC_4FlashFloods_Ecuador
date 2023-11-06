@@ -120,8 +120,8 @@ for StepF in StepF_list:
             
             title = mv.mtext(
                   text_line_count = 2,
-                  text_line_1 = "Annual rainfall average and Location of available rainfall observations",
-                  text_line_3 = " ",
+                  text_line_1 = "Annual rainfall average for " + SystemFC + " and (t+"  f"{StepF:02d}" + "), and location of rain gauges",
+                  text_line_2 = " ",
                   text_font = "sansserif",
                   text_colour = "charcoal",
                   text_font_size = 0.6,

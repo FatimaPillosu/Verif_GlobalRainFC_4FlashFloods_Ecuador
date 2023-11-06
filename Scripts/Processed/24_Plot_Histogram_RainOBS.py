@@ -41,20 +41,19 @@ for AccPerF in AccPerF_list:
             RegionName = RegionName_list[ind_Region]
             RegionColour = RegionColour_list[ind_Region]
             
-            # Setting the figure where to plot the timeseries
-            fig, ax = plt.subplots(figsize=(15, 12), sharex=True)
-
             # Reading the values of the rainfall observations
             FileIN = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/vals_obs_" + f"{Acc:02d}" + "h_" + RegionName + "_" + f"{AccPerF:02d}" + "UTC.npy"
             vals_obs = np.load(FileIN)
 
             # Plot the timeseries
+            fig, ax = plt.subplots(figsize=(15, 12), sharex=True)
             ax.hist(vals_obs, bins=np.arange(0, int(np.max(vals_obs)+10)), color=RegionColour, edgecolor='black')
             ax.set_title("Rainfall observations for accumulation periods ending at " + f"{AccPerF:02d}" + " UTC in " + RegionName + "\nObservations between " + DateTimeS.strftime("%Y%m%d") + " and " + DateTimeF.strftime("%Y%m%d"), fontsize=24, pad=10, color="#333333", weight="bold")
             ax.set_xlabel("Bins [mm/" + str(Acc) + "h]", fontsize=24, labelpad=20, color="#333333")
             ax.set_ylabel("Counts", fontsize=24, labelpad=24, color="#333333")
-            ax.set_xticks(np.arange(0, int(np.max(vals_obs)+10), 10))
-            ax.set_ylim([0,70])
+            ax.set_xticks(np.arange(0, 160, 10))
+            ax.set_xlim([0,160])
+            ax.set_ylim([0,1200])
             ax.xaxis.set_tick_params(labelsize=24, rotation=30, color="#333333")
             ax.yaxis.set_tick_params(labelsize=24, color="#333333")
             ax.grid()
@@ -62,6 +61,27 @@ for AccPerF in AccPerF_list:
             # Saving the plot
             DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
             FileNameOUT_temp = "Histogram_RainOBS_" + f"{Acc:02d}" + "h_" + RegionName  + "_" + f"{AccPerF:02d}" + "UTC.jpeg"
+            if not os.path.exists(DirOUT_temp):
+                  os.makedirs(DirOUT_temp)
+            plt.savefig(DirOUT_temp + "/" + FileNameOUT_temp)
+            plt.close()
+
+            # Plot the timeseries
+            fig, ax = plt.subplots(figsize=(15, 12), sharex=True)
+            ax.hist(vals_obs, bins=np.arange(0, int(np.max(vals_obs)+10)), color=RegionColour, edgecolor='black')
+            ax.set_title("Rainfall observations for accumulation periods ending at " + f"{AccPerF:02d}" + " UTC in " + RegionName + "\nObservations between " + DateTimeS.strftime("%Y%m%d") + " and " + DateTimeF.strftime("%Y%m%d"), fontsize=24, pad=10, color="#333333", weight="bold")
+            ax.set_xlabel("Bins [mm/" + str(Acc) + "h]", fontsize=24, labelpad=20, color="#333333")
+            ax.set_ylabel("Counts", fontsize=24, labelpad=24, color="#333333")
+            ax.set_xticks(np.arange(0, 160, 10))
+            ax.set_xlim([0,160])
+            ax.set_ylim([0,70])
+            ax.xaxis.set_tick_params(labelsize=24, rotation=30, color="#333333")
+            ax.yaxis.set_tick_params(labelsize=24, color="#333333")
+            ax.grid()
+            
+            # Saving the plot
+            DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
+            FileNameOUT_temp = "Histogram_RainOBS_ZoomedIN_" + f"{Acc:02d}" + "h_" + RegionName  + "_" + f"{AccPerF:02d}" + "UTC.jpeg"
             if not os.path.exists(DirOUT_temp):
                   os.makedirs(DirOUT_temp)
             plt.savefig(DirOUT_temp + "/" + FileNameOUT_temp)
