@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 #####################################################################################
 # CODE DESCRIPTION
 # 17_Plot_FB_CI.py plots Frequency Bias (FB) and confidence intervals (CI).
-# Note: the code can take up 10 minutes to run in serial.
+# Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
 # Acc (number, in hours): rainfall accumulation to consider.
@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 Acc = 12
 EFFCI_list = [1,6,10]
 MagnitudeInPerc_Rain_Event_FR_list = [85,99]
-CL = 99
+CL = 95
 RegionName_list = ["Costa","Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
 Colour_SystemFC_list = ["#ec4d37", "#00539CFF"]
