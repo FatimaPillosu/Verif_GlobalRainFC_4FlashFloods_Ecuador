@@ -1,6 +1,5 @@
 import os
 import math
-import numpy as np
 import metview as mv
 
 ##################################################################################
@@ -12,11 +11,10 @@ import metview as mv
 # INPUT PARAMETERS DESCRIPTION
 # Acc (number, in hours): rainfall accumulation to consider.
 # StepF_list (list of integer, in hours): list of final steps of the accumulation period.
+# CornersDomain_list (list of floats): coordinates [N/E/S/W] of the domain to plot.
 # SystemFC_list (list of strings): list of forecasting systems to consider.
-# RegionName_list (list of strings): list of names for the domain's regions.
 # Git_repo (string): repository's local path.
-# DirIN_FC (string): relative path containing the annual rainfall average from forecasts.
-# DirIN_OBS (string): relative path containing the annual rainfall average from observations.
+# DirIN (string): relative path containing the annual rainfall average from forecasts.
 # DirOUT (string): relative path of the plots containing the annual rainfall average.
 
 # INPUT PARAMETERS
@@ -24,7 +22,6 @@ Acc = 12
 StepF_list = [60, 72]
 CornersDomain_list = [2,-81.5,-5.5,-74.5] 
 SystemFC_list = ["ENS", "ecPoint"]
-RegionName_list = ["Costa", "Sierra"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 DirIN = "Data/Compute/13_AverageYear_RainFC_gridbox"
 DirOUT = "Data/Plot/14_AverageYear_RainFC_gridbox"
@@ -36,29 +33,14 @@ for StepF in StepF_list:
 
       AccPerF = int(math.modf(StepF/24)[0] * 24)
 
-      # Reading the locations of rainfall observations used to compute the annual rainfall averages from observations
-      LatOBS = np.array([])
-      LonOBS = np.array([])
-      for RegionName in RegionName_list:
-            FileIN_LatOBS = Git_repo + "/" + DirIN_OBS + "/" + f"{Acc:02d}" + "h/lats_obs_" + f"{Acc:02d}" + "h_" + RegionName + "_" + f"{AccPerF:02d}" + "UTC.npy"
-            FileIN_LonOBS = Git_repo + "/" + DirIN_OBS + "/" + f"{Acc:02d}" + "h/lons_obs_" + f"{Acc:02d}" + "h_" + RegionName + "_" + f"{AccPerF:02d}" + "UTC.npy"
-            LatOBS = np.concatenate((LatOBS, np.load(FileIN_LatOBS)))
-            LonOBS = np.concatenate((LonOBS, np.load(FileIN_LonOBS)))
-
-      # Creating a geopoint using the rainfall observations location
-      tp_obs = mv.create_geo(
-                  type = 'xyv',
-                  latitudes = LatOBS,
-                  longitudes = LonOBS,
-                  values = np.zeros(LatOBS.shape)
-                  )
-
-      # Plotting the annual rainfall avearges for a specific forecasting system
+      # Plotting the annual rainfall average for a specific forecasting system
       for SystemFC in SystemFC_list:
             
-            FileIN_FC = Git_repo + "/" + DirIN_FC + "/" + f"{Acc:02d}" + "h/AverageYear_RainFC_" + f"{Acc:02d}" + "h_" + SystemFC + "_" + f"{StepF:03d}" + ".grib"
+            # Reading the annual rainfall average
+            FileIN_FC = Git_repo + "/" + DirIN + "/" + f"{Acc:02d}" + "h/AverageYear_RainFC_" + f"{Acc:02d}" + "h_" + SystemFC + "_" + f"{StepF:03d}" + ".grib"
             tp_fc = mv.read(FileIN_FC)
 
+            # Plotting the annual rainfall average
             coastlines = mv.mcoast(
                   map_coastline_resolution = "full",
                   map_coastline_colour = "charcoal",
@@ -83,18 +65,6 @@ for StepF in StepF_list:
                   coastlines = coastlines
                   )
 
-            obs_points = mv.msymb(
-                              legend = "off",
-                              symbol_type = "marker",
-                              symbol_table_mode = "on",
-                              symbol_outline = "on",
-                              symbol_min_table = [-0.1],
-                              symbol_max_table = [0.1],
-                              symbol_colour_table = "#372800",
-                              symbol_marker_table = 15,
-                              symbol_height_table = 0.4
-                              )
-            
             fc_contouring = mv.mcont(
                   legend = "on",
                   contour = "off",
@@ -134,4 +104,4 @@ for StepF in StepF_list:
                   os.makedirs(DirOUT_temp)
             png = mv.png_output(output_name = DirOUT_temp + "/" + FileNameOUT_temp)
             mv.setoutput(png)
-            mv.plot(geo_view, tp_fc, fc_contouring, tp_obs, obs_points, legend, title)
+            mv.plot(geo_view, tp_fc, fc_contouring, legend, title)
