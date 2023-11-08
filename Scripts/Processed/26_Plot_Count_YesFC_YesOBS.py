@@ -8,7 +8,7 @@ from matplotlib.ticker import MaxNLocator
 
 #####################################################################################################################
 # CODE DESCRIPTION
-# 18_Plot_Count_YesFC_YesOBS.py plots the counts of yes forecast and observation events.
+# 26_Plot_Count_YesFC_YesOBS.py plots the counts of yes forecast and observation events.
 # Note: runtime code negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -43,8 +43,8 @@ SystemFC_list = ["ENS", "ecPoint"]
 NumEM_list = [51, 99]
 Colour_SystemFC_list = ["#ec4d37", "#00539CFF"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-DirIN = "Data/Compute/15_Counts_FC_OBS_Exceeding_VRT"
-DirOUT = "Data/Plot/18_Count_YesFC_YesOBS"
+DirIN = "Data/Compute/23_Counts_FC_OBS_Exceeding_VRT"
+DirOUT = "Data/Plot/26_Count_YesFC_YesOBS"
 #####################################################################################################################
 
 

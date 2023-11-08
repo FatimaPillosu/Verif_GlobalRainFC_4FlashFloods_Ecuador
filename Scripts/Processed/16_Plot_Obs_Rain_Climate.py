@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 ############################################################################
 # CODE DESCRIPTION
-# 08_Plot_Obs_Rain_Climate.py plots the observational rainfall climatology for each region
+# 16_Plot_Obs_Rain_Climate.py plots the observational rainfall climatology for each region
 # in the domain of interest. 
 # Code runtime: negligible.
 
@@ -27,8 +27,8 @@ CL = 95
 RegionName_list = ["Costa", "Sierra"]
 RegionColour_list = ["#ffea00", "#c19a6b"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-DirIN = "Data/Compute/07_Obs_Rain_Climate"
-DirOUT = "Data/Plot/08_Obs_Rain_Climate"
+DirIN = "Data/Compute/15_Obs_Rain_Climate"
+DirOUT = "Data/Plot/16_Obs_Rain_Climate"
 ############################################################################
 
 

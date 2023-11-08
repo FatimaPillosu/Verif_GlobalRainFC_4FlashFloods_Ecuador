@@ -4,10 +4,10 @@ import numpy as np
 import pandas as pd
 import metview as mv
 
-###################################################################################################
+#####################################################################################
 # CODE DESCRIPTION
-# 05_Plot_SpatialDistr_PointFR_GridFR_EFFCI_AccPer.py plots a map that shows the location of point and grid flood 
-# reports, for a specific date, EFFCI index, and accumulation period.
+# 05_Plot_SpatialDistr_PointFR_GridFR_EFFCI_AccPer.py plots a map that shows the location of point 
+# and grid flood reports, for a specific date, EFFCI index, and accumulation period.
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -31,13 +31,13 @@ EFFCI = 6
 CornersDomain_list = [2,-81.5,-5.5,-74.5] 
 RegionCode_list = [1,2,3]
 RegionName_list = ["La Costa", "La Sierra", "El Oriente"]
-RegionColour_list = ["RGB(255/255,234/255,0/255)", "RGB(193/255,154/255,107/255)", "RGB(170/255,255/255,0/255)"]
+RegionColour_list = ["#ffea00", "#c19a6b", "#A9FE00"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 FileIN_PointFR = "Data/Compute/01_Clean_PointFR/Ecu_FF_Hist_ECMWF.csv"
 DirIN_GridFR = "Data/Compute/03_GridFR_EFFCI_AccPer"
 DirOUT = "Data/Plot/05_SpatialDistr_PointFR_GridFR_EFFCI_AccPer"
-###################################################################################################
+#####################################################################################
 
 
 print("Plotting the location of point and gridded flood reports with EFFCI>=" + str(EFFCI) + " for the " + str(Acc) + "-hourly accumulation period starting on " + DateS.strftime("%Y%m%d") + " at " + DateS.strftime("%H") + " UTC")

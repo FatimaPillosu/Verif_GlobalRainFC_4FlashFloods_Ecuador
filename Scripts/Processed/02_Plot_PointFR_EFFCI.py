@@ -3,9 +3,10 @@ import numpy as np
 import pandas as pd
 import metview as mv
 
-###################################################################################################
+#####################################################################
 # CODE DESCRIPTION
-# 02_Plot_PointFR_EFFCI.py plots maps that show the location of point flood reports exceeding considered EFFCI indexes. 
+# 02_Plot_PointFR_EFFCI.py plots maps that show the location of point flood reports 
+# exceeding considered EFFCI indexes. 
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -26,12 +27,12 @@ EFFCI_list = [1,6,10]
 CornersDomain_list = [2,-81.5,-5.5,-74.5]
 RegionCode_list = [1,2,3]
 RegionName_list = ["La Costa", "La Sierra", "El Oriente"]
-RegionColour_list = ["RGB(255/255,234/255,0/255)", "RGB(193/255,154/255,107/255)", "RGB(170/255,255/255,0/255)"]
+RegionColour_list = ["#ffea00", "#c19a6b", "#A9FE00"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 FileIN = "Data/Compute/01_Clean_PointFR/Ecu_FF_Hist_ECMWF.csv"
 DirOUT = "Data/Plot/02_PointFR_EFFCI"
-###################################################################################################
+#####################################################################
 
 
 # Setting output directory

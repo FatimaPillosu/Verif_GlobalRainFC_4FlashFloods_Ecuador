@@ -5,7 +5,7 @@ import numpy as np
 
 ######################################################################################
 # CODE DESCRIPTION
-# 16_Compute_FB_Bootstrapping.py computes the Frequency Bias (FB), including the bootstrapped 
+# 24_Compute_FB_Bootstrapping.py computes the Frequency Bias (FB), including the bootstrapped 
 # values to estimate the statistical significance of the estimates.
 # Note: the code can take up to 2 hours to run.
 
@@ -41,8 +41,8 @@ RegionName_list = ["Costa","Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
 NumEM_list = [51,99]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-DirIN = "Data/Compute/15_Counts_FC_OBS_Exceeding_VRT"
-DirOUT_FB = "Data/Compute/16_FB_Bootstrapping"
+DirIN = "Data/Compute/23_Counts_FC_OBS_Exceeding_VRT"
+DirOUT_FB = "Data/Compute/24_FB_Bootstrapping"
 ######################################################################################
 
 

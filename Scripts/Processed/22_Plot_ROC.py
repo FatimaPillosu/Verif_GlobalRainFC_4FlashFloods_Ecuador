@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 #####################################################################################
 # CODE DESCRIPTION
-# 14_Plot_ROC.py plots ROC curves.
+# 22_Plot_ROC.py plots ROC curves.
 # Note: the code can take up 20 minutes to run in serial.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -44,8 +44,8 @@ SystemFC_list = ["ENS", "ecPoint"]
 NumEM_list = [51,99]
 Colour_SystemFC_list = ["#ec4d37", "#00539CFF"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-DirIN = "Data/Compute/11_Daily_Prob_Contingency_Tables"
-DirOUT = "Data/Plot/14_ROC"
+DirIN = "Data/Compute/19_Daily_Prob_Contingency_Tables"
+DirOUT = "Data/Plot/22_ROC"
 #####################################################################################
 
 # Plotting ROC curves for a specific EFFCI index

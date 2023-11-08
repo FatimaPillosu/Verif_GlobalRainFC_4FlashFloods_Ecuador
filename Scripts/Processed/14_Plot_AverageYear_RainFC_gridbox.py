@@ -5,8 +5,8 @@ import metview as mv
 
 ##################################################################################
 # CODE DESCRIPTION
-# 23_Plot_AverageYear_RainFC_LocOBS.py plots the annual average rain for different accumulation 
-# periods.
+# 14_Plot_AverageYear_RainFC_gridbox.py plots a map that shows the annual rainall average for 
+# different accumulation periods.
 # Note: runtime code negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -26,9 +26,8 @@ CornersDomain_list = [2,-81.5,-5.5,-74.5]
 SystemFC_list = ["ENS", "ecPoint"]
 RegionName_list = ["Costa", "Sierra"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-DirIN_FC = "Data/Compute/22_AverageYear_RainFC_gridbox"
-DirIN_OBS = "Data/Compute/20_AverageYear_RainOBS"
-DirOUT = "Data/Plot/23_AverageYear_RainFC_LocOBS"
+DirIN = "Data/Compute/13_AverageYear_RainFC_gridbox"
+DirOUT = "Data/Plot/14_AverageYear_RainFC_gridbox"
 ##################################################################################
 
 

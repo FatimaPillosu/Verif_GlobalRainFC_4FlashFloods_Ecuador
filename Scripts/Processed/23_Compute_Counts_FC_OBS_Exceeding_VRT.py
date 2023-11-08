@@ -6,14 +6,12 @@ import metview as mv
 
 ##########################################################################################################
 # CODE DESCRIPTION
-# 11_Compute_Daily_Prob_Contingency_Tables.py computes daily probabilistic contingency tables, and stores them in a 3d-array 
-# whose dimensions are (NumDays, NumProbThr, NumElementsCT).
-# Note: the code can take up 4 days to run in serial. It is recommended to run separate months in parallel to take down the 
-# runtime to 8 hours. 
+# 23_Compute_Counts_FC_OBS_Exceeding_VRT.py computes daily counts of ensemble members and observations exceeding a 
+# considered VRT. 
+# Note: the code can take up 4 days to run in serial.
 
 # INPUT PARAMETERS DESCRIPTION
-# DateS (date, in format YYYYMMDD): start date of the considered verification period.
-# DateF (date, in format YYYYMMDD): final date of the considered verification period.
+# Year (integer, in format YYYY): year to consider in the processing.
 # StepF_Start (integer, in hours): first final step of the accumulation periods to consider.
 # StepF_Final (integer, in hours): last final step of the accumulation periods to consider.
 # Disc_Step (integer, in hours): discretization for the final steps to consider.
@@ -33,8 +31,7 @@ import metview as mv
 # DirOUT (string): relative path of the directory containing the daily probabilistic contingency tables.
 
 # INPUT PARAMETERS
-DateS = datetime(2020,2,1,0)
-DateF = datetime(2020,2,29,0)
+Year = 2020
 StepF_Start = 12
 StepF_Final = 246
 Disc_Step = 6
@@ -45,61 +42,30 @@ Perc_VRT = 25
 RegionCode_list = [1,2];
 RegionName_list = ["Costa","Sierra"];
 SystemFC_list = ["ENS", "ecPoint"]
-Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
+Git_repo = "/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN_Climate_Rain_FR = "Data/Compute/07_Climate_Rain_FR"
 DirIN_FC = "Data/Raw/FC"
 DirIN_GridFR = "Data/Compute/03_GridFR_EFFCI_AccPer"
-DirOUT = "Data/Compute/11_Daily_Prob_Contingency_Tables"
+DirOUT = "Data/Compute/23_Counts_FC_OBS_Exceeding_VRT"
 ##########################################################################################################
 
-
-# COSTUME FUNCTIONS
-
-# Computation of daily probabilistic contingency tables
-def daily_prob_ct(tp, obs, VRT, NumEM):
-      
-      # Counting how many ensemble members exceed the VRT
-      count_members_exceeding_VRT = np.sum((tp >= VRT), axis=0)
-
-      # Initializing the variable that will contained the daily probabilistic contingency table
-      ct = np.empty([NumEM+1,5])
-
-      # Computing the daily probabilistic contingency table
-      for index in range(NumEM+1):
-            count_members = NumEM - index
-            OBS_yes_fc = obs[np.where(count_members_exceeding_VRT >= count_members)[0]] # observation instances for "yes" forecasts
-            OBS_no_fc = obs[np.where(count_members_exceeding_VRT < count_members)[0]] # observation instances for "no" forecasts
-            ct[index][0] = count_members # N. OF MEMBERS (AT LEAST) EXCEEDING VRT
-            ct[index][1] = np.where(OBS_yes_fc > 0)[0].shape[0] # HITS
-            ct[index][2] = np.where(OBS_yes_fc == 0)[0].shape[0] # FALSE ALARMS
-            ct[index][3] = np.where(OBS_no_fc > 0)[0].shape[0] # MISSES
-            ct[index][4] = np.where(OBS_no_fc == 0)[0].shape[0] # CORRECT NEGATIVES
-            ct = ct.astype(int) # setting all values as integers
-
-      return ct
-
-################################################################################
-
+# Sorting the range of dates to process
+DateS = datetime(Year, 1, 1)
+DateF = datetime(Year, 12,31)
 
 # Reading the file containing the mask for the considered domain
 mask = mv.values(mv.read(Git_repo + "/" + FileIN_Mask))
 
-# Computing the daily probabilistic contingency tables
-print(" ")
-print("Computing daily probabilistic contingency tables for the period between " + DateS.strftime("%Y%m%d") + " and " + DateF.strftime("%Y%m%d"))
-
-# Creating the daily probabilistic contingency tables for a specific forecasting system
+# Creating the daily counts of forecasts and observations exceeding a VRT
 for SystemFC in SystemFC_list:
 
-      # Initializing the list containing, for a specific lead time, the dates for which the rainfall forecasts exist
-      StepF_Dates_list = []
-
-      # Creating the daily probabilistic contingency tables for a specific lead time
+      # Creating the daily counts for a specific lead time
       for StepF in range(StepF_Start, (StepF_Final+1), Disc_Step):
             
-            # Creating the daily probabilistic contingency tables for a specific date
+            # Creating the daily counts for a specific date
             TheDate = DateS
+
             while TheDate <= DateF:
                   
                   print(" ")
@@ -121,12 +87,9 @@ for SystemFC in SystemFC_list:
                         FileIN_FC_temp= Git_repo + "/" + DirIN_FC + "/" + SystemFC + "/" + TheDate.strftime("%Y%m%d%H") + "/Pt_BC_PERC_" + f"{Acc:03d}" + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + ".grib"
                         if os.path.isfile(FileIN_FC_temp):
                               tp = mv.values(mv.read(FileIN_FC_temp))
-                  
+                                  
                   # Checking that the rainfall forecasts exist for the considered date. If not, they are not added in the 3d-array
                   if len(tp) != 0:
-                        
-                        # Extracting the number of ensemble members in the considered forecasting system
-                        NumEM = tp.shape[0]
 
                         # Defining the valid time for the accumulation period
                         ValidTimeF = TheDate + timedelta(hours=StepF)
@@ -138,7 +101,7 @@ for SystemFC in SystemFC_list:
                               # Note: the accumulated gridded flood reports are stored in files whose name indicates the end of the accumulated period.
                               FileIN_GridFR_temp = Git_repo + "/" + DirIN_GridFR + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/" + ValidTimeF.strftime("%Y%m%d") + "/GridFR_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_" + ValidTimeF.strftime("%Y%m%d") + "_" + ValidTimeF.strftime("%H") + ".grib"
                               GridFR = mv.values(mv.read(FileIN_GridFR_temp))
-
+                              
                               # Creating the daily probabilistic contingency tables for a specific region
                               for indReg in range(len(RegionCode_list)):
 
@@ -149,8 +112,12 @@ for SystemFC in SystemFC_list:
                                     # Selecting the grid-boxes belonging to the considered region
                                     ind_mask_region = np.where(mask == RegionCode)[0]
 
-                                    # Selecting the grid-boxes in the observational fileds belonging to the considered region
+                                    # Selecting the grid-boxes in the forecast fields belonging to the considered region 
+                                    tp_region = tp[:, ind_mask_region].flatten()
+
+                                    # Selecting the grid-boxes in the observational fields belonging to the considered region
                                     GridFR_region = GridFR[ind_mask_region]
+                                    count_obs_exceed_VRT = np.sum(GridFR_region > 0)
                                     
                                     # Reading the climatology of rainfall events associated with flash floods
                                     File_Rain_Climate_FR = Git_repo + "/" + DirIN_Climate_Rain_FR + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/Climate_Rain_FR_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_" + RegionName + ".csv"
@@ -164,19 +131,16 @@ for SystemFC in SystemFC_list:
                                           # Selecting the considered verifying rainfall event (VRT)
                                           VRT = climate_rain_FR["RainEvent_Magnitude_" + str(MagnitudeInPerc_Rain_Event_FR) + "th_Percentile"][Perc_VRT]
 
-                                          # Selecting the grid-boxes in the forecast fields belonging to the considered region 
-                                          tp_region = tp[:, ind_mask_region]
+                                          # Computing the counts of forecasts and observations exceeding the considered VRT
+                                          count_fc_exceed_VRT = np.sum(tp_region >= VRT)
+                                          count_fc_obs_exceed_VRT = np.hstack([count_fc_exceed_VRT,count_obs_exceed_VRT])
                                           
-                                          # Computing the probabilistic contingecy table
-                                          ct = daily_prob_ct(tp_region, GridFR_region, VRT, NumEM)
-
-                                          # Saving the probabilistic contingency table
+                                          # Saving the counts
                                           DirOUT_temp= Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h/EFFCI" + f"{EFFCI:02d}" + "/VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "/" + f"{StepF:03d}" + "/" + SystemFC + "/" + RegionName
-                                          FileNameOUT_temp = "CT_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}" + ".csv"
+                                          FileNameOUT_temp = "Count_FC_OBS_" + f"{Acc:02d}" + "h_EFFCI" + f"{EFFCI:02d}" + "_VRT" + f"{MagnitudeInPerc_Rain_Event_FR:02d}" + "_" + SystemFC + "_" + RegionName + "_" + TheDate.strftime("%Y%m%d") + "_" + TheDate.strftime("%H") + "_" + f"{StepF:03d}"
                                           if not os.path.exists(DirOUT_temp):
                                                 os.makedirs(DirOUT_temp)
-                                          ct_df = pd.DataFrame(ct, columns = ["N. OF MEMBERS (AT LEAST) EXCEEDING VRT", "HITS", "FALSE ALARMS", "MISSES", "CORRECT NEGATIVES"])
-                                          ct_df.to_csv(DirOUT_temp + "/" + FileNameOUT_temp, index=False)
+                                          np.save(DirOUT_temp + "/" + FileNameOUT_temp, count_fc_obs_exceed_VRT)
 
                   else:
 

@@ -5,7 +5,7 @@ import metview as mv
 
 ###################################################################################
 # CODE DESCRIPTION
-# 22_Compute_AverageYear_RainFC_gridbox.py computes the annual average rain for different  
+# 13_Compute_AverageYear_RainFC_gridbox.py computes the annual average rain for different  
 # accumulation periods and different lead times, per grid-box.
 # Note: It can take up to 24 hours to run is series.
 
@@ -33,7 +33,7 @@ SystemFC_list = ["ENS", "ecPoint"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN = "Data/Raw/FC"
-DirOUT = "Data/Compute/22_AverageYear_RainFC_gridbox"
+DirOUT = "Data/Compute/13_AverageYear_RainFC_gridbox"
 ###################################################################################
 
 # Creating the variable that stores the lead times to consider

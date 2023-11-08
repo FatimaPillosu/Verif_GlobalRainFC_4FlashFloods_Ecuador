@@ -5,7 +5,7 @@ import metview as mv
 
 ###################################################################################
 # CODE DESCRIPTION
-# 19_Compute_AverageYear_RainFC.py computes the annual average rain for different accumulation 
+# 10_Compute_AverageYear_RainFC.py computes the annual average rain for different accumulation 
 # periods and different lead times.
 # Note: It can take up to 24 hours to run is series.
 
@@ -37,7 +37,7 @@ RegionCode_list = [1,2]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN = "Data/Raw/FC"
-DirOUT = "Data/Compute/19_AverageYear_RainFC"
+DirOUT = "Data/Compute/10_AverageYear_RainFC"
 ###################################################################################
 
 # Reading the mask for the regions in the considered domain

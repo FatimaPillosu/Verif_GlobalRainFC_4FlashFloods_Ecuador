@@ -5,7 +5,7 @@ import metview as mv
 
 ######################################################################################
 # CODE DESCRIPTION
-# 20_Compute_AverageYear_RainOBS.py computes the annual average rain for different accumulation 
+# 11_Compute_AverageYear_RainOBS.py computes the annual average rain for different accumulation 
 # periods, and extracts the location of the rainfall observations used in the computations.
 # Note: the code takes up to 5 minutes to run in serial.
 
@@ -31,7 +31,7 @@ RegionCode_list = [1,2]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN = "Data/Raw/OBS/Rain"
-DirOUT = "Data/Compute/20_AverageYear_RainOBS"
+DirOUT = "Data/Compute/11_AverageYear_RainOBS"
 ######################################################################################
 
 # Creating the output directory

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 ##################################################################################
 # CODE DESCRIPTION
-# 21_Plot_AverageYear_Rain_FC_OBS.py plots the annual average rain for different accumulation 
+# 12_Plot_AverageYear_Rain_FC_OBS.py plots the annual average rain for different accumulation 
 # periods.
 # Note: runtime code negligible.
 
@@ -30,9 +30,9 @@ SystemFC_list = ["ENS", "ecPoint"]
 Colour_SystemFC_list = ["#ec4d37", "#00539CFF"]
 RegionName_list = ["Costa", "Sierra"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-DirIN_FC = "Data/Compute/19_AverageYear_RainFC"
-DirIN_OBS = "Data/Compute/20_AverageYear_RainOBS"
-DirOUT = "Data/Plot/21_AverageYear_Rain_FC_OBS"
+DirIN_FC = "Data/Compute/10_AverageYear_RainFC"
+DirIN_OBS = "Data/Compute/11_AverageYear_RainOBS"
+DirOUT = "Data/Plot/12_AverageYear_Rain_FC_OBS"
 ##################################################################################
 
 

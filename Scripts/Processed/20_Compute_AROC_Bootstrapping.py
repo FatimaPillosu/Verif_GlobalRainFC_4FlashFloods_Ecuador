@@ -7,7 +7,7 @@ import pandas as pd
 
 ##########################################################################################################
 # CODE DESCRIPTION
-# 12_Compute_AROC_Bootstrapping.py computes the area under the ROC curves (AROC), including the bootstrapped 
+# 20_Compute_AROC_Bootstrapping.py computes the area under the ROC curves (AROC), including the bootstrapped 
 # values to estimate the statistical significance of the estimates.
 # Note: the code can take up to 2 hours to run to run in series.
 
@@ -42,8 +42,8 @@ RegionName_list = ["Costa","Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
 NumEM_list = [51,99]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-DirIN = "Data/Compute/11_Daily_Prob_Contingency_Tables"
-DirOUT = "Data/Compute/12_AROC_Bootstrapping"
+DirIN = "Data/Compute/19_Daily_Prob_Contingency_Tables"
+DirOUT = "Data/Compute/20_AROC_Bootstrapping"
 ##########################################################################################################
 
 

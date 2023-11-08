@@ -6,7 +6,7 @@ import metview as mv
 
 #############################################################################################
 # CODE DESCRIPTION
-# 07_Compute_Obs_Rain_Climate.py computes the observational rainfall climatology for
+# 15_Compute_Obs_Rain_Climate.py computes the observational rainfall climatology for
 # each region in the domain of interest. 
 # Code runtime: it can take up to 45 minutes to run in serial if the observations need to be read for the first time.
 
@@ -34,7 +34,7 @@ Perc_list = np.concatenate((np.arange(1,100), np.array([99.5,99.8,99.9]))) # up 
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN = "Data/Raw/OBS/Rain"
-DirOUT = "Data/Compute/07_Obs_Rain_Climate"
+DirOUT = "Data/Compute/15_Obs_Rain_Climate"
 #############################################################################################
 
 

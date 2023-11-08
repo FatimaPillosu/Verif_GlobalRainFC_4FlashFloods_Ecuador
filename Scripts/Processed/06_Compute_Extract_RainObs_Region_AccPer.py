@@ -4,9 +4,10 @@ import numpy as np
 import metview as mv
 import matplotlib.pyplot as plt
 
-###################################################################################################
+############################################################################################
 # CODE DESCRIPTION
-# 06_Compute_Extract_RainObs_Region_AccPer.py extracts the rainfall observations per region and accumulation period.
+# 06_Compute_Extract_RainObs_Region_AccPer.py extracts the rainfall observations per region and accumulation 
+# period.
 # Code runtime: the code takes up to 30 minutes to run in series.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -29,12 +30,12 @@ DateF = datetime(2020,12,31,0)
 AccPerF_list = [12,0]
 RegionCode_list = [1,2,3]
 RegionName_list = ["Costa", "Sierra", "Oriente"]
-RegionColour_list = ["RGB(255/255,234/255,0/255)", "RGB(193/255,154/255,107/255)", "RGB(170/255,255/255,0/255)"]
+RegionColour_list = ["#ffea00", "#c19a6b", "#A9FE00"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN = "Data/Raw/OBS/Rain"
 DirOUT = "Data/Compute/06_Extract_RainObs_Region_AccPer"
-###################################################################################################
+############################################################################################
 
 # Reading the domain's mask
 FileIN_Mask = Git_repo + "/" + FileIN_Mask

@@ -2,7 +2,7 @@ import os
 import numpy as np
 import metview as mv
 
-###################################################################################################
+#####################################################################
 # CODE DESCRIPTION
 # 00_Plot_Mask.py plots the map that shows the mask for the domain of interest. 
 # Note: runtime negligible.
@@ -22,11 +22,11 @@ MaskName = "Ecuador"
 CornersDomain_list = [2,-81.5,-5.5,-74.5]
 RegionCode_list = [1,2,3]
 RegionName_list = ["La Costa", "La Sierra", "El Oriente"]
-RegionColour_list = ["RGB(255/255,234/255,0/255)", "RGB(193/255,154/255,107/255)", "RGB(170/255,255/255,0/255)"]
+RegionColour_list = ["#ffea00", "#c19a6b", "#A9FE00"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
 FileIN = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirOUT = "Data/Plot/00_Mask"
-###################################################################################################
+#####################################################################
 
 
 # Reading the domain's mask and extracting the coordinates of the domain's points

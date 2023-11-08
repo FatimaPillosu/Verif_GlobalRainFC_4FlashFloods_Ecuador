@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 #####################################################################################
 # CODE DESCRIPTION
-# 17_Plot_FB_CI.py plots Frequency Bias (FB) and confidence intervals (CI).
+# 25_Plot_FB_CI.py plots Frequency Bias (FB) and confidence intervals (CI).
 # Note: runtime negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -31,8 +31,8 @@ RegionName_list = ["Costa","Sierra"]
 SystemFC_list = ["ENS", "ecPoint"]
 Colour_SystemFC_list = ["#ec4d37", "#00539CFF"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-DirIN = "Data/Compute/16_FB_Bootstrapping"
-DirOUT = "Data/Plot/17_FB_CI"
+DirIN = "Data/Compute/24_FB_Bootstrapping"
+DirOUT = "Data/Plot/25_FB_CI"
 #####################################################################################
 
 
