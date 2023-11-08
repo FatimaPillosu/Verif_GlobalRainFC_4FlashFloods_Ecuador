@@ -7,9 +7,10 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.dates import DateFormatter
 
-########################################################################################################
+#####################################################################################
 # CODE DESCRIPTION
-# 07_Plot_RainObs_Loc_Distr.py plots a map with the location of rainfall observations, and the distribution of the rainfall totals.
+# 07_Plot_RainObs_Loc_Distr.py plots a map with the location of rainfall observations, and the 
+# distribution of the rainfall totals.
 # Code runtime: negligible.
 
 # INPUT PARAMETERS DESCRIPTION
@@ -18,13 +19,11 @@ from matplotlib.dates import DateFormatter
 # DateF (date, in format YYYYMMDD): final day of the period to consider.
 # AccPerF_list (list of integer, inUTC hours): list of the final times of the accumulation periods to consider.
 # CornersDomain_list (list of floats): coordinates [N/E/S/W] of the domain to plot.
-# RegionCode_list (list of integers): codes for the domain's regions to consider. 
 # RegionName_list (list of strings): names for the domain's regions to consider.
 # RegionColour_list (list of strings): rgb-codes for the domain's regions to consider.
 # Git_repo (string): repository's local path.
-# FileIN_Mask (string): relative path of the file containing the domain's mask.
 # DirIN (string): relative path containing the rainfall observations.
-# DirOUT (string): relative path where the map plot with the observations location and the observations distribution are stored.
+# DirOUT (string): relative path containing the plots.
 
 # INPUT PARAMETERS
 Acc = 12
@@ -32,23 +31,17 @@ DateS = datetime(2010,1,1,0)
 DateF = datetime(2020,12,31,0)
 AccPerF_list = [12,0]
 CornersDomain_list = [2,-81.5,-5.5,-74.5] 
-RegionCode_list = [1,2,3]
 RegionName_list = ["Costa", "Sierra", "Oriente"]
 RegionColour_list = ["#ffea00", "#c19a6b", "#A9FE00"]
 Git_repo="/ec/vol/ecpoint_dev/mofp/Papers_2_Write/Verif_Flash_Floods_Ecuador"
-FileIN_Mask = "Data/Raw/Ecuador_Mask_ENS/Mask.grib"
 DirIN = "Data/Compute/06_Extract_RainObs_Region_AccPer"
 DirOUT = "Data/Plot/07_RainObs_Loc_Distr"
-########################################################################################################
+#####################################################################################
 
 # Creating the output directory
 DirOUT_temp = Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
 if not os.path.exists(DirOUT_temp):
       os.makedirs(DirOUT_temp)
-
-# Reading the domain's mask
-FileIN_Mask = Git_repo + "/" + FileIN_Mask
-mask = mv.read(FileIN_Mask)
 
 # Creating the array containing all the dates in the considered period
 dates = pd.date_range(start=DateS, end=DateF, freq='D')
@@ -62,17 +55,16 @@ fig1, ax1 = plt.subplots(len(RegionName_list), len(AccPerF_list), figsize=(12, 1
 fig2, ax2 = plt.subplots(len(RegionName_list), len(AccPerF_list), figsize=(12, 10), sharex=True)
 
 # Reading the rainfall observations for a specific region
-ind_Region = 0
-for in_Region in range(len(RegionName_list)):
+for ind_Region in range(len(RegionName_list)):
 
       # Select the region to consider for the computation of the observational rainfall climatology
-      RegionName = RegionName_list[in_Region]
-      RegionCode = RegionCode_list[in_Region]
-      RegionColour = RegionColour_list[in_Region]
+      RegionName = RegionName_list[ind_Region]
+      RegionColour = RegionColour_list[ind_Region]
 
       # Reading the rainfall observations for a specific accumulation period
-      ind_AccPerF = 0
-      for AccPerF in AccPerF_list:
+      for ind_AccPerF in range(len(AccPerF_list)):
+            
+            AccPerF = AccPerF_list[ind_AccPerF]
 
             # Initializing the variables that will contain the  rainfall observations
             obs_lats = np.array([])
@@ -129,11 +121,6 @@ for in_Region in range(len(RegionName_list)):
                   ax2[ind_Region, ind_AccPerF].xaxis.set_major_formatter(DateFormatter('%Y'))
                   ax2[ind_Region, ind_AccPerF].xaxis.set_major_locator(mdates.YearLocator(month=1, day=1))
                   ax2[ind_Region, ind_AccPerF].xaxis.set_tick_params(labelsize=12, rotation=30, colors="#333333")
-            
-            ind_AccPerF += 1
-      
-      ind_Region += 1
-
 
 # Completing the figures
 fig1.suptitle("Counts of " + str(Acc) + "-hourly rainfall observations in each day between " +  str(DateS.year) + " and " +  str(DateF.year), fontsize=14, weight="bold", color="#333333")
