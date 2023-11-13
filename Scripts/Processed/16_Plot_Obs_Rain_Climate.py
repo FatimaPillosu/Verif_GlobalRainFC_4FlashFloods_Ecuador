@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -31,11 +31,6 @@ DirIN = "Data/Compute/15_Obs_Rain_Climate"
 DirOUT = "Data/Plot/16_Obs_Rain_Climate"
 ############################################################################
 
-
-# Setting the figure where to plot the observational rainfall climatologies
-fig, ax = plt.subplots(figsize=(12, 8))
-maxCI = []
-
 # Plotting the observational rainfall climatologies for all considered regions
 for ind_Region in range(len(RegionName_list)):
 
@@ -54,29 +49,28 @@ for ind_Region in range(len(RegionName_list)):
       alpha = 100 - CL # significance level (in %)
       CI_lower = np.nanpercentile(rain_climate_BS, alpha/2, axis=1)
       CI_upper = np.nanpercentile(rain_climate_BS, 100 - (alpha/2), axis=1)
-      maxCI.append(CI_upper[-1])
       
       # Plotting the observational rainfall climatologies
+      fig, ax = plt.subplots(figsize=(8, 8))
       ax.fill_betweenx(percs, CI_lower, CI_upper, color="grey", alpha=0.5)
-      ax.plot(rain_climate_original, percs, "-o", color=RegionColour, linewidth=2, markersize=5, markerfacecolor=RegionColour, markeredgecolor='black', markeredgewidth=0.5, label=RegionName)
+      ax.plot(rain_climate_original, percs, "-o", color=RegionColour, linewidth=2, markersize=5, markerfacecolor=RegionColour, markeredgecolor='black', markeredgewidth=0.5)
 
-# Completing the plot
-ax.set_title("Observational rainfall climatology, CL = " + str(CL) + "%", fontsize=20, pad=30, weight="bold", color="#333333")
-ax.set_xlabel("Rainfall [mm/" + str(Acc) + "h]", fontsize=16, labelpad=10, color="#333333")
-ax.set_ylabel("Percentiles [-]", fontsize=16, labelpad=10, color="#333333")
-ax.set_xlim([0,int(np.max(maxCI))+1])
-ax.set_ylim([80,101])
-ax.set_xticks(range(0, int(np.max(maxCI))+1, 5))
-ax.set_yticks((np.concatenate((np.arange(80,100,5), np.array([99,100])))).tolist())
-ax.xaxis.set_tick_params(labelsize=16, rotation=45, color="#333333")
-ax.yaxis.set_tick_params(labelsize=16, color="#333333")
-ax.legend(loc="upper center",  bbox_to_anchor=(0.5, 1.075), ncol=2, fontsize=16, frameon=False)
-ax.grid()
+      # Completing the plot
+      ax.set_title("Observational rainfall climatology (" + DateS.strftime("%Y%-m-%d") + " to " + DateF.strftime("%Y-%m-%d") + ")\n Region=" + RegionName + ", CL = " + str(CL) + "%", fontsize=16, pad=10, weight="bold", color="#333333")
+      ax.set_xlabel("Rainfall [mm/" + str(Acc) + "h]", fontsize=16, labelpad=10, color="#333333")
+      ax.set_ylabel("Percentiles [-]", fontsize=16, labelpad=10, color="#333333")
+      ax.set_xlim([0,int(CI_upper[-1])+1])
+      ax.set_ylim([80,101])
+      ax.set_xticks(range(0, int(CI_upper[-1])+1, 5))
+      ax.set_yticks((np.concatenate((np.arange(80,100,5), np.array([99,100])))).tolist())
+      ax.xaxis.set_tick_params(labelsize=14, rotation=45, color="#333333")
+      ax.yaxis.set_tick_params(labelsize=14, color="#333333")
+      ax.grid()
 
-# Saving the plot
-DirOUT_temp = Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
-FileNameOUT_temp = "Obs_Rain_Climate_" + f"{Acc:02d}" + ".png"
-if not os.path.exists(DirOUT_temp):
-      os.makedirs(DirOUT_temp)
-plt.savefig(DirOUT_temp + "/" + FileNameOUT_temp)
-plt.close()
+      # Saving the plot
+      DirOUT_temp = Git_repo + "/" + DirOUT + "/" + f"{Acc:02d}" + "h"
+      FileNameOUT_temp = "Obs_Rain_Climate_" + f"{Acc:02d}" + "h_" + RegionName + ".png"
+      if not os.path.exists(DirOUT_temp):
+            os.makedirs(DirOUT_temp)
+      plt.savefig(DirOUT_temp + "/" + FileNameOUT_temp)
+      plt.close()
