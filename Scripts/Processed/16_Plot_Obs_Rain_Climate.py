@@ -52,7 +52,7 @@ for ind_Region in range(len(RegionName_list)):
       
       # Plotting the observational rainfall climatologies
       fig, ax = plt.subplots(figsize=(8, 8))
-      ax.fill_betweenx(percs, CI_lower, CI_upper, color="grey", alpha=0.5)
+      ax.fill_betweenx(percs, CI_lower, CI_upper, color=RegionColour, alpha=0.3)
       ax.plot(rain_climate_original, percs, "-o", color=RegionColour, linewidth=2, markersize=5, markerfacecolor=RegionColour, markeredgecolor='black', markeredgewidth=0.5)
 
       # Completing the plot
