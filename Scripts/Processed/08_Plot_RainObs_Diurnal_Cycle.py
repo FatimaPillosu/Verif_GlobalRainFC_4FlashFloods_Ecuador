@@ -68,15 +68,22 @@ for ind_Region in range(len(RegionName_list)):
             # Computing the avearge rainfall for a specific accumulation period
             rain_diurnal_cycle[ind_AccPerF] = np.average(obs_vals)
 
+      # Create the average rainfall
+      av_rain_diurnal_cycle = np.average(rain_diurnal_cycle)
+
+      # Create the variable to plot
+      AccPerF_multiple = np.hstack([AccPerF_list] * 5)
+      rain_diurnal_cycle_multiple = np.hstack([rain_diurnal_cycle] * 5)
+      av_rain_diurnal_cycle_multiple = np.hstack([av_rain_diurnal_cycle] * len(rain_diurnal_cycle) * 5)
+      
       # Plotting the distribution of the rainfall  totals
       xtick_labels = []
       for rep in range(5):
             for AccPerF in AccPerF_list:
                   xtick_labels.append(f"{AccPerF:02d}")
-      AccPerF_multiple = np.hstack([AccPerF_list] * 5)
-      rain_diurnal_cycle_multiple = np.hstack([rain_diurnal_cycle] * 5)
       x_axis = np.arange(len(rain_diurnal_cycle_multiple))
       ax.plot(x_axis, rain_diurnal_cycle_multiple, "o-", color=RegionColour, linewidth=3, label=RegionName)
+      ax.plot(x_axis, av_rain_diurnal_cycle_multiple, "--", color=RegionColour, linewidth=2)
       ax.set_title("Rainfall diurnal cycle from SYNOP observations\n Averaged between " + DateS.strftime("%Y%m%d") + " and " + DateF.strftime("%Y%m%d"),  fontsize=16, pad=30, color="#333333", weight="bold")
       ax.set_xlabel("End of the " + str(Acc) + "-hourly accumulation periods [UTC]", fontsize=14, labelpad=10, color="#333333")
       ax.set_ylabel("Rainfall [mm/" + str(Acc) + "h]", fontsize=14, labelpad=10, color="#333333")
