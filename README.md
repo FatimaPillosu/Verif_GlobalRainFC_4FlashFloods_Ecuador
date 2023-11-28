@@ -1,8 +1,6 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7742713.svg)](https://doi.org/10.5281/zenodo.7742713)
-
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-# Verification of ecPoint-Rainfall against ECMWF to forecast areas at flash flood risk in Ecuador
+# Can global rainfall forecasts identify areas at risk of flash floods? Proof of concept for Ecuador
 
 ### Background
 
