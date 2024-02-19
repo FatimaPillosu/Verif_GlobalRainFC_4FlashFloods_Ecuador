@@ -334,8 +334,8 @@
 \put(14,208){\begin{minipage}[t][115mm]{105mm}\raggedright
 \fontsize{44}{40}\selectfont \memonumber \par \vskip 25pt
 \color{white}
-\fontseries{b}\fontsize{25}{30}\selectfont \@title \par \vfill
-\fontseries{m}\fontsize{14}{17}\selectfont \authorc %CM\par 
+\fontseries{b}\fontsize{20}{25}\selectfont \@title \par \vfill
+\fontseries{m}\fontsize{8}{8}\selectfont \authorc %CM\par 
 \end{minipage} }
 \put(14,95){\color{white}\fontseries{b}\fontsize{12}{15}\selectfont \@date} %CM  \par \vskip 1em
 \end{picture}
